@@ -12,7 +12,7 @@
  * 0 5  ...
  */
 package cn.zs.algorithm;
-import cn.zs.algorithm.component.Column;
+import cn.zs.algorithm.component.ColumnR;
 import cn.zs.algorithm.component.Coordinate;
 
 import java.util.*;
@@ -28,7 +28,7 @@ import static cn.zs.algorithm.Params.*;
  **/
 public class Individual {
     //计算目标函数用
-    private ArrayList<Column> columns = new ArrayList<>();
+    private ArrayList<ColumnR> columns = new ArrayList<>();
     //长度目标
     private double lengthCost;
     //离散目标
@@ -86,7 +86,7 @@ public class Individual {
                // temp[j] = itemNo;
                 coordinateMap.put(itemNo,coordinate);
             }
-            Column column = new Column();
+            ColumnR column = new ColumnR();
             column.setLocations(temp);
             columns.add(column);
         }
@@ -98,7 +98,7 @@ public class Individual {
         double res = 0;
         HashSet<Integer> usedSet = new HashSet<>();
         for (int i = 0; i < columns.size(); i++) {
-            Column column = columns.get(i);
+            ColumnR column = columns.get(i);
             column.calculCost(i+1,usedSet);
             ArrayList<Integer> locations = column.getLocations();
             for (int j = 0; j < locations.size(); j++) {
