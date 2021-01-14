@@ -10,6 +10,7 @@ package cn.zs.algorithm.component;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 
 import static cn.zs.algorithm.Params.*;
 
@@ -66,12 +67,12 @@ public class ColumnL extends ColumnM{
                         if (gc > gl){
                             continue;
                         }
-                  //      double pin = itemPickFreq[locations[N-1]];
+                        double pin = itemPickFreq[locations.get(N-1)];
                         String key1 = (N + 1) + "," + (gc + 0.5*f + wc) + "," + (Math.max(gl,gc + 0.5*f + wc)) ;
                         String key2 = (N + 1) + "," + (0.5*f + wc) + "," + (Math.max(gl,0.5*f + wc)) ;
                         String key = N + "," + gc + "," + gl;
-                   //     double v = (1 - pin)*  gMap.get(key1) + pin * gMap.get(key2);
-                  //      gMap.put(key,v);
+                        double v = (1 - pin)*  gMap.get(key1) + pin * gMap.get(key2);
+                        gMap.put(key,v);
                     }
                 }
             }
@@ -91,12 +92,12 @@ public class ColumnL extends ColumnM{
                             if (gc > gl) {
                                 continue;
                             }
-                    //        double pij = itemPickFreq[locations[index - 1]];
+                            double pij = itemPickFreq[locations.get(index-1)];
                             String key1 = (index + 1) + "," + (gc + f) + "," + (Math.max(gl, gc + f));
                             String key2 = (index + 1) + "," + ((double)f) + "," + (Math.max(gl, f));
                             String key = (index) + "," + (gc) + "," + gl;
-                    //        double v = (1 - pij) * gMap.get(key1) + pij * gMap.get(key2);
-                   //         gMap.put(key, v);
+                            double v = (1 - pij) * gMap.get(key1) + pij * gMap.get(key2);
+                            gMap.put(key, v);
                         }
                     }
                 }
@@ -149,17 +150,16 @@ public class ColumnL extends ColumnM{
    /**
     * 从库位分配开始计算成本
     * */
-    public void calculCost(int no,int usedA,int usedB,int usedC,int numA,int numB
-            ,int numC,int assignmentMode,double lastFirstProb,double lastEnterProb){
+    public void calculCost(int no,HashSet<Integer> usedSet,double lastEvenProb, double lastEnterProb,double lastFirstProb){
         //前三组 只需要该巷道内的库位分配情况
-        assignABC(numA,numB,numC,assignmentMode);
+
         calculElr();
         calculEnterProb();
 
         calculG();
 
         //需要知道其他参数
-   //     calculLastProb(usedA,usedB,usedC);
+        calculLastProb(usedSet);
         calculElc(no);
 
         //计算该通道之前没有通道访问
@@ -167,32 +167,6 @@ public class ColumnL extends ColumnM{
         calculElg();
         cost=(elg + elc)/nonEmptyProb;
     }
-    /**
-     * 简化版 从库位分配开始计算成本
-     * 把ColumnR的方法覆盖了
-     * */
-    public void calculCost(int numA,int numB, int numC,int assignmentMode){
-        calculCost(1,numA,numB,numC,numA,numB,numC,assignmentMode,1,0);
-    }
-    /**
-     * 简化版 重写父类 防止出错 默认分配方式为0 不对称分配
-     * */
-    public void calculCost(int numA,int numB,int numC){
-        calculCost(numA, numB, numC,0);
-    }
-    /**
-     * 已经库位分配完毕 随其他参数变化的成本
-     * */
-    public void calculCost(int no,int usedA,int usedB,int usedC
-            ,double lastFirstProb,double lastEnterProb){
-        //需要知道其他参数
-    //    calculLastProb(usedA,usedB,usedC);
-        calculElc(no);
 
-        //计算该通道之前没有通道访问
-        calculFirstProb(lastFirstProb,lastEnterProb);
-        calculElg();
-        cost=(elg + elc)/nonEmptyProb;
-    }
 
 }

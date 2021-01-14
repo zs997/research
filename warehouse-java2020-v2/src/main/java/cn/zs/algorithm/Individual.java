@@ -12,6 +12,7 @@
  * 0 5  ...
  */
 package cn.zs.algorithm;
+import cn.zs.algorithm.component.Column;
 import cn.zs.algorithm.component.ColumnR;
 import cn.zs.algorithm.component.Coordinate;
 
@@ -26,9 +27,9 @@ import static cn.zs.algorithm.Params.*;
  * @data: 2021-01-04 14:42
  * @description:基因个体 基因个体
  **/
-public class Individual {
+public class Individual<T extends Column>{
     //计算目标函数用
-    private ArrayList<ColumnR> columns = new ArrayList<>();
+    private ArrayList<Column> columns = new ArrayList<>();
     //长度目标
     private double lengthCost;
     //离散目标
@@ -56,20 +57,17 @@ public class Individual {
      * */
     public Individual(ArrayList<Integer> chromosome){
         this.chromosome = chromosome;
-        Collections.shuffle(chromosome);
     }
-
     public Individual(int [] chromosome){
         this.chromosome = new ArrayList<>();
         for (int i = 0; i < chromosome.length; i++) {
             this.chromosome.add(chromosome[i]);
         }
-        Collections.shuffle(this.chromosome);
     }
     /**
      * 通过染色体 同步其他数据
      * */
-    private void synchronizGene(){
+    private  void synchronizGene(Class<T> t) throws Exception {
         //遍历库位  查看基因分配的货物编号
         for (int i = 0; i < M; i++) {
             ArrayList<Integer> temp = new ArrayList<>();
@@ -86,24 +84,30 @@ public class Individual {
                // temp[j] = itemNo;
                 coordinateMap.put(itemNo,coordinate);
             }
-            ColumnR column = new ColumnR();
+            Column column = t.newInstance();
             column.setLocations(temp);
             columns.add(column);
         }
     }
     /**
-     * 计算平均路径
+     * 计算路径期望
      * */
     private void calculLengthCost(){
         double res = 0;
         HashSet<Integer> usedSet = new HashSet<>();
+        double lastEvenProb = 1;
+        double lastEnterProb = 0;
+        double lastFirstProb = 1;
         for (int i = 0; i < columns.size(); i++) {
-            ColumnR column = columns.get(i);
-            column.calculCost(i+1,usedSet);
+            Column column = columns.get(i);
+            column.calculCost(i+1,usedSet,lastEvenProb,lastEnterProb,lastFirstProb);
             ArrayList<Integer> locations = column.getLocations();
             for (int j = 0; j < locations.size(); j++) {
                 usedSet.add(locations.get(j));
             }
+            lastFirstProb =  lastFirstProb * (1 - lastEnterProb);
+            lastEnterProb = column.getEnterProb();
+            lastEvenProb = column.getEvenProb();
             res += column.getCost();
         }
         lengthCost = res;
@@ -133,8 +137,12 @@ public class Individual {
         }
         spreadCost = spreads;
     }
-    public double calculFitness(){
-        synchronizGene();
+    public double calculFitness(Class<T> t) {
+        try {
+            synchronizGene(t);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         calculLengthCost();
         calculSpreadCost();
         cost = lengthCost*0.5 + spreadCost*0.5;

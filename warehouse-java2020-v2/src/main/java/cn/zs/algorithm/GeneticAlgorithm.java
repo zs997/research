@@ -1,6 +1,9 @@
 package cn.zs.algorithm;
+import cn.zs.algorithm.component.Column;
+import cn.zs.algorithm.component.ColumnR;
+
 import java.util.Arrays;
-public class GeneticAlgorithm {
+public class GeneticAlgorithm <T extends Column>{
     private int populationSize;
     private double mutationRate;
     private double crossoverRate;
@@ -40,16 +43,14 @@ public class GeneticAlgorithm {
 	}
 
     /**
-     * Evaluate population -- basically run calcFitness on each individual.
-     *
-     * @param population the population to evaluate
-     * @param cities the cities being referenced
+     * Evaluate population -- basically run calcFitness on each individual.     *
+     * @param population the population to evaluate     *
      */
-    public void evalPopulation(Population population){
+    public void evalPopulation(Population population,Class<T> t)  {
         double populationFitness = 0;
         // Loop over population evaluating individuals and summing population fitness
         for (Individual individual : population.getIndividuals()) {
-            populationFitness += individual.calculFitness();
+            populationFitness += individual.calculFitness(t);
         }
         double avgFitness = populationFitness / population.size();
         population.setPopulationFitness(avgFitness);

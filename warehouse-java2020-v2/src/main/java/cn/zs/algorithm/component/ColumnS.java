@@ -9,6 +9,8 @@ package cn.zs.algorithm.component;
  * @description: S型拣货策略
  **/
 
+import java.util.HashSet;
+
 import static cn.zs.algorithm.Params.*;
 public class ColumnS extends ColumnR{
     double evenProb;
@@ -27,14 +29,14 @@ public class ColumnS extends ColumnR{
      * 从库位分配开始计算 第一个通道中 evenProb = 1
      * @param : lastEvenProb 某一状态下 该通道的某一分配 会有上一个状态 上一状态的最优分配已经计算了，就是上一状态的最优化情况下 上一个通道的概率
      * */
-    public void calculCost(int no,int usedA,int usedB,int usedC,int numA,int numB,int numC,double lastEvenProb,double lastEnterProb){
+    public void calculCost(int no,HashSet<Integer> usedSet,double lastEvenProb, double lastEnterProb,double lastFirstProb){
         //前三组 只需要该巷道内的库位分配情况
        // assignABC(numA,numB,numC);
         calculElr();
         calculEnterProb();
 
         //需要知道其他参数
-      //  calculLastProb(usedA,usedB,usedC);
+        calculLastProb(usedSet);
         calculElc(no);
 
         //需要其他参数
@@ -42,25 +44,6 @@ public class ColumnS extends ColumnR{
         calculEls();
         cost = (els + elc)/nonEmptyProb;
     }
-    /**
-     * @description 计算第一通道 简化版本
-     */
-    public void calculCost(int numA, int numB,int numC){
-        calculCost(1,numA,numB,numC,numA,numB,numC,1,0);
-    }
-    /**
-     * 分配好库位 用于二次计算
-     * */
-    public void calculCost(int no,int usedA,int usedB,int usedC,double lastEvenProb,double lastEnterProb){
-        //需要知道其他参数 Elr只与单通道内的库位分配有关
-    //    calculLastProb(usedA,usedB,usedC);
-        calculElc(no);
-
-        calculEvenProb(lastEvenProb,lastEnterProb);
-        calculEls();
-        cost = (els + elc)/nonEmptyProb;
-    }
-
     public double getEvenProb() {
         return evenProb;
     }

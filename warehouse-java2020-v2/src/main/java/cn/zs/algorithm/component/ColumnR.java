@@ -5,7 +5,7 @@ package cn.zs.algorithm.component;
 import java.util.ArrayList;
 import java.util.HashSet;
 import static  cn.zs.algorithm.Params.*;
-public class ColumnR {
+public class ColumnR extends Column{
     //货架的库位 存放货物编号 每一种存放 表示一种库位分配
     // 存储 货物编号
      ArrayList<Integer> locations;
@@ -80,7 +80,7 @@ public class ColumnR {
      * @description：第1巷道初始库位分配时，可以将所有单个通道内的库位分配情况穷举
      * 所以单个通道内路径长度只需要计算一次。
      * */
-    public void calculCost(int no,HashSet<Integer> usedSet){
+    public void calculCost(int no,HashSet<Integer> usedSet,double lastEvenProb, double lastEnterProb,double lastFirstProb){
         calculElr();
         calculEnterProb();
         //需要知道其他参数
@@ -93,5 +93,9 @@ public class ColumnR {
     }
     public double getCost() {
         return cost;
+    }
+
+    public double getEnterProb() {
+        return enterProb;
     }
 }
