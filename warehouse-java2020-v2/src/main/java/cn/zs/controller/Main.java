@@ -20,7 +20,7 @@ public class Main {
     static  OrdersMapper ordersMapper;
     static OrdersService ordersService;
     static OriginDataReader originDataReader;
-    public static int maxGenerations = 300;
+
     public static void main(String args[]){
         ApplicationContext ac = new ClassPathXmlApplicationContext("applicationContext.xml");
         originDataReader = ac.getBean(OriginDataReader.class);
@@ -51,48 +51,9 @@ public class Main {
 //        Collections.sort(y1,Comparator.reverseOrder());
 //        LineView.printPic(x,y,stackBar);
 
-            GAalgorithm(ColumnL.class);
-    }
-    /**
-     * 遗传算
-     * */
-    public static <T extends Column>void GAalgorithm(Class<T> t) {
-        // Initial GA
-        GeneticAlgorithm ga = new GeneticAlgorithm(100, 0.001, 0.9, 2, 5);
-        // Initialize population
-        Population population = ga.initPopulation();
-        // Evaluate population
-        ga.evalPopulation(population,t);
-        // Keep track of current generation
-        int generation = 1;
-        ArrayList<Integer> x = new ArrayList<>();
-        ArrayList<ArrayList<Double>> y = new ArrayList<>();
-        ArrayList<Double> y1 = new ArrayList<>();
-        ArrayList<String> stackBar = new ArrayList<>();
-        stackBar.add("one");
-        y.add(y1);
-        // Start evolution loop
-        while (ga.isTerminationConditionMet(generation, maxGenerations) == false) {
-            // Print fittest individual from population
-            x.add(generation);
-            Individual fittest = population.getFittest(0);
-            double cost = fittest.getCost();
-            System.out.println(generation+"  "+ cost);
-            y1.add(cost);
-            // Apply crossover
-            population = ga.crossoverPopulation(population);
-            // Apply mutation
-            population = ga.mutatePopulation(population);
-            // Evaluate population
-            ga.evalPopulation(population,t);
-            // Increment the current generation
-            generation++;
-        }
-        Individual fittest = population.getFittest(0);
-        ArrayList<Integer> chromosome = fittest.getChromosome();
-        System.out.println(chromosome);
-        LineView.printPic(x,y,stackBar);
-        System.out.println("Stopped after " + maxGenerations + " generations.");
+
+        GeneticAlgorithm<ColumnR> columnRGeneticAlgorithm = new GeneticAlgorithm<>();
+        columnRGeneticAlgorithm.doGA(ColumnR.class);
     }
     /**
      * @description: 初始化数据 将csv订单数据存到数据库 step1

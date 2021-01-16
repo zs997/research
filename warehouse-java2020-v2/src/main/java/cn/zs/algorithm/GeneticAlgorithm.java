@@ -1,14 +1,64 @@
 package cn.zs.algorithm;
 import cn.zs.algorithm.component.Column;
 import cn.zs.algorithm.component.ColumnR;
+import cn.zs.view.LineView;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 public class GeneticAlgorithm <T extends Column>{
+    public static int maxGenerations = 300;
     private int populationSize;
     private double mutationRate;
     private double crossoverRate;
     private int elitismCount;
 	protected int tournamentSize;
+
+    public GeneticAlgorithm() {
+
+    }
+
+    /**
+     * 遗传算法步骤
+     * */
+    public  void doGA(Class<T> t) {
+        // Initial GA
+        GeneticAlgorithm ga = new GeneticAlgorithm(100, 0.001, 0.9, 2, 5);
+        // Initialize population
+        Population population = ga.initPopulation();
+        // Evaluate population
+        ga.evalPopulation(population,t);
+        // Keep track of current generation
+        int generation = 1;
+        ArrayList<Integer> x = new ArrayList<>();
+        ArrayList<ArrayList<Double>> y = new ArrayList<>();
+        ArrayList<Double> y1 = new ArrayList<>();
+        ArrayList<String> stackBar = new ArrayList<>();
+        stackBar.add("one");
+        y.add(y1);
+        // Start evolution loop
+        while (ga.isTerminationConditionMet(generation, maxGenerations) == false) {
+            // Print fittest individual from population
+            x.add(generation);
+            Individual fittest = population.getFittest(0);
+            double cost = fittest.getCost();
+            System.out.println(generation+"  "+ cost);
+            y1.add(cost);
+            // Apply crossover
+            population = ga.crossoverPopulation(population);
+            // Apply mutation
+            population = ga.mutatePopulation(population);
+            // Evaluate population
+            ga.evalPopulation(population,t);
+            // Increment the current generation
+            generation++;
+        }
+        Individual fittest = population.getFittest(0);
+        ArrayList<Integer> chromosome = fittest.getChromosome();
+        System.out.println(chromosome);
+        LineView.printPic(x,y,stackBar);
+        System.out.println("Stopped after " + maxGenerations + " generations.");
+    }
+
 	public GeneticAlgorithm(int populationSize, double mutationRate, double crossoverRate, int elitismCount,
                             int tournamentSize) {
 		
