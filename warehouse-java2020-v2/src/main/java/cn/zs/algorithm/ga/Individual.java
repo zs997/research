@@ -11,14 +11,13 @@
  * 1 6
  * 0 5  ...
  */
-package cn.zs.algorithm;
+package cn.zs.algorithm.ga;
 import cn.zs.algorithm.component.Column;
-import cn.zs.algorithm.component.ColumnR;
 import cn.zs.algorithm.component.Coordinate;
 
 import java.util.*;
 
-import static cn.zs.algorithm.Params.*;
+import static cn.zs.algorithm.ga.Params.*;
 /**
  * @version: V1.0
  * @author: zs
@@ -29,7 +28,7 @@ import static cn.zs.algorithm.Params.*;
  **/
 public class Individual<T extends Column>{
     //计算目标函数用
-    private ArrayList<Column> columns = new ArrayList<>();
+    private ArrayList<Column> columns ;
     //长度目标
     private double lengthCost;
     //离散目标
@@ -49,8 +48,8 @@ public class Individual<T extends Column>{
         for (int i = 0; i < storageCount; i++) {
             g.add(i);
         }
+       // Collections.shuffle(g);
         chromosome = g;
-        Collections.shuffle(chromosome);
     }
     /**
      * 产生指导性染色体
@@ -68,6 +67,7 @@ public class Individual<T extends Column>{
      * 通过染色体 同步其他数据
      * */
     private  void synchronizGene(Class<T> t) throws Exception {
+        columns = new ArrayList<>();
         //遍历库位  查看基因分配的货物编号
         for (int i = 0; i < M; i++) {
             ArrayList<Integer> temp = new ArrayList<>();
@@ -86,7 +86,7 @@ public class Individual<T extends Column>{
             }
             Column column = t.newInstance();
             column.setLocations(temp);
-            columns.add(column);
+            this.columns.add(column);
         }
     }
     /**
@@ -100,11 +100,12 @@ public class Individual<T extends Column>{
         double lastFirstProb = 1;
         for (int i = 0; i < columns.size(); i++) {
             Column column = columns.get(i);
-            column.calculCost(i+1,usedSet,lastEvenProb,lastEnterProb,lastFirstProb);
             ArrayList<Integer> locations = column.getLocations();
             for (int j = 0; j < locations.size(); j++) {
                 usedSet.add(locations.get(j));
             }
+            column.calculCost(i+1,usedSet,lastEvenProb,lastEnterProb,lastFirstProb);
+
             lastFirstProb =  lastFirstProb * (1 - lastEnterProb);
             lastEnterProb = column.getEnterProb();
             lastEvenProb = column.getEvenProb();
@@ -138,28 +139,36 @@ public class Individual<T extends Column>{
         spreadCost = spreads;
     }
     public double calculFitness(Class<T> t) {
+//        try {
+//            synchronizGene(t);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        calculLengthCost();
+//        calculSpreadCost();
+//        cost = lengthCost*0.5 + spreadCost*0.5;
+//        fitness = 1/cost;
+//        return fitness;
+
+//        try {
+//            synchronizGene(t);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        calculSpreadCost();
+//        cost = spreadCost;
+//        fitness = 1/cost;
+//        return fitness;
+
         try {
             synchronizGene(t);
         } catch (Exception e) {
             e.printStackTrace();
         }
         calculLengthCost();
-        calculSpreadCost();
-        cost = lengthCost*0.5 + spreadCost*0.5;
-        fitness = 1/cost;
+        cost = lengthCost;
+        fitness =1/cost;
         return fitness;
-
-//        synchronizGene();
-//        calculSpreadCost();
-//        cost = spreadCost;
-//        fitness = 1/cost;
-//        return fitness;
-
-//        synchronizGene();
-//        calculLengthCost();
-//        cost = lengthCost;
-//        fitness = 1/cost;
-//        return fitness;
     }
     /**
      * 判断有无某基因

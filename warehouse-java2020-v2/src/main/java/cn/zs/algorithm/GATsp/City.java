@@ -1,4 +1,4 @@
-package GATsp;
+package cn.zs.algorithm.GATsp;
 
 /**
  * A simple abstraction of a city. This class maintains Cartesian coordinates

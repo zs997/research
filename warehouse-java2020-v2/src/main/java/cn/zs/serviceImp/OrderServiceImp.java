@@ -7,6 +7,7 @@ import cn.zs.service.OrdersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.*;
+import static cn.zs.algorithm.ga.Params.*;
 @Service
 public class OrderServiceImp implements OrdersService {
     @Autowired
@@ -254,5 +255,33 @@ public class OrderServiceImp implements OrdersService {
         commonData.setData(csvData);
         CsvDataWriter csvDataWriter = new CsvDataWriter();
         csvDataWriter.write(commonData);
+    }
+
+    @Override
+    public PickParam generateBenchmarkPickData(int orderLength,double aOfOrder,double bOfOrder,double cOfOrder) {
+        //各类货物所占库位数目
+       int storageA = (int)Math.round(storageCount * 0.2);
+       int storageB = (int)Math.round(storageCount * 0.3);
+       int storageC =  storageCount - storageA - storageB;
+       double pickA = orderLength * aOfOrder / storageA;
+       double pickB = orderLength * bOfOrder / storageB;
+       double pickC = orderLength * cOfOrder / storageC;
+       int i = 0;
+       itemPickFreq = new double[storageCount];
+        for (; i < storageA; i++) {
+            itemPickFreq[i] = pickA;
+        }
+        for (;i < storageA + storageB;i++){
+            itemPickFreq[i] = pickB;
+        }
+        for (;i< itemPickFreq.length;i++ ){
+            itemPickFreq[i] = pickC;
+        }
+        PickParam pickParam = new PickParam();
+        pickParam.setPickf(itemPickFreq);
+        pickParam.setStorageA(storageA);
+        pickParam.setStorageB(storageB);
+        pickParam.setStorageC(storageC);
+        return pickParam;
     }
 }

@@ -7,7 +7,7 @@
  */
 package cn.zs.algorithm.component;
 
-import static cn.zs.algorithm.Params.*;
+import static cn.zs.algorithm.ga.Params.*;
 
 /**
  * @version: V1.0

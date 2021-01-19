@@ -1,4 +1,4 @@
-package GATsp;
+package cn.zs.algorithm.GATsp;
 
 import cn.zs.view.LineView;
 

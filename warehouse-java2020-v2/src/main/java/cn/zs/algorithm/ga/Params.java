@@ -1,4 +1,4 @@
-package cn.zs.algorithm;
+package cn.zs.algorithm.ga;
 import cn.zs.pojo.Item;
 import java.util.ArrayList;
 import java.util.List;
@@ -55,7 +55,7 @@ public class Params {
     /**
      * @description:生成随机概率值 用于测试
      * */
-    public static void initItemList(){
+    public static void randomInitItemList(){
         itemPickFreq = new double[storageCount];
         for (int i = 0; i < itemPickFreq.length; i++) {
             itemPickFreq[i] = Math.random();

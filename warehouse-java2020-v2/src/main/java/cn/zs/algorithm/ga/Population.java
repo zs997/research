@@ -1,47 +1,29 @@
-package GATsp;
+package cn.zs.algorithm.ga;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Random;
-
 public class Population {
 	private Individual population[];
 	private double populationFitness = -1;
 
 	/**
 	 * Initializes blank population of individuals
-	 * 
+	 *
 	 * @param populationSize
 	 *            The size of the population
 	 */
 	public Population(int populationSize) {
 		// Initial population
 		this.population = new Individual[populationSize];
+		for (int i = 0; i < population.length; i++) {
+            Individual individual = new Individual();
+            population[i] = individual;
+        }
+
 	}
-
-	/**
-	 * Initializes population of individuals
-	 * 
-	 * @param populationSize
-	 *            The size of the population
-	 * @param chromosomeLength
-	 *            The length of the individuals chromosome
-	 */
-	public Population(int populationSize, int chromosomeLength) {
-		// Initial population
-		this.population = new Individual[populationSize];
-
-		// Loop over population size
-		for (int individualCount = 0; individualCount < populationSize; individualCount++) {
-			// Create individual
-			Individual individual = new Individual(chromosomeLength);
-			// Add individual to population
-			this.population[individualCount] = individual;
-		}
-	}
-
 	/**
 	 * Get individuals from the population
-	 * 
+	 *
 	 * @return individuals Individuals in population
 	 */
 	public Individual[] getIndividuals() {
@@ -50,7 +32,7 @@ public class Population {
 
 	/**
 	 * Find fittest individual in the population
-	 * 
+	 *
 	 * @param offset
 	 * @return individual Fittest individual at offset
 	 */
@@ -74,7 +56,7 @@ public class Population {
 
 	/**
 	 * Set population's fitness
-	 * 
+	 *
 	 * @param fitness
 	 *            The population's total fitness
 	 */
@@ -84,7 +66,7 @@ public class Population {
 
 	/**
 	 * Get population's fitness
-	 * 
+	 *
 	 * @return populationFitness The population's total fitness
 	 */
 	public double getPopulationFitness() {
@@ -93,7 +75,7 @@ public class Population {
 
 	/**
 	 * Get population's size
-	 * 
+	 *
 	 * @return size The population's size
 	 */
 	public int size() {
@@ -102,7 +84,7 @@ public class Population {
 
 	/**
 	 * Set individual at offset
-	 * 
+	 *
 	 * @param individual
 	 * @param offset
 	 * @return individual
@@ -113,7 +95,7 @@ public class Population {
 
 	/**
 	 * Get individual at offset
-	 * 
+	 *
 	 * @param offset
 	 * @return individual
 	 */

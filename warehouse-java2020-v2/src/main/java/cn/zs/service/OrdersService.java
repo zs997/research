@@ -1,5 +1,7 @@
 package cn.zs.service;
 import cn.zs.pojo.Item;
+import cn.zs.pojo.PickParam;
+
 import java.util.ArrayList;
 import java.util.List;
 public interface OrdersService {
@@ -14,4 +16,5 @@ public interface OrdersService {
     void generateSimilarMatrix(String path);
     void generateDistanceMatrix(String path);
     void groupItem(String source,String destination,int n);
+    PickParam generateBenchmarkPickData(int orderLength, double aOfOrder, double bOfOrder, double cOfOrder);
 }

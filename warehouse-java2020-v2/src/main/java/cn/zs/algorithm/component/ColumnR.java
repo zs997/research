@@ -4,7 +4,7 @@ package cn.zs.algorithm.component;
  * */
 import java.util.ArrayList;
 import java.util.HashSet;
-import static  cn.zs.algorithm.Params.*;
+import static cn.zs.algorithm.ga.Params.*;
 public class ColumnR extends Column{
     //货架的库位 存放货物编号 每一种存放 表示一种库位分配
     // 存储 货物编号

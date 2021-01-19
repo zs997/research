@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
-import static cn.zs.algorithm.Params.*;
+import static cn.zs.algorithm.ga.Params.*;
 
 public class ColumnL extends ColumnM{
 

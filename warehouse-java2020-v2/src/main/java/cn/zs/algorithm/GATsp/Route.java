@@ -1,4 +1,4 @@
-package GATsp;
+package cn.zs.algorithm.GATsp;
 
 /**
  * The main Evaluation class for the TSP. It's pretty simple -- given an
