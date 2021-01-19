@@ -9,7 +9,7 @@ package cn.zs.daoImp;
 
 import cn.zs.dao.MyDataWriter;
 import cn.zs.pojo.CommonData;
-import cn.zs.pojo.CsvData;
+import cn.zs.pojo.CsvContent;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -29,13 +29,13 @@ public class CsvDataWriter implements MyDataWriter {
             String path = data.getPath();
             File file=new File(path);
             Object data1 = data.getData();
-           if (data1 instanceof CsvData){
-                CsvData csvData =  (CsvData)data1;
+           if (data1 instanceof CsvContent){
+                CsvContent csvContent =  (CsvContent)data1;
                 FileOutputStream fos=new FileOutputStream(file,true);
                 OutputStreamWriter osw=new OutputStreamWriter(fos, "UTF-8");
                 BufferedWriter bw=new BufferedWriter(osw);
-                bw.write(csvData.getTitile()+"\t\n");
-               String[][] csvDataMatrix = csvData.getCsvDataMatrix();
+                bw.write(csvContent.getTitile()+"\t\n");
+               String[][] csvDataMatrix = csvContent.getCsvDataMatrix();
                for (int i = 0; i < csvDataMatrix.length; i++) {
                     StringBuilder sb = new StringBuilder();
                     for (int j = 0; j < csvDataMatrix[i].length-1; j++) {

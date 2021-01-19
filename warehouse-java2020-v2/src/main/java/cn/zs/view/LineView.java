@@ -1,7 +1,6 @@
 package cn.zs.view;
 import java.awt.*;
 import java.util.ArrayList;
-
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;

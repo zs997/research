@@ -19,7 +19,9 @@ public class Item {
     Long id;
     String brandNo;
     String brandName;
+    //频次
     Long times;
+    //拣货频率（概率）
     Double pickfreq;
     public Long getId() {
         return id;
@@ -50,5 +52,16 @@ public class Item {
     }
     public void setPickfreq(Double pickfreq) {
         this.pickfreq = pickfreq;
+    }
+
+    @Override
+    public String toString() {
+        return "Item{" +
+                "id=" + id +
+                ", brandNo='" + brandNo + '\'' +
+                ", brandName='" + brandName + '\'' +
+                ", times=" + times +
+                ", pickfreq=" + pickfreq +
+                '}';
     }
 }

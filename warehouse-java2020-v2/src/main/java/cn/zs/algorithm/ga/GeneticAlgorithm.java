@@ -5,27 +5,26 @@ import cn.zs.view.LineView;
 import java.util.ArrayList;
 import java.util.Arrays;
 public class GeneticAlgorithm <T extends Column>{
-    public static int maxGenerations = 5000;
+    public int maxGenerations = 5000 ;
     private int populationSize;
     private double mutationRate;
     private double crossoverRate;
     private int elitismCount;
 	protected int tournamentSize;
 
-    public GeneticAlgorithm() {
-
+    private GeneticAlgorithm(){
     }
 
     /**
      * 遗传算法步骤
      * */
-    public  void doGA(Class<T> t) {
+    public void doGA(Class<T> t) {
         // Initial GA  elitismCount 精英数   tournamentSize 交叉过程 父类候选集
-        GeneticAlgorithm ga = new GeneticAlgorithm(100, 0.001, 0.9, 2, 5);
+       // GeneticAlgorithm ga = new GeneticAlgorithm(100, 0.001, 0.9, 2, 5);
         // Initialize population
-        Population population = ga.initPopulation();
+        Population population = initPopulation();
         // Evaluate population
-        ga.evalPopulation(population,t);
+        evalPopulation(population,t);
         // Keep track of current generation
         int generation = 1;
         ArrayList<Integer> x = new ArrayList<>();
@@ -35,7 +34,7 @@ public class GeneticAlgorithm <T extends Column>{
         stackBar.add("one");
         y.add(y1);
         // Start evolution loop
-        while (ga.isTerminationConditionMet(generation, maxGenerations) == false) {
+        while (isTerminationConditionMet(generation, maxGenerations) == false) {
             // Print fittest individual from population
             x.add(generation);
             Individual fittest = population.getFittest(0);
@@ -43,12 +42,11 @@ public class GeneticAlgorithm <T extends Column>{
             System.out.println(generation+"  "+ cost);
             y1.add(cost);
             // Apply crossover
-            population = ga.crossoverPopulation(population);
+            population = crossoverPopulation(population);
             // Apply mutation
-            population = ga.mutatePopulation(population);
+            population = mutatePopulation(population);
             // Evaluate population
-            ga.evalPopulation(population,t);
-
+            evalPopulation(population,t);
             // Increment the current generation
             generation++;
         }
@@ -60,9 +58,9 @@ public class GeneticAlgorithm <T extends Column>{
         System.out.println("Stopped after " + maxGenerations + " generations.");
     }
 
-	public GeneticAlgorithm(int populationSize, double mutationRate, double crossoverRate, int elitismCount,
+	public GeneticAlgorithm(int maxGenerations,int populationSize, double mutationRate, double crossoverRate, int elitismCount,
                             int tournamentSize) {
-		
+		this.maxGenerations = maxGenerations;
         this.populationSize = populationSize;
         this.mutationRate = mutationRate;
         this.crossoverRate = crossoverRate;
@@ -79,10 +77,7 @@ public class GeneticAlgorithm <T extends Column>{
         return population;
     }
 	/**
-	 * Check if population has met termination condition -- this termination
-	 * condition is a simple one; simply check if we've exceeded the allowed
-	 * number of generations.
-	 *
+	 * 最大代数停止
 	 * @param generationsCount
 	 *            Number of generations passed
 	 * @param maxGenerations
@@ -94,6 +89,7 @@ public class GeneticAlgorithm <T extends Column>{
 	}
 
     /**
+     * 种群评估  计算每个个体cost  种群平均值cost
      * Evaluate population -- basically run calcFitness on each individual.     *
      * @param population the population to evaluate     *
      */
@@ -108,6 +104,7 @@ public class GeneticAlgorithm <T extends Column>{
     }
 	/** Selects parent for crossover using tournament selection
 	 * Tournament selection was introduced in Chapter 3
+     * 交叉操作中 用于选择另一个父染色体
 	 * @param population
 	 * @return The individual selected as a parent
 	 */
@@ -126,25 +123,8 @@ public class GeneticAlgorithm <T extends Column>{
 	}
 
 
-    /**
-	 * Ordered crossover mutation
-	 *
-	 * Chromosomes in the TSP require that each city is visited exactly once.
-	 * Uniform crossover can break the chromosome by accidentally selecting a
-	 * city that has already been visited from a parent; this would lead to one
-	 * city being visited twice and another city being skipped altogether.
-	 *
-	 * Additionally, uniform or random crossover doesn't really preserve the
-	 * most important aspect of the genetic information: the specific order of a
-	 * group of cities.
-	 *
-	 * We need a more clever crossover algorithm here. What we can do is choose
-	 * two pivot points, add chromosomes from one parent for one of the ranges,
-	 * and then only add not-yet-represented cities to the second range. This
-	 * ensures that no cities are skipped or visited twice, while also
-	 * preserving ordered batches of cities.
-	 *
-	 * @param population
+    /**交叉 个体（染色体）之间
+     * @param population
 	 * @return The new population
 	 */
     public Population crossoverPopulation(Population population){
@@ -210,15 +190,9 @@ public class GeneticAlgorithm <T extends Column>{
     }
 
     /**
-	 * Apply mutation to population
-	 *
-	 * Because the traveling salesman problem must visit each city only once,
-	 * this form of mutation will randomly swap two genes instead of
-	 * bit-flipping a gene like in earlier examples.
-	 *变异  只变异某条染色体两个基因
-	 * @param population
-	 *            The population to apply mutation to
-	 * @return The mutated population
+	 *变异  单个（个体）染色体的变化
+	 * @param population	 *
+	 * @return 变异后种群
 	 */
     public Population mutatePopulation(Population population){
         // Initialize new population

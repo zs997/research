@@ -106,7 +106,7 @@ public class Population {
 	/**
 	 * Shuffles the population in-place
 	 * 
-	 * @param void
+	 * @param
 	 * @return void
 	 */
 	public void shuffle() {

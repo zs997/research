@@ -1,47 +1,22 @@
-package cn.zs.serviceImp;
+package cn.zs.service;
 import cn.zs.dao.MyDataWriter;
 import cn.zs.daoImp.CsvDataWriter;
 import cn.zs.mapper.OrdersMapper;
 import cn.zs.pojo.*;
-import cn.zs.service.OrdersService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.*;
-import static cn.zs.algorithm.ga.Params.*;
+import static cn.zs.algorithm.component.Params.*;
 @Service
-public class OrderServiceImp implements OrdersService {
+public class DataService {
     @Autowired
     OrdersMapper ordersMapper;
-    @Override
-    public int countRows() {
-        return 0;
-    }
-    @Override
-    public int countOrders() {
-         //返回不同订单数目
-        return 0;
-    }
-    @Override
-    public int countBrands() {
-        return 0;
-    }
-    @Override
-    public List<String> selectByorderNo(Integer orderNo) {
-        List<String> res = new ArrayList<>();
-        //查询某订单编号的 事务
-        OrdersExample ordersExample = new OrdersExample();
-        OrdersExample.Criteria criteria = ordersExample.createCriteria();
-        criteria.andOrdernoEqualTo(orderNo);
-        List<Orders> orders = ordersMapper.selectByExample(ordersExample);
-        for (Orders order : orders) {
-            res.add(order.getBrandno());
-        }
-        return res;
-    }
-    @Override
-    /*
-    step 1 存储数据到数据库
+    /**
+    step 1 保存原始订单数据csv到数据库
+    @param:data 订单数据
     * */
+    @Deprecated
     public void save2database(ArrayList<ArrayList<String>> data) {
         int baditems = 0;
         // HashSet<String> set = new HashSet<>();
@@ -70,36 +45,40 @@ public class OrderServiceImp implements OrdersService {
         }
         System.out.println("坏数据个数"+baditems);
     }
+
     /**
-     * step2 生成货物信息表  保存到csv  按照拣货概率 由大到小 排序
-     *
+     *  根据数据库订单表  生成货物信息表  保存到csv(实际使用时候 可以不保存 从数据库查询)
+     *  id,   brandNo,  brandName,times,    pickFreq
+     * 名次，商品编号，商品名称，拣货频次，拣货概率
+     *  按照拣货概率由大到小 排序
+     * @parm：path 保存路径
      * */
-    @Override
+    @Deprecated
     public void generateItemList(String path){
-        //查询订单总数
-        Map<String, Long> stringLongMap = ordersMapper.selectOrdersNum();
-        Long ordersNum = stringLongMap.get("ordersNum");
-        double v = ordersNum * 1.0;
-        List<Item> items = ordersMapper.selectItemsInfo();
+        //查询商品明细
+        List<Item> items = getItemList();
         CommonData commonData = new CommonData();
         commonData.setPath(path);
-        CsvData csvData = new CsvData();
-        commonData.setData(csvData);
-        csvData.setTitile("id,brandNo,brandName,times,pickFreq");
+        CsvContent csvContent = new CsvContent();
+        commonData.setData(csvContent);
+        csvContent.setTitile("id,brandNo,brandName,times,pickFreq");
         String[][] csvDataMatrix = new String[items.size()][5];
         for (int i = 0; i < items.size(); i++) {
             Item item = items.get(i);
-            csvDataMatrix[i][0] = String.valueOf(i);
+            csvDataMatrix[i][0] = String.valueOf(item.getId());
             csvDataMatrix[i][1] = item.getBrandNo();
             csvDataMatrix[i][2] = item.getBrandName();
             csvDataMatrix[i][3] = String.valueOf(item.getTimes());
-            csvDataMatrix[i][4] = String.valueOf(item.getTimes()/v);
+            csvDataMatrix[i][4] = String.valueOf(item.getPickfreq());
         }
-        csvData.setCsvDataMatrix(csvDataMatrix);
+        csvContent.setCsvDataMatrix(csvDataMatrix);
         MyDataWriter writer = new CsvDataWriter();
         writer.write(commonData);
     }
-    @Override
+    /**
+     * 从数据库订单表查询商品明细，速度很快，可以不用csv，随用随取
+     * @return: 商品明细
+     * */
     public  List<Item> getItemList() {
         //查询订单总数
         Map<String, Long> stringLongMap = ordersMapper.selectOrdersNum();
@@ -113,10 +92,10 @@ public class OrderServiceImp implements OrdersService {
         }
       return items;
     }
-    @Override
-    /*
-    @description: 生成支持数矩阵  按拣货概率由大到小 排序
-    矩阵生成比较费时间  应该先放到csv 读取就使用
+
+    /**
+        生成支持数矩阵  按拣货概率由大到小 排序
+        矩阵生成比较费时间  应该先放到csv 需要使用时候，读取csv
     * */
     public void generateSupportCount(String path) {
         //查询不同订单编号
@@ -184,10 +163,10 @@ public class OrderServiceImp implements OrdersService {
         CommonData mydata = new CommonData();
 //      mydata.setPath("d:\\works\\data\\brandSupportCount.csv");
         mydata.setPath(path);
-        CsvData csvData = new CsvData();
-        csvData.setCsvDataMatrix(res);
-        csvData.setTitile(title.toString());
-        mydata.setData(csvData);
+        CsvContent csvContent = new CsvContent();
+        csvContent.setCsvDataMatrix(res);
+        csvContent.setTitile(title.toString());
+        mydata.setData(csvContent);
         MyDataWriter writer = new CsvDataWriter();
         writer.write(mydata);
 //        for (int i = 0; i < res.length; i++) {
@@ -201,18 +180,42 @@ public class OrderServiceImp implements OrdersService {
 //        mydata.setPath("d:\\works\\data\\brandDistance.csv");
 //        writer.write(mydata);
     }
-    @Override
+
     public void generateSimilarMatrix(String path) {
     }
-    @Override
+
     public void generateDistanceMatrix(String path) {
     }
+
+
     /**
-     * @description: 聚类算法 source为原始数据，相似度（聚类矩阵） 输出到文件
-     * 前n号货物聚类  现在先瞎搞 一个
+     * 将前n号货物随机分组
+     * 将分组结果保存到csv，destination路径
      * */
-    @Override
-    public void groupItem(String source, String destination,int n) {
+    public void generateItemGroupRandom(int n,String destination) {
+        ArrayList<ArrayList<Integer>> groupInfo = getItemGroupRandom(n);
+        String res [][] = new String[groupInfo.size()][];
+        for (int p = 0; p < groupInfo.size(); p++) {
+            res[p] = new String[groupInfo.get(p).size()];
+            for (int q = 0; q < groupInfo.get(p).size(); q++) {
+                res[p][q] = String.valueOf(groupInfo.get(p).get(q));
+            }
+        }
+        CsvContent csvContent = new CsvContent();
+        csvContent.setTitile("nothing but a title");
+        csvContent.setCsvDataMatrix(res);
+        CommonData commonData = new CommonData();
+        commonData.setPath(destination);
+        commonData.setData(csvContent);
+        CsvDataWriter csvDataWriter = new CsvDataWriter();
+        csvDataWriter.write(commonData);
+    }
+
+    /**
+     * 将前n号货物随机分组
+     * 返回分组信息
+     * */
+    public ArrayList<ArrayList<Integer>> getItemGroupRandom(int n){
         ArrayList<ArrayList<Integer>> groupInfo = new ArrayList<>();
         ArrayList<Integer> arrayList = new ArrayList<>();
         //0~399
@@ -240,25 +243,10 @@ public class OrderServiceImp implements OrdersService {
             }
             groupInfo.add(arrayList1);
         }
-        String res [][] = new String[groupInfo.size()][];
-        for (int p = 0; p < groupInfo.size(); p++) {
-            res[p] = new String[groupInfo.get(p).size()];
-            for (int q = 0; q < groupInfo.get(p).size(); q++) {
-                res[p][q] = String.valueOf(groupInfo.get(p).get(q));
-            }
-        }
-        CsvData csvData = new CsvData();
-        csvData.setTitile("nothing but a title");
-        csvData.setCsvDataMatrix(res);
-        CommonData commonData = new CommonData();
-        commonData.setPath(destination);
-        commonData.setData(csvData);
-        CsvDataWriter csvDataWriter = new CsvDataWriter();
-        csvDataWriter.write(commonData);
+        return groupInfo;
     }
 
-    @Override
-    public PickParam generateBenchmarkPickData(int orderLength,double aOfOrder,double bOfOrder,double cOfOrder) {
+    public PickParam getBenchmarkPickData(int orderLength,double aOfOrder,double bOfOrder,double cOfOrder) {
         //各类货物所占库位数目
        int storageA = (int)Math.round(storageCount * 0.2);
        int storageB = (int)Math.round(storageCount * 0.3);
@@ -267,21 +255,38 @@ public class OrderServiceImp implements OrdersService {
        double pickB = orderLength * bOfOrder / storageB;
        double pickC = orderLength * cOfOrder / storageC;
        int i = 0;
-       itemPickFreq = new double[storageCount];
+       double [] pickf = new double[storageCount];
         for (; i < storageA; i++) {
-            itemPickFreq[i] = pickA;
+            pickf[i] = pickA;
         }
         for (;i < storageA + storageB;i++){
-            itemPickFreq[i] = pickB;
+            pickf[i] = pickB;
         }
-        for (;i< itemPickFreq.length;i++ ){
-            itemPickFreq[i] = pickC;
+        for (;i< pickf.length;i++ ){
+            pickf[i] = pickC;
         }
         PickParam pickParam = new PickParam();
-        pickParam.setPickf(itemPickFreq);
+        pickParam.setPickf(pickf);
         pickParam.setStorageA(storageA);
         pickParam.setStorageB(storageB);
         pickParam.setStorageC(storageC);
         return pickParam;
+    }
+
+    /**
+     * 其他模块用到
+     * 根据订单编号 查询货物编号
+     * */
+    public List<String> selectByorderNo(Integer orderNo) {
+        List<String> res = new ArrayList<>();
+        //查询某订单编号的 事务
+        OrdersExample ordersExample = new OrdersExample();
+        OrdersExample.Criteria criteria = ordersExample.createCriteria();
+        criteria.andOrdernoEqualTo(orderNo);
+        List<Orders> orders = ordersMapper.selectByExample(ordersExample);
+        for (Orders order : orders) {
+            res.add(order.getBrandno());
+        }
+        return res;
     }
 }

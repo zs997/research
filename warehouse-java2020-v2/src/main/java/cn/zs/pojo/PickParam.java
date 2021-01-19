@@ -13,6 +13,7 @@ package cn.zs.pojo;
  * @className: PickParam
  * @packageName: cn.zs.pojo
  * @data: 2021-01-16 20:15
+ * 使用标准banchmark数据时 用到
  **/
 public class PickParam {
     int storageA ;

@@ -18,7 +18,7 @@ public interface OrdersMapper {
     Map<String,Long> selectOrdersNum();
     //查询不同商品
     List<Map<String,String>> selectDiffBrands();
-    //查询商品信息
+    //查询商品信息 商品编号 名称 频次 按频次降序排
     List<Item> selectItemsInfo();
     Orders selectByPrimaryKey(Integer oid);
     int updateByExampleSelective(@Param("record") Orders record, @Param("example") OrdersExample example);

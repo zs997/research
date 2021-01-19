@@ -1,8 +1,6 @@
 package cn.zs.algorithm.component;
-
 import java.util.ArrayList;
 import java.util.HashSet;
-
 public class Column {
     public double getEnterProb(){
         return -1;
@@ -19,6 +17,5 @@ public class Column {
           return -1;
      }
     public void calculCost(int no,HashSet<Integer> usedSet,double lastEvenProb, double lastEnterProb,double lastFirstProb){
-
     }
 }

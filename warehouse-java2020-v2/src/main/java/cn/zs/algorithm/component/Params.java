@@ -1,20 +1,14 @@
-package cn.zs.algorithm.ga;
+package cn.zs.algorithm.component;
 import cn.zs.pojo.Item;
 import java.util.ArrayList;
 import java.util.List;
-
 //货物编码规则：频次由大到小 0 1 2 3 4 5 6  M*N-1
 public class Params {
-    //拣货概率 计算所得数据 用map存比较好 以后可改进
-    //作用是map 存ABC的拣货概率
-    //public  static double itemPickFreq[] = new double[3];
-   // public  static HashMap<String,Double> itemPickFreq = new HashMap<>();
-    //假设分配的货物与库位数目一样多
     public static int storageCount;
     public static double [] itemPickFreq ;
-    public static Item [] itemlist;
+    public static Item [] itemList;
     public static ArrayList<ArrayList<Integer>> itemGroups;
-    public static double [][] similarMatrix ;
+
     //原始数据
     // M排货架 每排N个库位
     public   static int M,N;
@@ -28,10 +22,11 @@ public class Params {
     private Params(){}
     /**
      * @description:初始化仓库数据 第 1 步
+     * @param warehouseStructureData  从文本读取仓库尺寸数据
      * */
-    public static void initWarehouseStructure(String data){
-        data =data.trim();
-        String[] datas = data.split("\\s+");
+    public static void initWarehouseStructure(String warehouseStructureData){
+        warehouseStructureData =warehouseStructureData.trim();
+        String[] datas = warehouseStructureData.split("\\s+");
         //不必加异常处理 异常直接退出
         M = Integer.valueOf(datas[0]);
         N = Integer.valueOf(datas[1]);
@@ -40,21 +35,29 @@ public class Params {
         wc = Double.valueOf(datas[4]);
         storageCount = M * N;
     }
-
     /**
-     * @description: 初始化商品列表和拣货概率列表 第 2 步
+     * @description:初始化商品列表和拣货概率列表 第 2 步
+     * @param list  从数据库查询商品信息
      * */
     public static void initItemList(List<Item> list){
-        itemlist = new Item[list.size()];
+        itemList = new Item[list.size()];
         itemPickFreq = new double[list.size()];
         for (int i = 0; i < list.size(); i++) {
-            itemlist[i] = list.get(i);
+            itemList[i] = list.get(i);
             itemPickFreq[i] = list.get(i).getPickfreq();
         }
     }
     /**
-     * @description:生成随机概率值 用于测试
+     * 使用拣货概率初始化（用于banchmark数据初始化）
      * */
+    @Deprecated
+    public static void inititemPickFreq(double [] pickf){
+        itemPickFreq = pickf;
+    }
+    /**
+     * @description:生成随机拣货概率值 用于测试
+     * */
+    @Deprecated
     public static void randomInitItemList(){
         itemPickFreq = new double[storageCount];
         for (int i = 0; i < itemPickFreq.length; i++) {
@@ -62,7 +65,8 @@ public class Params {
         }
     }
     /**
-     * @description: 初始化 分组信息 第3 步
+     * @description:初始化分组信息 第3 步
+     * @Param groupInfo  从csv读取文本分组信息
      * */
     public static void initGroupInfo(ArrayList<ArrayList<String>> groupInfo){
         ArrayList<ArrayList<Integer>> res = new ArrayList<>();
@@ -86,13 +90,13 @@ public class Params {
         nonEmptyProb = 1 - p;
     }
 
-    public static String getParams(){
-        return  "M=" + M
-                + " N=" + N
-                + " f=" + f
-                + " wa="+ wa
-                + " wc="+ wc;
-
+    /**
+     * @description:初始化参数
+     * */
+    public static void init(String warehouseStructureData,List<Item> list,ArrayList<ArrayList<String>> groupInfo){
+        initWarehouseStructure( warehouseStructureData);
+        initItemList(list);
+        initGroupInfo(groupInfo);
+        calculNonEmptyProb();
     }
-
 }

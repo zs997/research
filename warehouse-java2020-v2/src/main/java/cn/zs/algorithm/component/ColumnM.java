@@ -17,7 +17,7 @@ package cn.zs.algorithm.component;
 
 import java.util.HashSet;
 
-import static cn.zs.algorithm.ga.Params.*;
+import static cn.zs.algorithm.component.Params.*;
 
 public class ColumnM extends ColumnR {
     double firstProb;

@@ -12,7 +12,7 @@ import cn.zs.algorithm.component.Coordinate;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-import static cn.zs.algorithm.ga.Params.*;
+import static cn.zs.algorithm.component.Params.*;
 /**
  * @version: V1.0
  * @author: zs

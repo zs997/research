@@ -14,7 +14,7 @@ package cn.zs.pojo;
  * @packageName: cn.zs.pojo
  * @data: 2020-12-09 21:31
  **/
-public class CsvData {
+public class CsvContent {
     String titile;
     String [][] csvDataMatrix;
 

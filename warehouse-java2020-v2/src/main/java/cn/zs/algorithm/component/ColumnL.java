@@ -1,5 +1,4 @@
 package cn.zs.algorithm.component;
-
 /**
  * @version: V1.0
  * @author: zs
@@ -7,21 +6,16 @@ package cn.zs.algorithm.component;
  * @packageName: cn.zs.model
  * @data: 2020-11-29 14:52
  **/
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-
-import static cn.zs.algorithm.ga.Params.*;
-
+import static cn.zs.algorithm.component.Params.*;
 public class ColumnL extends ColumnM{
-
     double g;
     double elg;
     /**
      * 计算单个通道内 最大间隔期望
      * */
-
     void calculG(){
         HashMap<String,Double> gMap = new HashMap<>();
         ArrayList<ArrayList<Double>> state = new ArrayList<>();
@@ -29,7 +23,6 @@ public class ColumnL extends ColumnM{
         ArrayList<Double> state2 = new ArrayList<>();
         state.add(state1);
         state.add(state2);
-
         //初始化所有状态空间
         state1.add(0.5 * f + wc);
         state2.add((double)f);
@@ -39,7 +32,6 @@ public class ColumnL extends ColumnM{
         }
         state1.add(state1.get(N - 2) + f);
         state1.add(N * f + 2 * wc);
-
         //step1 Gn+1(gc,gl) = gl 初始化 计算n+1
         for (int i = 0; i < state.size(); i++) {
             for (int j = 0; j < state.get(i).size(); j++) {
@@ -112,7 +104,6 @@ public class ColumnL extends ColumnM{
         g = gMap.get(1 + "," + (0.5 * f + wc) + "," + (0.5 * f + wc));
        // System.out.println(g);
     }
-
    /*
    //老办法 只能计算特殊值
     void calculG(){
@@ -152,7 +143,6 @@ public class ColumnL extends ColumnM{
     * */
     public void calculCost(int no,HashSet<Integer> usedSet,double lastEvenProb, double lastEnterProb,double lastFirstProb){
         //前三组 只需要该巷道内的库位分配情况
-
         calculElr();
         calculEnterProb();
 
@@ -161,12 +151,9 @@ public class ColumnL extends ColumnM{
         //需要知道其他参数
         calculLastProb(usedSet);
         calculElc(no);
-
         //计算该通道之前没有通道访问
         calculFirstProb(lastFirstProb,lastEnterProb);
         calculElg();
         cost=(elg + elc)/nonEmptyProb;
     }
-
-
 }
