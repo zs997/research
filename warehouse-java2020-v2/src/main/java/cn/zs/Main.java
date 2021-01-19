@@ -83,8 +83,7 @@ public class Main {
     public static void initWarehouseStructure(String path){
         OriginDataReader originDataReader = new OriginDataReaderImp();
         ArrayList<String>  ss = originDataReader.readTxt(path);
-        String s = ss.get(ss.size() - 1);
-        Params.initWarehouseStructure(s);
+        Params.initWarehouseStructure(ss.get(ss.size() - 1));
     }
     /**
      *@description： 从数据库 初始化商品信息
