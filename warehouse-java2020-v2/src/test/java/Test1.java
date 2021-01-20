@@ -6,6 +6,10 @@
  * copyright(c) 2019-2021 hust
  */
 
+import cn.zs.dao.MyDataWriter;
+import cn.zs.daoImp.CsvDataWriter;
+import cn.zs.pojo.CommonData;
+import cn.zs.pojo.CsvContent;
 import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 import org.junit.Test;
 import org.rosuda.REngine.REXP;
@@ -57,17 +61,73 @@ public class Test1 {
     }
     @Test
     public void testR() throws Exception {
-            //建立连接
-            RConnection rc=new RConnection();
-    //构建数据
-            int[] datas={314,451,56,24,631};
-    //声明变量，相当于在R命令行中输入data<-datas命令
-            rc.assign("data",datas);
-    //执行R语句，相当于在R命令行中输max(data)命令
-            REXP rexp=rc.eval("max(data)");
-    //REXP. asXxx()返回相应类型的数据，如果结果类型不符会出错
-            System.out.println(rexp.asInteger());
-            rc.close();
-    }
+        //建立连接
+        RConnection rc=new RConnection();
+        String functionPath = "D:\\works\\R\\cluster.R";
+        rc.assign("functionPath",functionPath);
+        rc.eval("source(functionPath)");
 
+        rc.assign("n","100");
+        rc.assign("k","5");
+        rc.assign("dataPath","D:\\works\\data\\brandDistance.csv");
+
+        REXP eval = rc.eval("cluster(dataPath,n,k)");
+        String s[] = eval.asStrings();
+        for (int i = 0; i < s.length; i++) {
+            System.out.println(s[i]);
+        }
+        rc.close();
+    }
+    @Test
+    public void test1(){
+        Object []  data;
+        Integer[] integers = new Integer[4];
+        integers[0] = 10;
+        integers[1]= 20;
+        data = integers;
+        System.out.println(data[0]+" "+ data[1] + " "+ data[2]+" "+data[3]);
+//        int[] ints = new int[3];
+////        ints[0] = 15;
+////        ints[1] = 16;
+////        data = ints;
+       String[] strings = new String[5];
+        strings[0] = "100";
+        strings[1] = "da";
+        strings[2] = "adsfd";
+        System.out.println(strings[0]+ " "+ strings[1] + " "+ strings[2] + " "+ strings[3] + "  "+ strings[4] );
+    }
+    @Test
+    public void testCsv(){
+        CommonData mydata = new CommonData();
+//      mydata.setPath("d:\\works\\data\\brandSupportCount.csv");
+        mydata.setPath("d:\\works\\data\\test1.csv");
+        int [][] temp  = new int[5][5];
+        temp[0][0] = 1;
+        temp[0][1] = 2;
+        temp[0][2] = 21;
+        temp[0][3] = 13;
+        temp[0][4] = 245;
+        String [][] res = new String[5][5];
+        for (int i = 0; i < temp.length; i++) {
+            for (int j = 0; j < temp[i].length; j++) {
+                res[i][j] = String.valueOf(temp[i][j]);
+            }
+        }
+        CsvContent csvContent = new CsvContent();
+        csvContent.setCsvDataMatrix(res);
+        csvContent.setTitile("asfdzfdsdfg");
+        mydata.setData(csvContent);
+        MyDataWriter writer = new CsvDataWriter();
+        writer.write(mydata);
+        for (int i = 0; i < res.length; i++) {
+            for (int j = 0; j < res[i].length; j++) {
+                res[i][j] = String.valueOf(100 - temp[i][j]);
+                if(i == j){
+                    res[i][j] = "0";
+                }
+            }
+        }
+        mydata.setPath("d:\\works\\data\\test2.csv");
+        writer.write(mydata);
+    }
 }

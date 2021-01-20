@@ -139,16 +139,16 @@ public class Individual<T extends Column>{
         spreadCost = spreads;
     }
     public double calculFitness(Class<T> t) {
-//        try {
-//            synchronizGene(t);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        calculLengthCost();
-//        calculSpreadCost();
-//        cost = lengthCost*0.5 + spreadCost*0.5;
-//        fitness = 1/cost;
-//        return fitness;
+        try {
+            synchronizGene(t);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        calculLengthCost();
+        calculSpreadCost();
+        cost = lengthCost*0.5 + spreadCost*0.5;
+        fitness = 1/cost;
+        return fitness;
 
 //        try {
 //            synchronizGene(t);
@@ -160,15 +160,15 @@ public class Individual<T extends Column>{
 //        fitness = 1/cost;
 //        return fitness;
 
-        try {
-            synchronizGene(t);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        calculLengthCost();
-        cost = lengthCost;
-        fitness =1/cost;
-        return fitness;
+//        try {
+//            synchronizGene(t);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        calculLengthCost();
+//        cost = lengthCost;
+//        fitness =1/cost;
+//        return fitness;
     }
     /**
      * 判断有无某基因

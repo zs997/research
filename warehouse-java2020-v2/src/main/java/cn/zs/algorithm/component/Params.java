@@ -58,7 +58,7 @@ public class Params {
      * @description:生成随机拣货概率值 用于测试
      * */
     @Deprecated
-    public static void randomInitItemList(){
+    public static void initItemListRandom(){
         itemPickFreq = new double[storageCount];
         for (int i = 0; i < itemPickFreq.length; i++) {
             itemPickFreq[i] = Math.random();
@@ -77,7 +77,7 @@ public class Params {
             }
             res.add(temp);
         }
-        Params.itemGroups = res;
+        itemGroups = res;
     }
     /**
      * @description:计算订单非空的概率 第 4 步
@@ -90,13 +90,4 @@ public class Params {
         nonEmptyProb = 1 - p;
     }
 
-    /**
-     * @description:初始化参数
-     * */
-    public static void init(String warehouseStructureData,List<Item> list,ArrayList<ArrayList<String>> groupInfo){
-        initWarehouseStructure( warehouseStructureData);
-        initItemList(list);
-        initGroupInfo(groupInfo);
-        calculNonEmptyProb();
-    }
 }

@@ -36,18 +36,18 @@ public class CsvDataWriter implements MyDataWriter {
                 BufferedWriter bw=new BufferedWriter(osw);
                 bw.write(csvContent.getTitile()+"\t\n");
                String[][] csvDataMatrix = csvContent.getCsvDataMatrix();
-               for (int i = 0; i < csvDataMatrix.length; i++) {
-                    StringBuilder sb = new StringBuilder();
-                    for (int j = 0; j < csvDataMatrix[i].length-1; j++) {
-                        sb.append(csvDataMatrix[i][j]+",");
+                   for (int i = 0; i < csvDataMatrix.length; i++) {
+                        StringBuilder sb = new StringBuilder();
+                        for (int j = 0; j < csvDataMatrix[i].length-1; j++) {
+                            sb.append(csvDataMatrix[i][j]+",");
+                        }
+                        sb.append(csvDataMatrix[i][csvDataMatrix[i].length-1]);
+                        bw.write(sb.toString()+"\t\n");
                     }
-                    sb.append(csvDataMatrix[i][csvDataMatrix[i].length-1]);
-                    bw.write(sb.toString()+"\t\n");
-                }
-                //注意关闭的先后顺序，先打开的后关闭，后打开的先关闭
-                bw.close();
-                osw.close();
-                fos.close();
+                    //注意关闭的先后顺序，先打开的后关闭，后打开的先关闭
+                    bw.close();
+                    osw.close();
+                    fos.close();
             }
         }catch (Exception e){
             e.printStackTrace();

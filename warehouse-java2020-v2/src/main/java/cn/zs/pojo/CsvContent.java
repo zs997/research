@@ -26,11 +26,11 @@ public class CsvContent {
         this.titile = titile;
     }
 
-    public String[][] getCsvDataMatrix() {
+    public String [][] getCsvDataMatrix() {
         return csvDataMatrix;
     }
 
-    public void setCsvDataMatrix(String[][] csvDataMatrix) {
+    public void setCsvDataMatrix(String [][] csvDataMatrix) {
         this.csvDataMatrix = csvDataMatrix;
     }
 }

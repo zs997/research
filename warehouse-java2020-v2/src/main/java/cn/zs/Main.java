@@ -1,4 +1,5 @@
 package cn.zs;
+import cn.zs.algorithm.cluster.Kmeans;
 import cn.zs.algorithm.ga.GeneticAlgorithm;
 import cn.zs.algorithm.ga.Individual;
 import cn.zs.algorithm.component.Params;
@@ -17,36 +18,56 @@ import java.util.*;
 import static cn.zs.algorithm.component.Params.*;
 public class Main {
     static DataService dataService;
-    static OriginDataReader originDataReader;
-
     public static void main(String args[]){
         ApplicationContext ac = new ClassPathXmlApplicationContext("applicationContext.xml");
-        originDataReader = ac.getBean(OriginDataReader.class);
         dataService = ac.getBean(DataService.class);
-         initWarehouseStructure("D:\\works\\data\\warehouseStructure.txt");
-        //initItemList();
-        double[] pickf = dataService.getBenchmarkPickData(20, 0.5, 0.3, 0.2).getPickf();
-        Params.inititemPickFreq(pickf);
+        initParams();
 
-        Params.calculNonEmptyProb();
-      initGroupInfo("D:\\works\\data\\groupinfo1.csv");
+        //doSA();
+        doGA();
 
-       // doSA();
-      //  doGA();
-      //   testPopulation();
     }
-
     public static void doSA(){
-        SA.doSA();
+        SA sa = new SA(100, 0.000000005, 100, 0.95);
+        sa.doSA();
     }
     public static void doGA(){
-        //每一组实验数据 都要重新分组  因为货物数目变化了
-        // main.initGroupInfo("D:\\works\\data\\groupinfo.csv");
-        //   main.checkData(5,8);
-             GeneticAlgorithm<ColumnR> columnRGeneticAlgorithm = new GeneticAlgorithm<>(5000,100, 0.001, 0.9, 2, 5);
-             columnRGeneticAlgorithm.doGA(ColumnR.class);
-
+         GeneticAlgorithm<ColumnR> columnRGeneticAlgorithm = new GeneticAlgorithm<>(5000
+                 ,100, 0.001, 0.9, 2, 5);
+         columnRGeneticAlgorithm.doGA(ColumnR.class);
     }
+    /**
+     * @description: 文本 初始化 仓库结构
+     * */
+    public static void initParams(){
+        OriginDataReader originDataReader = new OriginDataReaderImp();
+        ArrayList<String>  ss = originDataReader.readTxt("D:\\works\\data\\warehouseStructure.txt");
+        Params.initWarehouseStructure(ss.get(ss.size() - 1));
+
+        List<Item> itemList = dataService.getItemList();
+        Params.initItemList(itemList);
+        // double[] pickf = dataService.getBenchmarkPickData(20, 0.5, 0.3, 0.2).getPickf();
+        //Params.inititemPickFreq(pickf);
+
+        Params.calculNonEmptyProb();
+
+        try {
+            new Kmeans().generateItemGroupByR("D:\\works\\R\\cluster.R"
+                    ,"D:\\works\\data\\brandDistance.csv",storageCount,5,"D:\\works\\data\\groupinfo.csv");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        ArrayList<ArrayList<String>> arrayLists = originDataReader.readCsv("D:\\works\\data\\groupinfo.csv");
+        Params.initGroupInfo(arrayLists);
+    }
+
+
+
+
+    /**
+     * 测试随机可行解性能  算法一定要比随机生成的好 才行啊
+     * */
+    @Deprecated
     public static void randomSolution(){
         ArrayList<Integer> x = new ArrayList<>();
         ArrayList<ArrayList<Double>> y = new ArrayList<>();
@@ -65,69 +86,6 @@ public class Main {
         System.out.println(y1.get(0));
         System.out.println(y1.get(y1.size()-1));
         LineView.printPic(x,y,stackBar);
-    }
-
-
-    /**
-    * @description：查询货物列表 包括编号 拣货概率 保存csv
-    * */
-    public static void generateItemList(String path){
-        dataService.generateItemList(path);
-    }
-    private static void generateSupportCount(String path) {
-        dataService.generateSupportCount(path);
-    }
-    /**
-     * @description: 文本 初始化 仓库结构
-     * */
-    public static void initWarehouseStructure(String path){
-        OriginDataReader originDataReader = new OriginDataReaderImp();
-        ArrayList<String>  ss = originDataReader.readTxt(path);
-        Params.initWarehouseStructure(ss.get(ss.size() - 1));
-    }
-    /**
-     *@description： 从数据库 初始化商品信息
-     * */
-    public static void initItemList(){
-        List<Item> itemList = dataService.getItemList();
-        Params.initItemList(itemList);
-    }
-    /**
-     * @description: 从文本 初始化 关联度矩阵
-     * */
-    public static void initSimilarMatrix(){
-        OriginDataReader originDataReader = new OriginDataReaderImp();
-        ArrayList<ArrayList<String>> arrayLists = originDataReader.readCsv("D:\\works\\data\\brandSupportCount.csv");
-        double [][] matrix = new double[arrayLists.size()-1][arrayLists.size()-1];
-        System.out.println(matrix.length);
-        for (int i = 1; i < arrayLists.size(); i++) {
-            for (int j = 0; j < arrayLists.get(i).size(); j++) {
-                String s = arrayLists.get(i).get(j);
-                Double d = Double.valueOf(s);
-                matrix[i-1][j] = d;
-            }
-        }
-     //   Params.similarMatrix = matrix;
-    }
-    /**
-     * @description: 从文本 读取 分组信息
-     * */
-    public static void initGroupInfo(String path){
-        OriginDataReader originDataReader = new OriginDataReaderImp();
-        ArrayList<ArrayList<String>> arrayLists = originDataReader.readCsv(path);
-        Params.initGroupInfo(arrayLists);
-    }
-
-
-
-    /**
-     * @description: 初始化数据 将csv订单数据存到数据库 step1
-     * */
-    @Deprecated
-    public static void csv2databse(String path){
-        //"D:\\works\\data\\data.csv"
-        ArrayList<ArrayList<String>> data = originDataReader.readCsv(path);
-        dataService.save2database(data);
     }
     /**
      * 测试遗传算法 种群正确性
@@ -305,7 +263,7 @@ public class Main {
      * usedA usedB usedC  共计多少 算上本通道
      * */
     @Deprecated
-    public static void checkColumn(int no ,int usedA ,int usedB,int usedC,int numA,int numB){
+    public static void testColumn(int no ,int usedA ,int usedB,int usedC,int numA,int numB){
         PickParam pickParam = dataService.getBenchmarkPickData(20, 0.5, 0.3, 0.2);
         Params.calculNonEmptyProb();
         ColumnL columnL = new ColumnL();

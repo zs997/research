@@ -65,24 +65,23 @@ public class SA {
                 break;
         }
     }
+    private SA(){
 
-    public static void doSA() {
+    }
+    public void doSA() {
         long begin_time = System.currentTimeMillis();
-
-        SA sa = new SA(100, 0.000000005, 100, 0.95);
-        sa.SimulatedAnnealing();
-
+        SimulatedAnnealing();
         long end_time = System.currentTimeMillis();
 
         System.out.print("最佳路径长度为：");
-        System.out.println(sa.path.getRes());
+        System.out.println(path.getRes());
         System.out.print("路径顺序：");
-        int[] best_path = sa.path.getBest_path();
+        int[] best_path = path.getBest_path();
         for (int i = 0; i < best_path.length; i++) {
             System.out.print(best_path[i]+",");
         }
         System.out.println();
-        double res = sa.path.getRes();
+        double res = path.getRes();
         System.out.println(res+"fdsfsg");
         System.out.println();
         System.out.println("运行时间：" + ((end_time - begin_time) / 1000.0));
