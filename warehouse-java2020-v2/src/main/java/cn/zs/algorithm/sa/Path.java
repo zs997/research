@@ -20,7 +20,7 @@ import static cn.zs.algorithm.component.Params.*;
  * @packageName: cn.zs
  * @data: 2021-01-17 16:58
  **/
-public class Path {
+public class Path <T extends Column>{
     //计算目标函数用
     private ArrayList<Column> columns ;
 
