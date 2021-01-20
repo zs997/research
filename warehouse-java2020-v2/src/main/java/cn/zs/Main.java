@@ -1,5 +1,5 @@
 package cn.zs;
-import cn.zs.algorithm.cluster.Kmeans;
+import cn.zs.algorithm.cluster.Hcluster;
 import cn.zs.algorithm.ga.GeneticAlgorithm;
 import cn.zs.algorithm.ga.Individual;
 import cn.zs.algorithm.component.Params;
@@ -52,7 +52,7 @@ public class Main {
         Params.calculNonEmptyProb();
 
 
-        new Kmeans().generateItemGroupByR("D:\\works\\R\\cluster.R"
+        new Hcluster().generateItemGroupByR("D:\\works\\R\\cluster.R"
                     ,"D:\\works\\data\\brandDistance.csv",storageCount,20,"D:\\works\\data\\groupinfo.csv");
 
         ArrayList<ArrayList<String>> arrayLists = originDataReader.readCsv("D:\\works\\data\\groupinfo.csv");

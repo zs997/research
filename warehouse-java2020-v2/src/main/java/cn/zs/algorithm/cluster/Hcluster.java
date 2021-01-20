@@ -24,7 +24,7 @@ import java.util.Set;
  * @data: 2021-01-19 22:24
  * 调用R语言聚类库 将聚类结果 存储于csv
  **/
-public class Kmeans {
+public class Hcluster {
     /**
      * 调用R库函数  将前n号货物聚类
      * @param：source 读取的距离矩阵
@@ -76,7 +76,4 @@ public class Kmeans {
         csvDataWriter.write(commonData);
         rc.close();
     }
-
-
-
 }
