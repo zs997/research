@@ -129,36 +129,36 @@ public class Individual<T extends Column>{
                 for (int k = j+1; k < items.size(); k++) {
                     Integer item2 = items.get(k);
                     Coordinate c2 = coordinateMap.get(item2);
-                    spread = c1.calculDistance(c2);
+                    spread += c1.calculDistance(c2);
                 }
             }
-           // spread = spread / items.size();
+            spread = spread / items.size();
 
             spreads += spread;
         }
         spreadCost = spreads;
     }
     public double calculFitness(Class<T> t) {
-        try {
-            synchronizGene(t);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        calculLengthCost();
-        calculSpreadCost();
-        cost = lengthCost*0.5 + spreadCost*0.5;
-        fitness = 1/cost;
-        return fitness;
-
 //        try {
 //            synchronizGene(t);
 //        } catch (Exception e) {
 //            e.printStackTrace();
 //        }
+//        calculLengthCost();
 //        calculSpreadCost();
-//        cost = spreadCost;
+//        cost = lengthCost*0.9 + spreadCost*0.1;
 //        fitness = 1/cost;
 //        return fitness;
+
+        try {
+            synchronizGene(t);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        calculSpreadCost();
+        cost = spreadCost;
+        fitness = 1/cost;
+        return fitness;
 
 //        try {
 //            synchronizGene(t);

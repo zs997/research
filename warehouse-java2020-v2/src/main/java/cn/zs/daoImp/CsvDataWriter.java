@@ -31,7 +31,7 @@ public class CsvDataWriter implements MyDataWriter {
             Object data1 = data.getData();
            if (data1 instanceof CsvContent){
                 CsvContent csvContent =  (CsvContent)data1;
-                FileOutputStream fos=new FileOutputStream(file,true);
+                FileOutputStream fos=new FileOutputStream(file,false);
                 OutputStreamWriter osw=new OutputStreamWriter(fos, "UTF-8");
                 BufferedWriter bw=new BufferedWriter(osw);
                 bw.write(csvContent.getTitile()+"\t\n");

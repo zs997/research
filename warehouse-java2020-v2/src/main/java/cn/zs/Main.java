@@ -18,7 +18,7 @@ import java.util.*;
 import static cn.zs.algorithm.component.Params.*;
 public class Main {
     static DataService dataService;
-    public static void main(String args[]){
+    public static void main(String args[]) throws Exception {
         ApplicationContext ac = new ClassPathXmlApplicationContext("applicationContext.xml");
         dataService = ac.getBean(DataService.class);
         initParams();
@@ -39,7 +39,7 @@ public class Main {
     /**
      * @description: 文本 初始化 仓库结构
      * */
-    public static void initParams(){
+    public static void initParams() throws Exception {
         OriginDataReader originDataReader = new OriginDataReaderImp();
         ArrayList<String>  ss = originDataReader.readTxt("D:\\works\\data\\warehouseStructure.txt");
         Params.initWarehouseStructure(ss.get(ss.size() - 1));
@@ -51,12 +51,10 @@ public class Main {
 
         Params.calculNonEmptyProb();
 
-        try {
-            new Kmeans().generateItemGroupByR("D:\\works\\R\\cluster.R"
-                    ,"D:\\works\\data\\brandDistance.csv",storageCount,5,"D:\\works\\data\\groupinfo.csv");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
+        new Kmeans().generateItemGroupByR("D:\\works\\R\\cluster.R"
+                    ,"D:\\works\\data\\brandDistance.csv",storageCount,20,"D:\\works\\data\\groupinfo.csv");
+
         ArrayList<ArrayList<String>> arrayLists = originDataReader.readCsv("D:\\works\\data\\groupinfo.csv");
         Params.initGroupInfo(arrayLists);
     }
