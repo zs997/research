@@ -22,7 +22,7 @@ import static cn.zs.algorithm.component.Params.*;
  **/
 public class Path {
     //计算目标函数用
-    private ArrayList<ColumnR> columns ;
+    private ArrayList<Column> columns ;
 
     private double lengthCost;
     //下标库位编号 值为存储的货物
@@ -48,7 +48,7 @@ public class Path {
      * 通过染色体 同步其他数据
      * */
     private  void synchronizColumn(int [] route)  {
-        columns = new ArrayList<ColumnR>();
+        columns = new ArrayList<>();
         //遍历库位  查看基因分配的货物编号
         for (int i = 0; i < M; i++) {
             ArrayList<Integer> temp = new ArrayList<>();
