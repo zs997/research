@@ -24,11 +24,11 @@ public class Main {
         initParams();
 
         doSA();
-    //    doGA();
+       doGA();
 
     }
     public static void doSA() throws Exception {
-        SA sa = new SA(100, 0.000000005, 100, 0.95,ColumnL.class);
+        SA sa = new SA(100, 0.000000005, 100, 0.95,ColumnR.class);
         sa.doSA();
     }
     public static void doGA(){
@@ -75,8 +75,8 @@ public class Main {
         y.add(y1);
         for (int i = 0; i < 200000; i++) {
             x.add(i);
-            Individual individual = new Individual();
-            individual.calculFitness(ColumnR.class);
+            Individual individual = new Individual(ColumnR.class);
+            individual.calculFitness();
             y1.add(individual.getCost());
             System.out.println(i+"  "+ individual.getCost());
         }
@@ -91,11 +91,11 @@ public class Main {
      * */
     @Deprecated
     public static void testPopulation() {
-        Population population = new Population(100);
+        Population population = new Population(100,ColumnR.class);
         double populationFitness = 0;
         // Loop over population evaluating individuals and summing population fitness
         for (Individual individual : population.getIndividuals()) {
-            populationFitness += individual.calculFitness(ColumnR.class);
+            populationFitness += individual.calculFitness();
         }
         double avgFitness = populationFitness / population.size();
         population.setPopulationFitness(avgFitness);
@@ -250,10 +250,10 @@ public class Main {
 //        for (int i = 0; i < temp.length; i++) {
 //            chromo.add(temp[i]);
 //        }
-        Individual<ColumnM> individual = new Individual<>();
+        Individual<ColumnM> individual = new Individual<>(ColumnM.class);
         individual.setChromosome(list);
         System.out.println(list);
-        individual.calculFitness(ColumnM.class);
+        individual.calculFitness();
         System.out.println(individual.getCost());
     }
     /**

@@ -1,22 +1,24 @@
 package cn.zs.algorithm.ga;
+import cn.zs.algorithm.component.Column;
+
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Random;
-public class Population {
+public class Population <T extends Column> {
 	private Individual population[];
 	private double populationFitness = -1;
-
-	/**
+	private Class<T> t;
+ 	/**
 	 * Initializes blank population of individuals
 	 *
 	 * @param populationSize
 	 *            The size of the population
 	 */
-	public Population(int populationSize) {
+	public Population(int populationSize,Class<T> t) {
 		// Initial population
 		this.population = new Individual[populationSize];
 		for (int i = 0; i < population.length; i++) {
-            Individual individual = new Individual();
+            Individual individual = new Individual(t);
             population[i] = individual;
         }
 

@@ -39,11 +39,13 @@ public class Individual<T extends Column>{
     private HashMap<Integer, Coordinate> coordinateMap ;
     private double fitness;
     private double cost;
+    private Class<T> t;
     /**
      * 产生随机染色体
      * 由基因 同步其他库位分配数据
      * */
-    public  Individual(){
+    public  Individual(Class<T> t){
+        this.t = t;
         ArrayList<Integer> g = new ArrayList<>();
         for (int i = 0; i < storageCount; i++) {
             g.add(i);
@@ -54,11 +56,13 @@ public class Individual<T extends Column>{
     /**
      * 产生指导性染色体
      * */
-    public Individual(ArrayList<Integer> chromosome){
+    public Individual(Class<T> t,ArrayList<Integer> chromosome){
         this.chromosome = chromosome;
+        this.t = t;
     }
-    public Individual(int [] chromosome){
+    public Individual(Class<T> t,int [] chromosome){
         this.chromosome = new ArrayList<>();
+        this.t = t;
         for (int i = 0; i < chromosome.length; i++) {
             this.chromosome.add(chromosome[i]);
         }
@@ -66,7 +70,7 @@ public class Individual<T extends Column>{
     /**
      * 通过染色体 同步其他数据
      * */
-    private  void synchronizGene(Class<T> t) throws Exception {
+    private  void synchronizGene() throws Exception {
         columns = new ArrayList<>();
         coordinateMap = new HashMap<>();
         //遍历库位  查看基因分配的货物编号
@@ -139,30 +143,30 @@ public class Individual<T extends Column>{
         }
         spreadCost = spreads;
     }
-    public double calculFitness(Class<T> t) {
-//        try {
-//            synchronizGene(t);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        calculLengthCost();
-//        calculSpreadCost();
-//        cost = lengthCost*0.9 + spreadCost*0.1;
-//        fitness = 1/cost;
-//        return fitness;
-
+    public double calculFitness() {
         try {
-            synchronizGene(t);
+            synchronizGene();
         } catch (Exception e) {
             e.printStackTrace();
         }
+        calculLengthCost();
         calculSpreadCost();
-        cost = spreadCost;
+        cost = lengthCost + spreadCost;
         fitness = 1/cost;
         return fitness;
 
 //        try {
-//            synchronizGene(t);
+//            synchronizGene();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        calculSpreadCost();
+//        cost = spreadCost;
+//        fitness = 1/cost;
+//        return fitness;
+
+//        try {
+//            synchronizGene();
 //        } catch (Exception e) {
 //            e.printStackTrace();
 //        }

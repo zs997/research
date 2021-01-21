@@ -27,9 +27,11 @@ import java.util.Set;
 public class Hcluster {
     /**
      * 调用R库函数  将前n号货物聚类
-     * @param：source 读取的距离矩阵
-     * @param:n 距离矩阵前n行列，频率前n的货物
-     * @param: destination
+     * @param：functionPath R函数所在目录
+     * @param:dataPath 数据所在目录
+     * @param:n 选择前n号货物
+     * @param：k 聚类k组
+     * @para：destination 结果目录 具体到文件名
      * */
     public void generateItemGroupByR(String functionPath,String dataPath,int n,int k,String destination) throws Exception {
         //建立连接

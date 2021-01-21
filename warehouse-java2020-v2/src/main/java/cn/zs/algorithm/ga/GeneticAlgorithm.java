@@ -24,7 +24,7 @@ public class GeneticAlgorithm <T extends Column>{
         // Initialize population
         Population population = initPopulation();
         // Evaluate population
-        evalPopulation(population,t);
+        evalPopulation(population);
         // Keep track of current generation
         int generation = 1;
         ArrayList<Integer> x = new ArrayList<>();
@@ -46,7 +46,7 @@ public class GeneticAlgorithm <T extends Column>{
             // Apply mutation
             population = mutatePopulation(population);
             // Evaluate population
-            evalPopulation(population,t);
+            evalPopulation(population);
             // Increment the current generation
             generation++;
         }
@@ -74,7 +74,7 @@ public class GeneticAlgorithm <T extends Column>{
      */
     public Population initPopulation(){
         // Initialize population
-        Population population = new Population(populationSize);
+        Population population = new Population(populationSize,t);
         return population;
     }
 	/**
@@ -94,11 +94,11 @@ public class GeneticAlgorithm <T extends Column>{
      * Evaluate population -- basically run calcFitness on each individual.     *
      * @param population the population to evaluate     *
      */
-    public void evalPopulation(Population population,Class<T> t)  {
+    public void evalPopulation(Population population)  {
         double populationFitness = 0;
         // Loop over population evaluating individuals and summing population fitness
         for (Individual individual : population.getIndividuals()) {
-            populationFitness += individual.calculFitness(t);
+            populationFitness += individual.calculFitness();
         }
         double avgFitness = populationFitness / population.size();
         population.setPopulationFitness(avgFitness);
@@ -111,7 +111,7 @@ public class GeneticAlgorithm <T extends Column>{
 	 */
 	public Individual selectParent(Population population) {
 		// Create tournament
-		Population tournament = new Population(this.tournamentSize);
+		Population tournament = new Population(this.tournamentSize,t);
 		// Add random individuals to the tournament
 		population.shuffle();
 		for (int i = 0; i < this.tournamentSize; i++) {
@@ -130,7 +130,7 @@ public class GeneticAlgorithm <T extends Column>{
 	 */
     public Population crossoverPopulation(Population population){
         // Create new population
-        Population newPopulation = new Population(population.size());
+        Population newPopulation = new Population(population.size(),t);
 
         // Loop over current population by fitness
         for (int populationIndex = 0; populationIndex < population.size(); populationIndex++) {
@@ -145,7 +145,7 @@ public class GeneticAlgorithm <T extends Column>{
                 // Create blank offspring chromosome
                 int offspringChromosome[] = new int[parent1.getChromosomeLength()];
                 Arrays.fill(offspringChromosome, -1);
-                Individual offspring = new Individual(offspringChromosome);
+                Individual offspring = new Individual(t,offspringChromosome);
 
                 // Get subset of parent chromosomes
                 int substrPos1 = (int) (Math.random() * parent1.getChromosomeLength());
@@ -197,7 +197,7 @@ public class GeneticAlgorithm <T extends Column>{
 	 */
     public Population mutatePopulation(Population population){
         // Initialize new population
-        Population newPopulation = new Population(this.populationSize);
+        Population newPopulation = new Population(this.populationSize,t);
         
         // Loop over current population by fitness
         for (int populationIndex = 0; populationIndex < population.size(); populationIndex++) {
