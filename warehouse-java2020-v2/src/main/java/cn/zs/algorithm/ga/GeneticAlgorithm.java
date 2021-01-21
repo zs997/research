@@ -11,14 +11,14 @@ public class GeneticAlgorithm <T extends Column>{
     private double crossoverRate;
     private int elitismCount;
 	protected int tournamentSize;
-
+    private Class<T> t;
     private GeneticAlgorithm(){
     }
 
     /**
      * 遗传算法步骤
      * */
-    public void doGA(Class<T> t) {
+    public void doGA() {
         // Initial GA  elitismCount 精英数   tournamentSize 交叉过程 父类候选集
        // GeneticAlgorithm ga = new GeneticAlgorithm(100, 0.001, 0.9, 2, 5);
         // Initialize population
@@ -59,13 +59,14 @@ public class GeneticAlgorithm <T extends Column>{
     }
 
 	public GeneticAlgorithm(int maxGenerations,int populationSize, double mutationRate, double crossoverRate, int elitismCount,
-                            int tournamentSize) {
+                            int tournamentSize,Class<T> t) {
 		this.maxGenerations = maxGenerations;
         this.populationSize = populationSize;
         this.mutationRate = mutationRate;
         this.crossoverRate = crossoverRate;
         this.elitismCount = elitismCount;
 		this.tournamentSize = tournamentSize;
+		this.t = t;
 	}
     /**
      * Initialize population

@@ -36,7 +36,7 @@ public class Individual<T extends Column>{
     //下标是库位号码  值是该库位存放的货物编号
     private ArrayList<Integer> chromosome ;
     //key是货物编号  value是库位坐标 编号
-    private HashMap<Integer, Coordinate> coordinateMap = new HashMap<>();
+    private HashMap<Integer, Coordinate> coordinateMap ;
     private double fitness;
     private double cost;
     /**
@@ -68,6 +68,7 @@ public class Individual<T extends Column>{
      * */
     private  void synchronizGene(Class<T> t) throws Exception {
         columns = new ArrayList<>();
+        coordinateMap = new HashMap<>();
         //遍历库位  查看基因分配的货物编号
         for (int i = 0; i < M; i++) {
             ArrayList<Integer> temp = new ArrayList<>();

@@ -23,18 +23,18 @@ public class Main {
         dataService = ac.getBean(DataService.class);
         initParams();
 
-        //doSA();
-        doGA();
+        doSA();
+    //    doGA();
 
     }
-    public static void doSA(){
-        SA sa = new SA(100, 0.000000005, 100, 0.95);
+    public static void doSA() throws Exception {
+        SA sa = new SA(100, 0.000000005, 100, 0.95,ColumnL.class);
         sa.doSA();
     }
     public static void doGA(){
          GeneticAlgorithm<ColumnR> columnRGeneticAlgorithm = new GeneticAlgorithm<>(5000
-                 ,100, 0.001, 0.9, 2, 5);
-         columnRGeneticAlgorithm.doGA(ColumnR.class);
+                 ,100, 0.001, 0.9, 2, 5,ColumnR.class);
+         columnRGeneticAlgorithm.doGA();
     }
     /**
      * @description: 文本 初始化 仓库结构
