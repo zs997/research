@@ -1,4 +1,4 @@
-package cn.zs.algorithm.GATsp;
+package tspbenchmark.tspga;
 
 public class Individual {
 	

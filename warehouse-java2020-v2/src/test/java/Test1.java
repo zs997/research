@@ -12,6 +12,7 @@ import cn.zs.pojo.CommonData;
 import cn.zs.pojo.CsvContent;
 import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 import org.junit.Test;
+import org.python.util.PythonInterpreter;
 import org.rosuda.REngine.REXP;
 import org.rosuda.REngine.Rserve.RConnection;
 import org.rosuda.REngine.Rserve.RserveException;
@@ -129,5 +130,11 @@ public class Test1 {
         }
         mydata.setPath("d:\\works\\data\\test2.csv");
         writer.write(mydata);
+    }
+    @Test
+    public void testPython(){
+        PythonInterpreter interpreter = new PythonInterpreter();
+        interpreter.exec("a='hello world'; ");
+        interpreter.exec("print a;");
     }
 }

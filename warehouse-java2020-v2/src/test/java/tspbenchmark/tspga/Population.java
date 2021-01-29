@@ -1,4 +1,4 @@
-package cn.zs.algorithm.GATsp;
+package tspbenchmark.tspga;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Random;

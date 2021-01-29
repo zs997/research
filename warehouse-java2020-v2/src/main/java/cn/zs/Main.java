@@ -21,10 +21,11 @@ public class Main {
     public static void main(String args[]) throws Exception {
         ApplicationContext ac = new ClassPathXmlApplicationContext("applicationContext.xml");
         dataService = ac.getBean(DataService.class);
+
         initParams();
 
         doSA();
-       doGA();
+      // doGA();
 
     }
     public static void doSA() throws Exception {
@@ -41,7 +42,7 @@ public class Main {
      * */
     public static void initParams() throws Exception {
         OriginDataReader originDataReader = new OriginDataReaderImp();
-        ArrayList<String>  ss = originDataReader.readTxt("D:\\works\\data\\warehouseStructure.txt");
+        ArrayList<String>  ss = originDataReader.readTxt("f:\\works\\data\\warehouseStructure.txt");
         Params.initWarehouseStructure(ss.get(ss.size() - 1));
 
         List<Item> itemList = dataService.getItemList();
@@ -52,10 +53,10 @@ public class Main {
         Params.calculNonEmptyProb();
 
 
-        new Hcluster().generateItemGroupByR("D:\\works\\R\\cluster.R"
-                    ,"D:\\works\\data\\brandDistance.csv",storageCount,20,"D:\\works\\data\\groupinfo.csv");
+        new Hcluster().generateItemGroupByR("f:\\works\\R\\cluster.R"
+                    ,"f:\\works\\data\\brandDistance.csv",storageCount,20,"f:\\works\\data\\groupinfo.csv");
 
-        ArrayList<ArrayList<String>> arrayLists = originDataReader.readCsv("D:\\works\\data\\groupinfo.csv");
+        ArrayList<ArrayList<String>> arrayLists = originDataReader.readCsv("f:\\works\\data\\groupinfo.csv");
         Params.initGroupInfo(arrayLists);
     }
 

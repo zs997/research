@@ -1,4 +1,6 @@
-package cn.zs.algorithm.GATsp;
+package tspbenchmark.tspga;
+
+import tspbenchmark.City;
 
 /**
  * The main Evaluation class for the TSP. It's pretty simple -- given an

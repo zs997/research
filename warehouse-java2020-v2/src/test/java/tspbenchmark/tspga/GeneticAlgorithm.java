@@ -1,4 +1,6 @@
-package cn.zs.algorithm.GATsp;
+package tspbenchmark.tspga;
+import tspbenchmark.City;
+
 import java.util.Arrays;
 
 public class GeneticAlgorithm {

@@ -52,7 +52,7 @@ public class DataService {
     /**
      * step1
      * @description: 初始化数据 将csv订单数据存到数据库
-     * @param：path 具体到文件名
+     * @param：path 原始csv数据文件位置  具体到文件名
      * */
     public  void csv2databse(String path){
         //"D:\\works\\data\\data.csv"
@@ -110,7 +110,7 @@ public class DataService {
     /**
         生成支持数矩阵  按拣货概率由大到小 排序
         矩阵生成比较费时间  应该先放到csv 需要使用时候，读取csv
-     @param：path  具体到目录 不具体到文件名 生成多个文件
+     @param：path  生成支持度 距离矩阵的位置  具体到目录 不具体到文件名 生成多个文件
     * */
     public void generateSupportCount(String path) {
         //查询不同订单编号

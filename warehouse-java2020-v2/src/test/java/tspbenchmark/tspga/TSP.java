@@ -1,6 +1,8 @@
-package cn.zs.algorithm.GATsp;
+package tspbenchmark.tspga;
 
 import cn.zs.view.LineView;
+import tspbenchmark.City;
+import tspbenchmark.CityInstance;
 
 import java.util.ArrayList;
 
@@ -19,22 +21,15 @@ import java.util.ArrayList;
  *
  */
 public class TSP {
-	public static int maxGenerations = 10000;
+	public static int maxGenerations = 2000;
 	public static void main(String[] args) {
 		
 		// Create cities
-		int numCities = 100;
-		City cities[] = new City[numCities];
+        CityInstance cityInstance = new CityInstance();
+        int numCities = cityInstance.getNumCities();
+		City cities[] = cityInstance.getCities();
 		
-		// Loop to create random cities
-		for (int cityIndex = 0; cityIndex < numCities; cityIndex++) {
-			// Generate x,y position
-			int xPos = (int) (100 * Math.random());
-			int yPos = (int) (100 * Math.random());
-			
-			// Add city
-			cities[cityIndex] = new City(xPos, yPos);
-		}
+
 
 		// Initial GA
 		GeneticAlgorithm ga = new GeneticAlgorithm(100, 0.001, 0.9, 2, 5);
