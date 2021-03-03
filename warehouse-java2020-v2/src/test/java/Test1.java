@@ -7,59 +7,35 @@
  */
 
 import cn.zs.dao.MyDataWriter;
-import cn.zs.daoImp.CsvDataWriter;
+import cn.zs.dao.OriginDataReader;
+import cn.zs.dao.CsvDataWriter;
+import cn.zs.dao.OriginDataReaderImp;
 import cn.zs.pojo.CommonData;
 import cn.zs.pojo.CsvContent;
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
+
 import org.junit.Test;
+import org.python.core.PyFunction;
+
+import org.python.core.PyList;
+
 import org.python.util.PythonInterpreter;
 import org.rosuda.REngine.REXP;
 import org.rosuda.REngine.Rserve.RConnection;
-import org.rosuda.REngine.Rserve.RserveException;
+import tspbenchmark.DistanceInstance;
+import tspbenchmark.tspsabenchmark.Route;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.*;
 
 /**
  * @version: V1.0
- * @author: zs
+ * @author: cn.zs
  * @className: Test1
  * @packageName: PACKAGE_NAME
  * @data: 2021-01-17 15:27
  **/
 public class Test1 {
-    @Test
-    public void testSolution(){
-        int [] temp = {117, 330, 216, 187, 341, 119, 1, 124, 33, 170, 129, 217, 175, 343, 77,
-                112, 82, 196, 293, 258, 174, 355, 11, 106, 173, 281, 271, 205, 23, 245, 97, 0,
-                229, 243, 314, 213, 20, 26, 350, 251, 141, 189, 253, 98, 318, 224, 186, 56, 4,
-                114, 90, 10, 285, 50, 30, 180, 181, 67, 51, 291, 35, 284, 111, 215, 131, 133,
-                123, 339, 194, 109, 252, 179, 351, 31, 287, 62, 74, 43, 232, 81, 19, 12, 316,
-                132, 320, 238, 40, 325, 348, 25, 255, 145, 297, 301, 121, 298, 269, 130, 151,
-                89, 286, 156, 306, 265, 24, 188, 71, 122, 236, 190, 84, 168, 241, 266, 313, 18,
-                214, 310, 250, 107, 322, 108, 100, 45, 152, 22, 349, 203, 207, 249, 110, 8, 183,
-                345, 72, 115, 184, 198, 354, 263, 332, 352, 292, 37, 47, 218, 149, 85, 16, 278,
-                182, 52, 64, 319, 294, 126, 125, 39, 338, 321, 335, 83, 289, 144, 155, 342, 210,
-                104, 128, 73, 222, 137, 79, 282, 158, 277, 103, 283, 6, 233, 200, 13, 176, 160,
-                21, 331, 113, 120, 27, 223, 307, 92, 227, 275, 69, 221, 60, 340, 32, 270, 274,
-                165, 159, 311, 248, 5, 127, 279, 95, 136, 57, 138, 317, 161, 267, 353, 268, 202,
-                356, 101, 88, 231, 326, 38, 172, 15, 254, 276, 195, 36, 63, 70, 139, 220, 309,
-                49, 337, 240, 312, 166, 178, 329, 290, 358, 346, 150, 86, 96, 261, 17, 296, 193,
-                226, 357, 347, 44, 28, 264, 247, 259, 204, 235, 302, 295, 42, 135, 208, 118, 256,
-                185, 93, 199, 143, 225, 359, 157, 2, 87, 300, 142, 146, 246, 191, 171, 303, 344, 34,
-                209, 201, 59, 237, 53, 14, 167, 80, 242, 48, 7, 41, 75, 308, 66, 234, 288, 3, 29,
-                327, 102, 244, 134, 304, 162, 99, 177, 94, 228, 76, 280, 219, 197, 334, 46, 140,
-                212, 164, 65, 9, 328, 239, 153, 147, 78, 323, 105, 336, 273, 262, 260, 206, 54,
-                58, 257, 68, 55, 211, 169, 61, 91, 333, 272, 148, 116, 230, 305, 163, 299, 154, 315, 324, 192};
-        ArrayList<Integer> list = new ArrayList<>();
-        for (int i = 0; i < temp.length; i++) {
-            list.add(temp[i]);
-        }
-        Collections.sort(list);
-        System.out.println(list);
-    }
     @Test
     public void testR() throws Exception {
         //建立连接
@@ -78,24 +54,6 @@ public class Test1 {
             System.out.println(s[i]);
         }
         rc.close();
-    }
-    @Test
-    public void test1(){
-        Object []  data;
-        Integer[] integers = new Integer[4];
-        integers[0] = 10;
-        integers[1]= 20;
-        data = integers;
-        System.out.println(data[0]+" "+ data[1] + " "+ data[2]+" "+data[3]);
-//        int[] ints = new int[3];
-////        ints[0] = 15;
-////        ints[1] = 16;
-////        data = ints;
-       String[] strings = new String[5];
-        strings[0] = "100";
-        strings[1] = "da";
-        strings[2] = "adsfd";
-        System.out.println(strings[0]+ " "+ strings[1] + " "+ strings[2] + " "+ strings[3] + "  "+ strings[4] );
     }
     @Test
     public void testCsv(){
@@ -133,8 +91,153 @@ public class Test1 {
     }
     @Test
     public void testPython(){
+//        PythonInterpreter interpreter = new PythonInterpreter();
+//        interpreter.exec("a='hello world'; ");
+//        interpreter.exec("print a;");
+//        Process proc;
+        Properties props = new Properties();
+        props.put("python.home", "D:\\Program Files\\python39\\Lib\\site-packages");
+        props.put("python.console.encoding", "UTF-8");
+        props.put("python.security.respectJavaAccessibility", "false");
+        props.put("python.import.matplotlib.pyplot", "false");
+        Properties preprops = System.getProperties();
+        PythonInterpreter.initialize(preprops, props, new String[0]);
+
+        ArrayList<Integer> x = new ArrayList<>();
+        x.add(1);
+        x.add(2);
+        x.add(3);
+        x.add(4);
+        x.add(5);
+        ArrayList<ArrayList<Integer>> y = new ArrayList<>();
+        y.add(new ArrayList<Integer>());
+        y.get(0).add(11);
+        y.get(0).add(12);
+        y.get(0).add(13);
+        y.get(0).add(14);
+        y.get(0).add(15);
+
+        PyList pyListx = new PyList(x);
+        PyList pyListy = new PyList(y);
+
+
         PythonInterpreter interpreter = new PythonInterpreter();
-        interpreter.exec("a='hello world'; ");
-        interpreter.exec("print a;");
+        interpreter.execfile("F:\\works\\python\\plotImage.py");
+
+        // 第一个参数为期望获得的函数（变量）的名字，第二个参数为期望返回的对象类型
+        PyFunction pyFunction = interpreter.get("plotImage", PyFunction.class);
+
+        //调用函数，如果函数需要参数，在Java中必须先将参数转化为对应的“Python类型”
+        pyFunction.__call__(pyListx,pyListy);
+
+
+
+    }
+    @Test
+    public void testPython2(){
+        try {
+            System.out.println("start");
+            String[] args1=new String[]{"python","f:\\works\\python\\test13.py","5"};
+            Process pr=Runtime.getRuntime().exec(args1);
+
+            BufferedReader in = new BufferedReader(new InputStreamReader(
+                    pr.getInputStream()));
+            String line;
+            while ((line = in.readLine()) != null) {
+                System.out.println(line);
+            }
+            in.close();
+            pr.waitFor();
+            System.out.println("end");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    @Test
+    public void testRplot() throws Exception {
+        RConnection rc = new RConnection();
+        int [] x = {1,2,3,4,5};
+        int [] y ={1,2,3,4,5};
+        rc.assign("x",x);
+        rc.assign("y",y);
+
+        REXP eval = rc.eval("plot(x,y)");
+
+        rc.close();
+    }
+
+    @Test
+    public void testTspbenchmarkData(){
+        String s = "0 257 0 187 196 0 91 228 158 0 150 112" +
+                " 96 120 0 80 196 88 77 63 0 130 167 59" +
+                " 101 56 25 0 134 154 63 105 34 29 22 0" +
+                " 243 209 286 159 190 216 229 225 0 185 86 124" +
+                " 156 40 124 95 82 207 0 214 223 49 185 123" +
+                " 115 86 90 313 151 0 70 191 121 27 83 47" +
+                " 64 68 173 119 148 0 272 180 315 188 193 245" +
+                " 258 228 29 159 342 209 0 219 83 172 149 79" +
+                " 139 134 112 126 62 199 153 97 0 293 50 232" +
+                " 264 148 232 203 190 248 122 259 227 219 134 0" +
+                " 54 219 92 82 119 31 43 58 238 147 84 53" +
+                " 267 170 255 0 211 74 81 182 105 150 121 108" +
+                " 310 37 160 145 196 99 125 173 0 290 139 98" +
+                " 261 144 176 164 136 389 116 147 224 275 178 154" +
+                " 190 79 0 268 53 138 239 123 207 178 165 367" +
+                " 86 187 202 227 130 68 230 57 86 0 261 43" +
+                " 200 232 98 200 171 131 166 90 227 195 137 69" +
+                " 82 223 90 176 90 0 175 128 76 146 32 76" +
+                " 47 30 222 56 103 109 225 104 164 99 57 112" +
+                " 114 134 0 250 99 89 221 105 189 160 147 349" +
+                " 76 138 184 235 138 114 212 39 40 46 136 96" +
+                " 0 192 228 235 108 119 165 178 154 71 136 262" +
+                " 110 74 96 264 187 182 261 239 165 151 221 0" +
+                " 121 142 99 84 35 29 42 36 220 70 126 55" +
+                " 249 104 178 60 96 175 153 146 47 135 169 0";
+        String[] split = s.split(" ");
+
+        double[][] data = new double[24][24];
+        int colNum = 1;
+        int count = 0;
+        for (int i = 0; i < data.length; i++) {
+            for (int j = 0;j < colNum;j++){
+                data[i][j] = Double.valueOf(split[count].trim());
+                data[j][i] = data[i][j];
+                count++;
+            }
+            colNum++;
+        }
+        for (int i = 0; i < data.length; i++) {
+            for (int j = 0; j < data[i].length; j++) {
+                System.out.print(data[i][j] + ",");
+            }
+            System.out.println();
+        }
+    }
+    @Test
+    public void test2(){
+        String s = "16 11 3 7 6 24 8 21 5 10 17 22 18 19 15 2 20 14 13 9 23 4 12 1";
+        String[] split = s.split("\\s+");
+        int[] solution = new int[split.length];
+
+        for (int i = 0; i < solution.length; i++) {
+            solution[i] = Integer.valueOf(split[i].trim())-1;
+        }
+        double distance = Route.calculDistance(solution, DistanceInstance.getInstance24());
+        System.out.println(distance);
+    }
+    @Test
+    public void testGroup(){
+        OriginDataReader originDataReader = new OriginDataReaderImp();
+        ArrayList<ArrayList<String>> groupInfo = originDataReader.readCsv("f:\\works\\data\\groupinfo.csv");
+        ArrayList<Integer> temp = new ArrayList<>();
+        for (int i = 1; i < groupInfo.size(); i++) {
+            for (int j = 0; j < groupInfo.get(i).size(); j++) {
+                temp.add(Integer.valueOf(groupInfo.get(i).get(j).trim()));
+            }
+        }
+        Collections.sort(temp);
+        System.out.println(temp);
     }
 }
+
+

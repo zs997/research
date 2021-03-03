@@ -1,9 +1,9 @@
 package cn.zs.algorithm.component;
 /**
  * @version: V1.0
- * @author: zs
+ * @author: cn.zs
  * @className: ColumnL
- * @packageName: cn.zs.model
+ * @packageName: cn.cn.zs.model
  * @data: 2020-11-29 14:52
  **/
 import java.util.ArrayList;

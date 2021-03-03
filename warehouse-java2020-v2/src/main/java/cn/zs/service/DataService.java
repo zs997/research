@@ -1,8 +1,7 @@
 package cn.zs.service;
 import cn.zs.dao.MyDataWriter;
 import cn.zs.dao.OriginDataReader;
-import cn.zs.daoImp.CsvDataWriter;
-import cn.zs.daoImp.OriginDataReaderImp;
+import cn.zs.dao.CsvDataWriter;
 import cn.zs.mapper.OrdersMapper;
 import cn.zs.pojo.*;
 import cn.zs.tools.DataConverter;
@@ -16,6 +15,8 @@ public class DataService {
     OrdersMapper ordersMapper;
     @Autowired
     OriginDataReader originDataReader;
+    @Autowired
+    MyDataWriter myDataWriter;
     /**
     step 1 保存原始订单数据csv到数据库
     @param:data 订单数据
@@ -86,8 +87,8 @@ public class DataService {
             csvDataMatrix[i][4] = String.valueOf(item.getPickfreq());
         }
         csvContent.setCsvDataMatrix(csvDataMatrix);
-        MyDataWriter writer = new CsvDataWriter();
-        writer.write(commonData);
+
+        myDataWriter.write(commonData);
     }
     /**
      * 从数据库订单表查询商品明细，速度很快，可以不用csv，随用随取
@@ -104,7 +105,7 @@ public class DataService {
             item.setId((long)i);
             item.setPickfreq(item.getTimes()/v);
         }
-      return items;
+        return items;
     }
 
     /**
@@ -191,8 +192,8 @@ public class DataService {
         csvContent.setCsvDataMatrix(res);
         csvContent.setTitile(title.toString());
         mydata.setData(csvContent);
-        MyDataWriter writer = new CsvDataWriter();
-        writer.write(mydata);
+
+        myDataWriter.write(mydata);
         for (int i = 0; i < res.length; i++) {
             for (int j = 0; j < res[i].length; j++) {
                 res[i][j] = String.valueOf(orderSet.size() - temp[i][j]);
@@ -202,7 +203,7 @@ public class DataService {
             }
         }
         mydata.setPath(path+"\\brandDistance.csv");
-        writer.write(mydata);
+        myDataWriter.write(mydata);
     }
 
     /**
@@ -235,8 +236,7 @@ public class DataService {
         CommonData commonData = new CommonData();
         commonData.setPath(destination);
         commonData.setData(csvContent);
-        CsvDataWriter csvDataWriter = new CsvDataWriter();
-        csvDataWriter.write(commonData);
+        myDataWriter.write(commonData);
     }
 
     /**

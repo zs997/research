@@ -1,7 +1,7 @@
 /**
  * projectName: TSP
  * fileName: SA.java
- * packageName: cn.zs
+ * packageName: cn.cn.zs
  * date: 2021-01-17 16:59
  * copyright(c) 2019-2021 hust
  */
@@ -11,9 +11,9 @@ import cn.zs.algorithm.component.Column;
 
 /**
  * @version: V1.0
- * @author: zs
+ * @author: cn.zs
  * @className: SA
- * @packageName: cn.zs
+ * @packageName: cn.cn.zs
  * @data: 2021-01-17 16:59
  **/
 public class SA<T extends Column> {

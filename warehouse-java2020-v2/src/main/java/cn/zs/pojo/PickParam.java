@@ -1,7 +1,7 @@
 /**
  * projectName: research
  * fileName: PickParam.java
- * packageName: cn.zs.pojo
+ * packageName: cn.cn.zs.pojo
  * date: 2021-01-16 20:15
  * copyright(c) 2019-2021 hust
  */
@@ -9,9 +9,9 @@ package cn.zs.pojo;
 
 /**
  * @version: V1.0
- * @author: zs
+ * @author: cn.zs
  * @className: PickParam
- * @packageName: cn.zs.pojo
+ * @packageName: cn.cn.zs.pojo
  * @data: 2021-01-16 20:15
  * 使用标准banchmark数据时 用到
  **/

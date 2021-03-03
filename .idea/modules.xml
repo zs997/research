@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/dataProcess/dataProcess.iml" filepath="$PROJECT_DIR$/dataProcess/dataProcess.iml" />
+      <module fileurl="file://$PROJECT_DIR$/research.iml" filepath="$PROJECT_DIR$/research.iml" />
+      <module fileurl="file://$PROJECT_DIR$/warehouse-java2020-v2/warehouse-java2020-v2.iml" filepath="$PROJECT_DIR$/warehouse-java2020-v2/warehouse-java2020-v2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/warehouseSimplify/warehouseSimplify.iml" filepath="$PROJECT_DIR$/warehouseSimplify/warehouseSimplify.iml" />
+    </modules>
+  </component>
+</project>

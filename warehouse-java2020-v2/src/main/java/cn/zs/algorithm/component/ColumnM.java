@@ -1,7 +1,7 @@
 /**
  * projectName: warehouse2020
  * fileName: ColumnM.java
- * packageName: cn.zs.model
+ * packageName: cn.cn.zs.model
  * date: 2020-11-30 14:33
  * copyright(c) 2019-2021 hust
  */
@@ -9,9 +9,9 @@ package cn.zs.algorithm.component;
 
 /**
  * @version: V1.0
- * @author: zs
+ * @author: cn.zs
  * @className: ColumnM
- * @packageName: cn.zs.model
+ * @packageName: cn.cn.zs.model
  * @data: 2020-11-30 14:33
  **/
 

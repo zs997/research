@@ -1,5 +1,10 @@
 package tspbenchmark.tspga;
 
+import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+
 public class Individual {
 	
 	/**
@@ -39,7 +44,14 @@ public class Individual {
 		for (int gene = 0; gene < chromosomeLength; gene++) {
 			individual[gene] = gene;
 		}
-		
+		ArrayList<Integer> templist = new ArrayList<>();
+		for (int i = 0; i < individual.length; i++) {
+			templist.add(individual[i]);
+		}
+		Collections.shuffle(templist);
+		for (int i = 0; i < individual.length; i++) {
+			individual[i] = templist.get(i);
+		}
 		this.chromosome = individual;
 	}
 

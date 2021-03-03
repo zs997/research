@@ -1,12 +1,12 @@
 /**
  * projectName: research
  * fileName: Kmeans.java
- * packageName: cn.zs.algorithm.cluster
+ * packageName: cn.cn.zs.algorithm.cluster
  * date: 2021-01-19 22:24
  * copyright(c) 2019-2021 hust
  */
 package cn.zs.algorithm.cluster;
-import cn.zs.daoImp.CsvDataWriter;
+import cn.zs.dao.CsvDataWriter;
 import cn.zs.pojo.CommonData;
 import cn.zs.pojo.CsvContent;
 import cn.zs.tools.DataConverter;
@@ -18,9 +18,9 @@ import java.util.Set;
 
 /**
  * @version: V1.0
- * @author: zs
+ * @author: cn.zs
  * @className: Kmeans
- * @packageName: cn.zs.algorithm.cluster
+ * @packageName: cn.cn.zs.algorithm.cluster
  * @data: 2021-01-19 22:24
  * 调用R语言聚类库 将聚类结果 存储于csv
  **/
@@ -44,6 +44,7 @@ public class Hcluster {
         rc.assign("dataPath",dataPath);
 
         REXP eval = rc.eval("cluster(dataPath,n,k)");
+        //返回结果是 组别 每一位s[i]是第i个属于那个组别
         String s[] = eval.asStrings();
         HashMap<String,ArrayList<Integer>> map = new HashMap<>();
         for (int i = 0; i < s.length; i++) {

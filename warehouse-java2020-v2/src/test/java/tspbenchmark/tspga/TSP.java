@@ -1,6 +1,6 @@
 package tspbenchmark.tspga;
 
-import cn.zs.view.LineView;
+import cn.zs.tools.LineView;
 import tspbenchmark.City;
 import tspbenchmark.CityInstance;
 
@@ -21,7 +21,7 @@ import java.util.ArrayList;
  *
  */
 public class TSP {
-	public static int maxGenerations = 2000;
+	public static int maxGenerations = 800;
 	public static void main(String[] args) {
 		
 		// Create cities
@@ -32,7 +32,7 @@ public class TSP {
 
 
 		// Initial GA
-		GeneticAlgorithm ga = new GeneticAlgorithm(100, 0.001, 0.9, 2, 5);
+		GeneticAlgorithm ga = new GeneticAlgorithm(100, 0.001, 0.9, 10, 5);
 
 		// Initialize population
 		Population population = ga.initPopulation(cities.length);

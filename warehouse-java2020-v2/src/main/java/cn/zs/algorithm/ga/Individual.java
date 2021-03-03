@@ -1,7 +1,7 @@
 /**
  * projectName: research
  * fileName: GAEntity.java
- * packageName: cn.zs.algorithm
+ * packageName: cn.cn.zs.algorithm
  * date: 2021-01-04 14:42
  * copyright(c) 2019-2021 hust
  * 库位编号：
@@ -20,9 +20,9 @@ import java.util.*;
 import static cn.zs.algorithm.component.Params.*;
 /**
  * @version: V1.0
- * @author: zs
+ * @author: cn.zs
  * @className: GAEntity
- * @packageName: cn.zs.algorithm
+ * @packageName: cn.cn.zs.algorithm
  * @data: 2021-01-04 14:42
  * @description:基因个体 基因个体
  **/
@@ -137,11 +137,11 @@ public class Individual<T extends Column>{
                     spread += c1.calculDistance(c2);
                 }
             }
-            spread = spread / items.size();
+            spread = spread / ((items.size())*(items.size()-1)/2);
 
             spreads += spread;
         }
-        spreadCost = spreads;
+        spreadCost = spreads/itemGroups.size();
     }
     public double calculFitness() {
         try {
@@ -151,7 +151,7 @@ public class Individual<T extends Column>{
         }
         calculLengthCost();
         calculSpreadCost();
-        cost = lengthCost + spreadCost;
+        cost = lengthCost + 10*spreadCost;
         fitness = 1/cost;
         return fitness;
 

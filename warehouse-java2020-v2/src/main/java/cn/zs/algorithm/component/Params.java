@@ -40,9 +40,9 @@ public class Params {
      * @param list  从数据库查询商品信息
      * */
     public static void initItemList(List<Item> list){
-        itemList = new Item[list.size()];
-        itemPickFreq = new double[list.size()];
-        for (int i = 0; i < list.size(); i++) {
+        itemList = new Item[storageCount];
+        itemPickFreq = new double[storageCount];
+        for (int i = 0; i < storageCount; i++) {
             itemList[i] = list.get(i);
             itemPickFreq[i] = list.get(i).getPickfreq();
         }
@@ -84,10 +84,16 @@ public class Params {
      * */
     public static void calculNonEmptyProb(){
         double p = 1.0;
-        for (int i = 0; i < itemPickFreq.length; i++) {
+//        for (int i = 0; i < itemPickFreq.length; i++) {
+//            p *= (1 - itemPickFreq[i]);
+//        }
+        for (int i = 0; i < storageCount; i++) {
             p *= (1 - itemPickFreq[i]);
         }
         nonEmptyProb = 1 - p;
     }
-
+    @Deprecated
+    public static void setItemPickFreq(double[] itemPickFreq) {
+        Params.itemPickFreq = itemPickFreq;
+    }
 }

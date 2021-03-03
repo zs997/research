@@ -1,6 +1,6 @@
 package cn.zs.algorithm.ga;
 import cn.zs.algorithm.component.Column;
-import cn.zs.view.LineView;
+import cn.zs.tools.LineView;
 
 import java.util.ArrayList;
 import java.util.Arrays;

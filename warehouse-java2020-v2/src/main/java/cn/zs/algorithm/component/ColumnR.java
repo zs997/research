@@ -63,7 +63,7 @@ public class ColumnR extends Column{
      * */
     public void calculLastProb(HashSet<Integer> usedSet){
         lastProb = 1.0;
-        for (int i = 0; i < itemPickFreq.length; i++) {
+        for (int i = 0; i < storageCount; i++) {
             if (!usedSet.contains(i)){
                 lastProb *= (1- itemPickFreq[i]);
             }

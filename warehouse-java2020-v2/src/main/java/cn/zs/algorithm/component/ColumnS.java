@@ -2,9 +2,9 @@ package cn.zs.algorithm.component;
 
 /**
  * @version: V1.0
- * @author: zs
+ * @author: cn.zs
  * @className: ColumnS
- * @packageName: cn.zs.model
+ * @packageName: cn.cn.zs.model
  * @data: 2020-11-28 17:04
  * @description: S型拣货策略
  **/

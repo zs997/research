@@ -1,47 +1,53 @@
 package cn.zs;
 import cn.zs.algorithm.cluster.Hcluster;
-import cn.zs.algorithm.ga.GeneticAlgorithm;
+import cn.zs.algorithm.eda.EDA;
 import cn.zs.algorithm.ga.Individual;
 import cn.zs.algorithm.component.Params;
 import cn.zs.algorithm.ga.Population;
 import cn.zs.algorithm.component.*;
+import cn.zs.algorithm.localsearcheda.LocalEDA;
+import cn.zs.dao.MyDataWriter;
 import cn.zs.dao.OriginDataReader;
-import cn.zs.daoImp.OriginDataReaderImp;
+import cn.zs.dao.OriginDataReaderImp;
 import cn.zs.pojo.Item;
 import cn.zs.pojo.PickParam;
-import cn.zs.algorithm.sa.SA;
 import cn.zs.service.DataService;
-import cn.zs.view.LineView;
+import cn.zs.tools.LineView;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import java.util.*;
 import static cn.zs.algorithm.component.Params.*;
 public class Main {
     static DataService dataService;
-    public static void main(String args[]) throws Exception {
+    static  OriginDataReader originDataReader;
+    static {
         ApplicationContext ac = new ClassPathXmlApplicationContext("applicationContext.xml");
         dataService = ac.getBean(DataService.class);
-
-        initParams();
-
-        doSA();
-      // doGA();
-
+        originDataReader = ac.getBean(OriginDataReader.class);
     }
-    public static void doSA() throws Exception {
-        SA sa = new SA(100, 0.000000005, 100, 0.95,ColumnR.class);
-        sa.doSA();
+    public static void main(String args[]) throws Exception {
+    //initBenchmark();
+      initParams(6);
+//    SA sa = new SA(100, 0.000000005, 100, 0.95,ColumnR.class);
+//    sa.doSA();
+//    GeneticAlgorithm<ColumnS> columnRGeneticAlgorithm = new GeneticAlgorithm<>(1000
+//                ,150, 0.001, 0.9, 15, 5,ColumnS.class);
+//    columnRGeneticAlgorithm.doGA();
+    LocalEDA localEda = new LocalEDA(150, 15 * 4, 0.1,
+            1000, 15, ColumnS.class);
+    localEda.doEDA();
+      EDA eda = new EDA(150, 15 * 4, 0.1, 1000,
+              15, ColumnS.class);
+      eda.doEDA();
+ //  testIndivual();
     }
-    public static void doGA(){
-         GeneticAlgorithm<ColumnR> columnRGeneticAlgorithm = new GeneticAlgorithm<>(5000
-                 ,100, 0.001, 0.9, 2, 5,ColumnR.class);
-         columnRGeneticAlgorithm.doGA();
-    }
+
     /**
      * @description: 文本 初始化 仓库结构
      * */
-    public static void initParams() throws Exception {
-        OriginDataReader originDataReader = new OriginDataReaderImp();
+    public static void initParams(int k) throws Exception {
+
         ArrayList<String>  ss = originDataReader.readTxt("f:\\works\\data\\warehouseStructure.txt");
         Params.initWarehouseStructure(ss.get(ss.size() - 1));
 
@@ -49,19 +55,23 @@ public class Main {
         Params.initItemList(itemList);
         // double[] pickf = dataService.getBenchmarkPickData(20, 0.5, 0.3, 0.2).getPickf();
         //Params.inititemPickFreq(pickf);
-
         Params.calculNonEmptyProb();
-
-
         new Hcluster().generateItemGroupByR("f:\\works\\R\\cluster.R"
-                    ,"f:\\works\\data\\brandDistance.csv",storageCount,20,"f:\\works\\data\\groupinfo.csv");
+                    ,"f:\\works\\data\\brandDistance.csv",storageCount,k,"f:\\works\\data\\groupinfo.csv");
 
         ArrayList<ArrayList<String>> arrayLists = originDataReader.readCsv("f:\\works\\data\\groupinfo.csv");
         Params.initGroupInfo(arrayLists);
     }
+    public static void initBenchmark(){
 
+        ArrayList<String>  ss = originDataReader.readTxt("f:\\works\\data\\warehouseStructure.txt");
+        Params.initWarehouseStructure(ss.get(ss.size() - 1));
 
-
+        PickParam benchmarkPickData = dataService.getBenchmarkPickData(20, 0.5, 0.3, 0.2);
+        double[] pickf = benchmarkPickData.getPickf();
+        Params.setItemPickFreq(pickf);
+        Params.calculNonEmptyProb();
+    }
 
     /**
      * 测试随机可行解性能  算法一定要比随机生成的好 才行啊
@@ -86,27 +96,7 @@ public class Main {
         System.out.println(y1.get(y1.size()-1));
         LineView.printPic(x,y,stackBar);
     }
-    /**
-     * 测试遗传算法 种群正确性
-     * 正确
-     * */
-    @Deprecated
-    public static void testPopulation() {
-        Population population = new Population(100,ColumnR.class);
-        double populationFitness = 0;
-        // Loop over population evaluating individuals and summing population fitness
-        for (Individual individual : population.getIndividuals()) {
-            populationFitness += individual.calculFitness();
-        }
-        double avgFitness = populationFitness / population.size();
-        population.setPopulationFitness(avgFitness);
-        population.getFittest(0);
-        System.out.println("平均适应度：" + population.getPopulationFitness());
-        Individual[] individuals = population.getIndividuals();
-        for (Individual individual : individuals) {
-            System.out.println(individual.getCost() + " " + individual.getFitness());
-        }
-    }
+
     /**
      * 检查一组库位分配可行解的目标函数值及遗传算法个体设计  是否正确
      * 正确
@@ -115,82 +105,87 @@ public class Main {
     public static void  testIndivual(){
         int [][] assignMatrix = new int[15][4];
         //第四维 是每行的分配方式  为0 正常分配 为1 对称分配
-        assignMatrix[0][0] = 24;
-        assignMatrix[0][1] = 0;
-        assignMatrix[0][2] = 0;
+        assignMatrix[0][0] = 6;
+        assignMatrix[0][1] = 7;
+        assignMatrix[0][2] = 11;
         assignMatrix[0][3] = 0;
 
-        assignMatrix[1][0] = 2;
-        assignMatrix[1][1] = 10;
-        assignMatrix[1][2] = 12;
-        assignMatrix[1][3] = 1;
+        assignMatrix[1][0] = 6;
+        assignMatrix[1][1] = 7;
+        assignMatrix[1][2] = 11;
+        assignMatrix[1][3] = 0;
 
-        assignMatrix[2][0] = 2;
-        assignMatrix[2][1] = 8;
-        assignMatrix[2][2] = 14;
-        assignMatrix[2][3] = 1;
+        assignMatrix[2][0] = 6;
+        assignMatrix[2][1] = 7;
+        assignMatrix[2][2] = 11;
+        assignMatrix[2][3] = 0;
 
-        assignMatrix[3][0] = 2;
-        assignMatrix[3][1] = 8;
-        assignMatrix[3][2] = 14;
-        assignMatrix[3][3] = 1;
+        assignMatrix[3][0] = 6;
+        assignMatrix[3][1] = 7;
+        assignMatrix[3][2] = 11;
+        assignMatrix[3][3] = 0;
 
-        assignMatrix[4][0] = 2;
+        assignMatrix[4][0] = 5;
         assignMatrix[4][1] = 8;
-        assignMatrix[4][2] = 14;
-        assignMatrix[4][3] = 1;
+        assignMatrix[4][2] = 11;
+        assignMatrix[4][3] = 0;
 
-        assignMatrix[5][0] = 2;
+        assignMatrix[5][0] = 5;
         assignMatrix[5][1] = 8;
-        assignMatrix[5][2] = 14;
-        assignMatrix[5][3] = 1;
+        assignMatrix[5][2] = 11;
+        assignMatrix[5][3] = 0;
 
-        assignMatrix[6][0] = 2;
+        assignMatrix[6][0] = 5;
         assignMatrix[6][1] = 8;
-        assignMatrix[6][2] = 14;
-        assignMatrix[6][3] = 1;
+        assignMatrix[6][2] = 11;
+        assignMatrix[6][3] = 0;
 
-        assignMatrix[7][0] = 2;
-        assignMatrix[7][1] = 8;
-        assignMatrix[7][2] = 14;
-        assignMatrix[7][3] = 1;
+        assignMatrix[7][0] = 5;
+        assignMatrix[7][1] = 7;
+        assignMatrix[7][2] = 12;
+        assignMatrix[7][3] = 0;
 
-        assignMatrix[8][0] = 2;
-        assignMatrix[8][1] = 8;
-        assignMatrix[8][2] = 14;
-        assignMatrix[8][3] = 1;
+        assignMatrix[8][0] = 5;
+        assignMatrix[8][1] = 7;
+        assignMatrix[8][2] = 12;
+        assignMatrix[8][3] = 0;
 
-        assignMatrix[9][0] = 2;
-        assignMatrix[9][1] = 8;
-        assignMatrix[9][2] = 14;
-        assignMatrix[9][3] = 1;
+        assignMatrix[9][0] = 5;
+        assignMatrix[9][1] = 7;
+        assignMatrix[9][2] = 12;
+        assignMatrix[9][3] = 0;
 
-        assignMatrix[10][0] = 2;
-        assignMatrix[10][1] = 8;
-        assignMatrix[10][2] = 14;
-        assignMatrix[10][3] = 1;
+        assignMatrix[10][0] = 5;
+        assignMatrix[10][1] = 7;
+        assignMatrix[10][2] = 12;
+        assignMatrix[10][3] = 0;
 
-        assignMatrix[11][0] = 2;
-        assignMatrix[11][1] = 8;
-        assignMatrix[11][2] = 14;
-        assignMatrix[11][3] = 1;
+        assignMatrix[11][0] = 5;
+        assignMatrix[11][1] = 7;
+        assignMatrix[11][2] = 12;
+        assignMatrix[11][3] = 0;
 
-        assignMatrix[12][0] = 2;
-        assignMatrix[12][1] = 8;
-        assignMatrix[12][2] = 14;
-        assignMatrix[12][3] = 1;
+        assignMatrix[12][0] = 5;
+        assignMatrix[12][1] = 7;
+        assignMatrix[12][2] = 12;
+        assignMatrix[12][3] = 0;
 
-        assignMatrix[13][0] = 0;
-        assignMatrix[13][1] = 10;
+        assignMatrix[13][0] = 3;
+        assignMatrix[13][1] = 7;
         assignMatrix[13][2] = 14;
-        assignMatrix[13][3] = 1;
+        assignMatrix[13][3] = 0;
 
-        assignMatrix[14][0] = 24;
-        assignMatrix[14][1] = 0;
-        assignMatrix[14][2] = 0;
+        assignMatrix[14][0] = 0;
+        assignMatrix[14][1] = 7;
+        assignMatrix[14][2] = 17;
         assignMatrix[14][3] = 0;
-
+//        OriginDataReader originDataReader = new OriginDataReaderImp();
+//        ArrayList<String>  ss = originDataReader.readTxt("f:\\works\\data\\warehouseStructure.txt");
+//        Params.initWarehouseStructure(ss.get(ss.size() - 1));
+//        ApplicationContext ac = new ClassPathXmlApplicationContext("applicationContext.xml");
+//        dataService = ac.getBean(DataService.class);
         PickParam pickParam = dataService.getBenchmarkPickData(20, 0.5, 0.3, 0.2);
+        Params.setItemPickFreq(pickParam.getPickf());
         Params.calculNonEmptyProb();
         int storageA = pickParam.getStorageA();
         int storageB = pickParam.getStorageB();
@@ -243,57 +238,22 @@ public class Main {
                 }
             }
         }
-//        int [] temp = {
-//                335, 178, 160, 339, 103, 325, 332, 80, 314, 233, 89, 88, 341, 161, 45, 272, 74, 212, 173, 24, 355, 93, 310, 252, 71, 63, 7, 97, 8, 30, 28, 189, 66, 12, 77, 14, 60, 247, 162, 70, 23, 133, 99, 52, 224, 328, 34, 166, 337, 115, 144, 135, 276, 72, 278, 246, 291, 148, 123, 301, 183, 305, 290, 211, 172, 186, 98, 329, 340, 119, 240, 210, 264, 265, 121, 140, 151, 275, 286, 236, 200, 346, 249, 296, 90, 174, 73, 307, 149, 277, 47, 262, 300, 299, 126, 128, 9, 39, 146, 48, 55, 11, 61, 44, 3, 2, 42, 68, 65, 50, 21, 15, 59, 91, 27, 1, 171, 56, 25, 101, 43, 107, 118, 36, 92, 41, 176, 142, 69, 324, 343, 95, 168, 57, 6, 321, 67, 35, 199, 145, 281, 37, 29, 130, 17, 113, 205, 111, 158, 18, 62, 22, 159, 40, 53, 32, 26, 49, 13, 54, 4, 20, 64, 170, 33, 10, 31, 266, 116, 46, 86, 309, 136, 129, 0, 193, 345, 83, 117, 317, 120, 124, 5, 237, 58, 139, 250, 327, 38, 16, 51, 138, 258, 203, 114, 156, 125, 230, 127, 302, 245, 175, 269, 226, 297, 357, 229, 218, 137, 19, 190, 207, 204, 184, 108, 347, 96, 234, 81, 87, 102, 304, 112, 131, 79, 106, 227, 279, 331, 165, 154, 76, 143, 259, 192, 169, 221, 187, 311, 209, 163, 271, 213, 201, 243, 208, 153, 225, 152, 157, 82, 313, 122, 248, 349, 134, 334, 167, 267, 293, 181, 235, 206, 150, 273, 292, 78, 196, 242, 182, 185, 351, 231, 219, 254, 75, 257, 260, 238, 195, 132, 215, 282, 222, 191, 202, 110, 179, 312, 306, 194, 358, 164, 109, 188, 338, 320, 354, 322, 197, 105, 274, 263, 177, 330, 308, 303, 198, 232, 323, 287, 239, 94, 253, 280, 316, 284, 104, 155, 244, 241, 270, 141, 326, 356, 223, 180, 268, 251, 228, 315, 283, 84, 342, 256, 318, 261, 359, 289, 100, 147, 295, 220, 344, 298, 85, 217, 350, 294, 214, 216, 319, 333, 353, 352, 255, 288, 336, 348, 285
-//
-//        };
-//        ArrayList<Integer> chromo = new ArrayList<>();
-//        for (int i = 0; i < temp.length; i++) {
-//            chromo.add(temp[i]);
-//        }
-        Individual<ColumnM> individual = new Individual<>(ColumnM.class);
-        individual.setChromosome(list);
-        System.out.println(list);
+        int [] temp = {
+                5, 48, 70, 54, 49, 53, 166, 111, 179, 83, 153, 138, 162, 160, 358, 221, 350, 256, 290, 230, 303, 355, 205, 203, 0, 20, 29, 43, 45, 21, 75, 101, 178, 116, 91, 174, 148, 265, 204, 248, 359, 240, 261, 267, 302, 190, 292, 263, 60, 59, 1, 56, 67, 38, 154, 72, 85, 173, 129, 208, 146, 194, 264, 233, 319, 236, 282, 279, 242, 293, 209, 337, 19, 71, 3, 65, 33, 69, 145, 58, 80, 135, 137, 122, 81, 149, 110, 269, 232, 280, 351, 235, 243, 322, 313, 294, 28, 66, 4, 6, 25, 133, 97, 121, 96, 141, 140, 106, 299, 296, 343, 283, 191, 180, 239, 332, 181, 238, 336, 189, 26, 23, 32, 55, 10, 78, 136, 113, 108, 109, 152, 339, 89, 120, 281, 144, 312, 196, 353, 219, 285, 223, 255, 249, 11, 18, 44, 46, 24, 14, 12, 151, 98, 92, 74, 168, 139, 147, 171, 201, 316, 231, 213, 328, 277, 320, 259, 228, 9, 62, 36, 13, 39, 61, 47, 167, 126, 119, 156, 104, 102, 99, 346, 237, 212, 315, 197, 195, 275, 252, 287, 202, 27, 73, 34, 15, 51, 68, 172, 90, 100, 169, 210, 79, 163, 188, 132, 300, 330, 309, 216, 273, 229, 215, 185, 220, 64, 17, 35, 42, 63, 16, 164, 107, 117, 115, 276, 82, 314, 325, 246, 354, 254, 184, 308, 272, 200, 244, 321, 207, 30, 2, 57, 52, 40, 118, 41, 37, 192, 177, 105, 114, 150, 158, 352, 349, 298, 324, 198, 297, 234, 333, 284, 345, 50, 31, 84, 22, 161, 131, 123, 165, 130, 128, 94, 270, 76, 291, 245, 327, 268, 278, 318, 227, 342, 222, 250, 226, 7, 134, 8, 176, 88, 112, 87, 95, 157, 86, 225, 103, 338, 260, 356, 288, 258, 217, 305, 251, 348, 289, 344, 271, 175, 77, 127, 124, 125, 142, 170, 159, 329, 199, 262, 317, 307, 323, 304, 286, 274, 182, 326, 295, 214, 257, 340, 253, 143, 155, 93, 331, 301, 335, 193, 347, 211, 183, 241, 206, 306, 357, 224, 247, 310, 334, 218, 266, 341, 187, 311, 186
+        };
+        ArrayList<Integer> chromo = new ArrayList<>();
+        for (int i = 0; i < temp.length; i++) {
+            chromo.add(temp[i]);
+        }
+        Individual<ColumnR> individual = new Individual<>(ColumnR.class);
+        individual.setChromosome(chromo);
+        System.out.println(chromo);
         individual.calculFitness();
+        System.out.println(storageCount);
+        for (int i = 0; i < itemPickFreq.length; i++) {
+            System.out.println(itemPickFreq[i]);
+        }
         System.out.println(individual.getCost());
     }
-    /**
-     * 检验通道cost计算的正确性  numA numB本通道的货物
-     * usedA usedB usedC  共计多少 算上本通道
-     * */
-    @Deprecated
-    public static void testColumn(int no ,int usedA ,int usedB,int usedC,int numA,int numB){
-        PickParam pickParam = dataService.getBenchmarkPickData(20, 0.5, 0.3, 0.2);
-        Params.calculNonEmptyProb();
-        ColumnL columnL = new ColumnL();
-        ArrayList<Integer> col = new ArrayList<>();
-        HashSet<Integer> set = new HashSet<>();
-        int i = 0;
-        for (; i < numA; i++) {
-            //编号为0 一定是A类货物
-            col.add(i);
-            //   set.add(i);
-        }
-        for (; i < numA + numB ; i++) {
-            //编号为 storageA +1 一定是b类
-            col.add(pickParam.getStorageA() + i - numA);
-            //   set.add(pickParam.getStorageA() + i - numA);
-        }
-        for (;i < N;i++){
-            col.add(pickParam.getStorageA() + pickParam.getStorageB() + i - numA - numB);
-            //   set.add(pickParam.getStorageA() + pickParam.getStorageB() + i - numA - numB);
-        }
-        for (int j  = 0 ; j < usedA; j++) {
-            set.add(j);
-        }
-        for (int j = pickParam.getStorageA(); j < pickParam.getStorageA() + usedB; j++) {
-            set.add(j);
-        }
-        for(int j = pickParam.getStorageA() + pickParam.getStorageB();j <  pickParam.getStorageA() + pickParam.getStorageB() + usedC; j ++){
-            set.add(j);
-        }
-        columnL.setLocations(col);
-        columnL.calculCost(no,set,0,0,0);
-        System.out.println(columnL.getCost());
-    }
+
 }

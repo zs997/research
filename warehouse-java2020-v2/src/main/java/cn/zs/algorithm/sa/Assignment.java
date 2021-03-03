@@ -1,7 +1,7 @@
 /**
  * projectName: TSP
  * fileName: Path.java
- * packageName: cn.zs
+ * packageName: cn.cn.zs
  * date: 2021-01-17 16:58
  * copyright(c) 2019-2021 hust
  */
@@ -14,9 +14,9 @@ import java.util.HashSet;
 import static cn.zs.algorithm.component.Params.*;
 /**
  * @version: V1.0
- * @author: zs
+ * @author: cn.zs
  * @className: Path
- * @packageName: cn.zs
+ * @packageName: cn.cn.zs
  * @data: 2021-01-17 16:58
  **/
 public class Assignment<T extends Column>{
