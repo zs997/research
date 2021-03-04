@@ -104,11 +104,30 @@ public class Individual<T extends Column> {
 				//库位编号
 				int no = coordinate.getNo();
 				//货物编号
+				try {
+					Integer itemNo = chromosome.get(no);
+					temp.add(itemNo);
+					// temp[j] = itemNo;
+					coordinateMap.put(itemNo,coordinate);
+				}catch (Exception e){
+					MyDataWriter dataWriter = new CsvDataWriter();
+					CommonData commonData = new CommonData();
+					CsvContent csvContent = new CsvContent();
+					commonData.setData(csvContent);
+					commonData.setPath("d:\\works\\data\\chromosomeerror.csv");
+					csvContent.setTitile("error log");
 
-				Integer itemNo = chromosome.get(no);
-				temp.add(itemNo);
-				// temp[j] = itemNo;
-				coordinateMap.put(itemNo,coordinate);
+					ArrayList<String> list = new ArrayList<>();
+					list.add(String.valueOf(no));
+					list.add(this.chromosome.toString());
+					String[][] matrix = new String[list.size()][1];
+					for (int index = 0; index < list.size(); index++) {
+						matrix[index][0] = list.get(index);
+					}
+					csvContent.setCsvDataMatrix(matrix);
+					dataWriter.write(commonData);
+					break;
+				}
 			}
 			Column column = t.newInstance();
 			column.setLocations(temp);
@@ -168,7 +187,7 @@ public class Individual<T extends Column> {
 					CommonData commonData = new CommonData();
 					CsvContent csvContent = new CsvContent();
 					commonData.setData(csvContent);
-					commonData.setPath("d:\\works\\data\\error.csv");
+					commonData.setPath("d:\\works\\data\\spreaderror.csv");
 					csvContent.setTitile("error log");
 
 					ArrayList<String> list = new ArrayList<>();
@@ -187,7 +206,6 @@ public class Individual<T extends Column> {
 				}
 			}
 			spread = spread / ((items.size())*(items.size()-1)/2);
-
 			spreads += spread;
 		}
 		spreadCost = spreads/itemGroups.size();

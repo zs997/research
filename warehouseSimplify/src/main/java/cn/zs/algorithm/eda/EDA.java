@@ -177,6 +177,10 @@ public class EDA <T extends Column>{
                     }
                 }
             }
+            //保证有效个体
+//            if(list.size() != storageCount){
+//                continue;
+//            }
             Individual individual = new Individual(t,list,weight);
             population.setIndividual(individualIndex,individual);
         }
