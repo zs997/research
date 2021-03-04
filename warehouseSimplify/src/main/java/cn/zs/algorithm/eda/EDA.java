@@ -16,6 +16,7 @@ public class EDA <T extends Column>{
     //概率矩阵学习率
     protected double alpha;
     protected int maxGenerations;
+    protected  double weight;
     /**
      * @Parm: t 拣货策略
      * @Parm：populationSize：种群大小
@@ -24,17 +25,19 @@ public class EDA <T extends Column>{
      * @Parm：alpha：学习率
      * @Parm：maxGenerations：最大迭代次数
      * */
-	public EDA(Class<T> t,int populationSize,int superiorityCount,int eliteCount,double alpha,int maxGenerations) {
+	public EDA(Class<T> t,int populationSize,int superiorityCount,int eliteCount,double alpha,int maxGenerations,double weight) {
         this.t=t;
         this.populationSize = populationSize;
 	    this.superiorityCount =superiorityCount;
         this.eliteCount = eliteCount;
 	    this.alpha  = alpha;
 	    this.maxGenerations = maxGenerations;
+
+	    this.weight =weight;
 	}
 	public Individual doEDA(){
         // Create cities
-        Population population = new Population(this.populationSize, t);
+        Population population = new Population(this.populationSize,t,weight);
         evalPopulation(population);
         System.out.println("EDA Start cost: " +  population.getFittest(0).getCost());
         int generation = 1;
@@ -174,7 +177,7 @@ public class EDA <T extends Column>{
                     }
                 }
             }
-            Individual individual = new Individual(t,list);
+            Individual individual = new Individual(t,list,weight);
             population.setIndividual(individualIndex,individual);
         }
     }

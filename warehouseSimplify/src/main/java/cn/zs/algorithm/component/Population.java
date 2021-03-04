@@ -7,10 +7,10 @@ import java.util.Random;
 public class Population<T extends Column> {
 	private Individual population[];
 	private double populationFitness = -1;
-	public Population(int populationSize, Class<T> t) {
+	public Population(int populationSize, Class<T> t,double weight) {
 		population = new Individual[populationSize];
 		for (int individualCount = 0; individualCount < populationSize; individualCount++) {
-			Individual individual = new Individual(t);
+			Individual individual = new Individual(t,weight);
 			population[individualCount] = individual;
 		}
 	}

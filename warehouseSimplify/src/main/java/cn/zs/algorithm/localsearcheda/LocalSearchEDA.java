@@ -36,14 +36,15 @@ public class LocalSearchEDA extends EDA {
      * @Parm：maxGenerations：最大迭代次数
      * @Parm:localSearchTimes:局部搜索次数     *
      */
-    public LocalSearchEDA(Class t, int populationSize, int superiorityCount, int eliteCount, double alpha, int maxGenerations,int localSearchTimes) {
-        super(t, populationSize, superiorityCount, eliteCount, alpha, maxGenerations);
+    public LocalSearchEDA(Class t, int populationSize, int superiorityCount,
+                          int eliteCount, double alpha, int maxGenerations,int localSearchTimes,double weight) {
+        super(t, populationSize, superiorityCount, eliteCount, alpha, maxGenerations,weight);
         this.localSearchTimes = localSearchTimes;
     }
     @Override
     public Individual doEDA(){
         // Create cities
-        Population population = new Population(this.populationSize, t);
+        Population population = new Population(this.populationSize, t,weight);
 
         int generation = 1;
         //初始化概率矩阵
@@ -83,7 +84,7 @@ public class LocalSearchEDA extends EDA {
             }
         }
         int[] bestRoute = route.getBestRoute();
-        Individual res = new Individual(t,bestRoute);
+        Individual res = new Individual(t,bestRoute,weight);
         res.setCost(route.getBestCost());
         res.setFitness(1.0/route.getBestCost());
         return res;

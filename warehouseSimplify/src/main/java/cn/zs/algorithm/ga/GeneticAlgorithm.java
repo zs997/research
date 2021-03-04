@@ -12,6 +12,7 @@ public class GeneticAlgorithm <T extends Column>{
     private double crossoverRate;
     private double mutationRate;
     public int maxGenerations;
+    private double weight;
     private GeneticAlgorithm(){
     }
     /**
@@ -24,7 +25,7 @@ public class GeneticAlgorithm <T extends Column>{
      * @Parm：maxGenerations：迭代次数
      * */
     public GeneticAlgorithm(Class<T> t,int populationSize,int tournamentSize,int elitismCount,
-            double crossoverRate,double mutationRate,int maxGenerations) {
+            double crossoverRate,double mutationRate,int maxGenerations,double weight) {
         this.t = t;
         this.populationSize = populationSize;
         this.tournamentSize = tournamentSize;
@@ -32,6 +33,8 @@ public class GeneticAlgorithm <T extends Column>{
         this.crossoverRate = crossoverRate;
         this.mutationRate = mutationRate;
         this.maxGenerations = maxGenerations;
+
+        this.weight = weight;
     }
     /**
      * 遗传算法步骤
@@ -77,7 +80,7 @@ public class GeneticAlgorithm <T extends Column>{
      */
     public Population initPopulation(){
         // Initialize population
-        Population population = new Population(populationSize,t);
+        Population population = new Population(populationSize,t,weight);
         return population;
     }
 	/**
@@ -113,7 +116,7 @@ public class GeneticAlgorithm <T extends Column>{
 	 */
 	public Individual selectParent(Population population) {
 		// Create tournament
-		Population tournament = new Population(this.tournamentSize,t);
+		Population tournament = new Population(this.tournamentSize,t,weight);
 		// Add random individuals to the tournament
 		population.shuffle();
 		for (int i = 0; i < this.tournamentSize; i++) {
@@ -131,7 +134,7 @@ public class GeneticAlgorithm <T extends Column>{
 	 */
     public Population crossoverPopulation(Population population){
         // Create new population
-        Population newPopulation = new Population(population.size(),t);
+        Population newPopulation = new Population(population.size(),t,weight);
         // Loop over current population by fitness
         for (int populationIndex = 0; populationIndex < population.size(); populationIndex++) {
             // Get parent1
@@ -143,7 +146,7 @@ public class GeneticAlgorithm <T extends Column>{
                 // Create blank offspring chromosome
                 int offspringChromosome[] = new int[parent1.getChromosomeLength()];
                 Arrays.fill(offspringChromosome, -1);
-                Individual offspring = new Individual(t,offspringChromosome);
+                Individual offspring = new Individual(t,offspringChromosome,weight);
                 // Get subset of parent chromosomes
                 int substrPos1 = (int) (Math.random() * parent1.getChromosomeLength());
                 int substrPos2 = (int) (Math.random() * parent1.getChromosomeLength());
@@ -175,6 +178,7 @@ public class GeneticAlgorithm <T extends Column>{
                     }
                 }
                 // Add child
+                offspring.calculFitness();
                 newPopulation.setIndividual(populationIndex, offspring);
             } else {
                 // Add individual to new population without applying crossover
@@ -191,7 +195,7 @@ public class GeneticAlgorithm <T extends Column>{
 	 */
     public Population mutatePopulation(Population population){
         // Initialize new population
-        Population newPopulation = new Population(this.populationSize,t);
+        Population newPopulation = new Population(this.populationSize,t,weight);
         
         // Loop over current population by fitness
         for (int populationIndex = 0; populationIndex < population.size(); populationIndex++) {

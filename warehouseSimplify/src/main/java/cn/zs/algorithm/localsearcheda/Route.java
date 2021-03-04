@@ -10,6 +10,8 @@ import cn.zs.algorithm.component.Column;
 import cn.zs.algorithm.component.Individual;
 import java.util.ArrayList;
 import static cn.zs.algorithm.component.Params.storageCount;
+import static cn.zs.algorithm.component.Params.wa;
+
 /**
  * @version: V1.0
  * @author: cn.cn.zs
@@ -24,6 +26,7 @@ public class Route <T extends Column>{
     private double bestCost;
     private double tempCost;   // 临时存放路径及其及其长度
     private Class<T> t;
+    private double weight;
     public Route(Individual individual){
         this.t = individual.getT();
         ArrayList<Integer> chromosome = individual.getChromosome();
@@ -35,6 +38,7 @@ public class Route <T extends Column>{
         bestCost = individual.getCost();
         tempRoute = new int[chromosome.size()];
         tempCost = 0.0;
+        this.weight = individual.getWeight();
     }
     public void generateNeighour()   {
         setTempRoute(bestRoute);
@@ -56,7 +60,7 @@ public class Route <T extends Column>{
             i++;
             j--;
         }
-        Individual tempIndividual = new Individual(t, tempRoute);
+        Individual tempIndividual = new Individual(t, tempRoute,weight);
         tempIndividual.calculFitness();
         double res = tempIndividual.getCost();
         tempCost = res;

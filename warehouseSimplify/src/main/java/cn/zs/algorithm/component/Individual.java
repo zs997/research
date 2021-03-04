@@ -21,15 +21,17 @@ public class Individual<T extends Column> {
 	private double fitness=-1;
 	private double cost;
 	private Class<T> t;
+	private double weight;
 	//使用模板构造新个体 不计算值
-	public Individual(Individual temp){
-		this(temp.t,temp.getChromosome());
+	public Individual(Individual temp,double weight){
+		this(temp.t,temp.getChromosome(),weight);
 	}
 	/**
 	 * 产生随机染色体
 	 * 由基因 同步其他库位分配数据
 	 * */
-	public Individual(Class<T> t){
+	public Individual(Class<T> t,double weight){
+		this.weight = weight;
 		this.t = t;
 		ArrayList<Integer> g = new ArrayList<>();
 		for (int i = 0; i < storageCount; i++) {
@@ -64,7 +66,8 @@ public class Individual<T extends Column> {
 	/**
 	 * 产生指导性染色体
 	 * */
-	public Individual(Class<T> t, ArrayList<Integer> chromosome){
+	public Individual(Class<T> t, ArrayList<Integer> chromosome,double weight){
+		this.weight = weight;
 		// Create individualchromosome
 		this.chromosome = new ArrayList<>();
 		for (int i = 0; i < chromosome.size(); i++) {
@@ -72,7 +75,8 @@ public class Individual<T extends Column> {
 		}
 		this.t = t;
 	}
-	public Individual(Class<T> t, int [] chromosome){
+	public Individual(Class<T> t, int [] chromosome,double weight){
+		this.weight = weight;
 		this.t = t;
 		this.chromosome = new ArrayList<>();
 		for (int i = 0; i < chromosome.length; i++) {
@@ -163,7 +167,7 @@ public class Individual<T extends Column> {
 		}
 		calculLengthCost();
 		calculSpreadCost();
-		cost = 0.5*lengthCost +0.5*spreadCost;
+		cost = weight*lengthCost +(1-weight)*spreadCost;
 		fitness = 1/cost;
 		return fitness;
 
@@ -227,6 +231,14 @@ public class Individual<T extends Column> {
 	}
 	public void setCost(double cost) {
 		this.cost = cost;
+	}
+
+	public double getWeight() {
+		return weight;
+	}
+
+	public void setWeight(double weight) {
+		this.weight = weight;
 	}
 
 	public Class<T> getT() {

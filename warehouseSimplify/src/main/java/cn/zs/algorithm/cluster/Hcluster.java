@@ -26,7 +26,6 @@ import java.util.Set;
  **/
 
 public class Hcluster {
-
     /**
      * 调用R库函数  将前n号货物聚类
      * @param：functionPath R函数所在目录  "f:\\works\\R\\cluster.R"     *
@@ -68,11 +67,9 @@ public class Hcluster {
           //  System.out.println(list);
         }
         String[][] csvDataMatrix = DataConverter.list2Matrix(res);
-
         CsvContent csvContent = new CsvContent();
         csvContent.setTitile("nothing but a tittle");
         csvContent.setCsvDataMatrix(csvDataMatrix);
-
         CommonData commonData = new CommonData();
         commonData.setData(csvContent);
         commonData.setPath(destination);

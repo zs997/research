@@ -22,6 +22,8 @@ public class LocalEDA<T extends Column>{
     protected Class<T> t;
     //局部搜索次数
     protected int localSearchTimes ;
+
+    private double weight;
     /**
      * @Parm: t 拣货策略
      * @Parm：populationSize：种群大小
@@ -31,7 +33,8 @@ public class LocalEDA<T extends Column>{
      * @Parm：maxGenerations：最大迭代次数
      * @param:localSearchTimes: 局部搜索次数
      * */
-    public LocalEDA(Class<T> t,int populationSize, int superiorityCount, int eliteCount, double alpha, int maxGenerations,int localSearchTimes) {
+    public LocalEDA(Class<T> t,int populationSize, int superiorityCount, int eliteCount, double alpha
+            , int maxGenerations,int localSearchTimes,double weight) {
         this.t=t;
         this.populationSize = populationSize;
 	    this.superiorityCount =superiorityCount;
@@ -39,10 +42,11 @@ public class LocalEDA<T extends Column>{
 	    this.alpha  = alpha;
 	    this.maxGenerations = maxGenerations;
 	    this.localSearchTimes = localSearchTimes;
+	    this.weight = weight;
 	}
 	public Individual doEDA(){
         // Create cities
-        Population population = new Population(this.populationSize, t);
+        Population population = new Population(this.populationSize, t,weight);
 
         int generation = 1;
         //初始化概率矩阵
@@ -192,7 +196,7 @@ public class LocalEDA<T extends Column>{
                     }
                 }
             }
-            Individual individual = new Individual(t,list);
+            Individual individual = new Individual(t,list,weight);
             population.setIndividual(individualIndex,individual);
         }
     }
@@ -218,7 +222,7 @@ public class LocalEDA<T extends Column>{
             }
         }
         int[] bestRoute = route.getBestRoute();
-        Individual res = new Individual(t,bestRoute);
+        Individual res = new Individual(t,bestRoute,weight);
         res.setCost(route.getBestCost());
         res.setFitness(1.0/route.getBestCost());
         return res;

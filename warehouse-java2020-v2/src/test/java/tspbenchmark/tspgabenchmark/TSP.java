@@ -28,7 +28,7 @@ public class TSP {
 		int cityNum = distanceInstance.getCityNum();
 		double[][] distanceMatrix = distanceInstance.getDistanceMatrix();
 		// Initial GA
-		GeneticAlgorithm ga = new GeneticAlgorithm(100, 0.01, 0.9, 10, 5);
+		GeneticAlgorithm ga = new GeneticAlgorithm(100, 0.001, 0.9, 2, 5);
 
 		// Initialize population
 		Population population = ga.initPopulation(cityNum);
