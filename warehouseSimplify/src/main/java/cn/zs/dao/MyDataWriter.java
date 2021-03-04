@@ -19,4 +19,5 @@ import cn.zs.pojo.CommonData;
  **/
 public interface MyDataWriter {
      void write(CommonData data);
+     void write(CommonData data,boolean append);
 }

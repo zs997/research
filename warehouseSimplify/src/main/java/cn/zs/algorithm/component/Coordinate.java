@@ -69,4 +69,13 @@ public class Coordinate {
    public void setNo(int no) {
       this.no = no;
    }
+
+   @Override
+   public String toString() {
+      return "Coordinate{" +
+              "colNo=" + colNo +
+              ", rowNo=" + rowNo +
+              ", no=" + no +
+              '}';
+   }
 }

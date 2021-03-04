@@ -1,9 +1,12 @@
 package cn.zs.algorithm.component;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
+import cn.zs.dao.CsvDataWriter;
+import cn.zs.dao.MyDataWriter;
+import cn.zs.pojo.CommonData;
+import cn.zs.pojo.CsvContent;
+import org.python.antlr.ast.Str;
+
+import java.util.*;
 
 import static cn.zs.algorithm.component.Params.*;
 
@@ -101,6 +104,7 @@ public class Individual<T extends Column> {
 				//库位编号
 				int no = coordinate.getNo();
 				//货物编号
+
 				Integer itemNo = chromosome.get(no);
 				temp.add(itemNo);
 				// temp[j] = itemNo;
@@ -138,6 +142,11 @@ public class Individual<T extends Column> {
 	 * 计算离散度
 	 * */
 	private void calculSpreadCost(){
+//		Set<Integer> integers = coordinateMap.keySet();
+//		for (Integer integer : integers) {
+//			System.out.println(integer+":"+coordinateMap.get(integer));
+//		}
+		boolean excpFlag = false;
 		//总离散度
 		double spreads = 0;
 		for (int i = 0; i < itemGroups.size(); i++) {
@@ -146,11 +155,35 @@ public class Individual<T extends Column> {
 			double spread = 0;
 			for (int j = 0; j < items.size(); j++) {
 				Integer item1 = items.get(j);
-				Coordinate c1 = coordinateMap.get(item1);
-				for (int k = j+1; k < items.size(); k++) {
-					Integer item2 = items.get(k);
-					Coordinate c2 = coordinateMap.get(item2);
-					spread += c1.calculDistance(c2);
+				try {
+					Coordinate c1 = coordinateMap.get(item1);
+					for (int k = j+1; k < items.size(); k++) {
+						Integer item2 = items.get(k);
+						Coordinate c2 = coordinateMap.get(item2);
+						spread += c1.calculDistance(c2);
+					}
+				}catch (Exception e){
+					excpFlag = true;
+					MyDataWriter dataWriter = new CsvDataWriter();
+					CommonData commonData = new CommonData();
+					CsvContent csvContent = new CsvContent();
+					commonData.setData(csvContent);
+					commonData.setPath("d:\\works\\data\\error.csv");
+					csvContent.setTitile("error log");
+
+					ArrayList<String> list = new ArrayList<>();
+					list.add(this.chromosome.toString());
+					Set<Integer> integers = coordinateMap.keySet();
+					for (Integer integer : integers) {
+						list.add(integer+":"+coordinateMap.get(integer));
+					}
+					String[][] matrix = new String[list.size()][1];
+					for (int index = 0; index < list.size(); index++) {
+						matrix[index][0] = list.get(index);
+					}
+					csvContent.setCsvDataMatrix(matrix);
+					dataWriter.write(commonData);
+					break;
 				}
 			}
 			spread = spread / ((items.size())*(items.size()-1)/2);
@@ -158,6 +191,9 @@ public class Individual<T extends Column> {
 			spreads += spread;
 		}
 		spreadCost = spreads/itemGroups.size();
+		if (excpFlag){
+			spreadCost = Double.MAX_VALUE;
+		}
 	}
 	public double calculFitness() {
 		try {
