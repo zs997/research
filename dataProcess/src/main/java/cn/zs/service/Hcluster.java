@@ -7,7 +7,6 @@
  */
 package cn.zs.service;
 
-import cn.zs.dao.CsvDataWriter;
 import cn.zs.dao.MyDataWriter;
 import cn.zs.pojo.CommonData;
 import cn.zs.pojo.CsvContent;
@@ -76,8 +75,106 @@ public class Hcluster {
         CommonData commonData = new CommonData();
         commonData.setData(csvContent);
         commonData.setPath(destination);
-        MyDataWriter myDataWriter = new CsvDataWriter();
+        MyDataWriter myDataWriter = new MyDataWriter();
         myDataWriter.write(commonData);
         rc.close();
+    }
+
+    /**
+     * 对阵矩阵标准化 不考虑对角元素 减去均值 除以方差
+     */
+    public double [][] zeroMeanNormalization(double [][] matrix){
+        double sum = 0.0;
+        double count = 0;
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = i+1; j < matrix[i].length; j++) {
+                count++;
+                sum += matrix[i][j];
+            }
+        }
+        double avg = sum/count;
+
+        double sumSquare = 0.0;
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = i+1; j < matrix[i].length; j++) {
+               sumSquare += (matrix[i][j]-avg)*(matrix[i][j]-avg);
+            }
+        }
+        double s = Math.sqrt(sumSquare/(count-1));
+
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = i+1; j < matrix[i].length; j++) {
+               matrix[i][j] = (matrix[i][j]-avg)/s;
+               matrix[j][i] = matrix[i][j];
+            }
+        }
+        return  matrix;
+    }
+
+    /**
+     *
+     * */
+    public double [][] minMaxNormalization(double [][] matrix){
+        double min = Double.MAX_VALUE;
+        double max = Double.MIN_VALUE;
+
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = i+1; j < matrix[i].length; j++) {
+                min = Math.min(min,matrix[i][j]);
+                max = Math.max(max,matrix[i][j]);
+            }
+        }
+
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = i+1; j < matrix[i].length; j++) {
+              matrix[i][j] = (matrix[i][j]-min)/(max-min);
+              matrix[j][i] = matrix[i][j];
+            }
+        }
+        return  matrix;
+    }
+
+    //计算聚类结果的轮廓度
+    //不适合一个组为一组情况
+    public  double calculSilhouette(ArrayList<ArrayList<Integer>> groupInfo,double [][] distanceMatrix){
+        double sumSi = 0;
+        for (int groupIndex = 0; groupIndex < groupInfo.size(); groupIndex++) {
+            ArrayList<Integer> groupi = groupInfo.get(groupIndex);
+            for (int itemIndex = 0; itemIndex < groupi.size(); itemIndex++) {
+                //货物编号 对该货物计算 轮廓
+                Integer item = groupi.get(itemIndex);
+                //1.计算本组与该货物距离之和
+                double ai = 0.0;
+                for (int k = 0; k < groupi.size(); k++) {
+                    if (k == itemIndex){
+                        continue;
+                    }
+                    Integer item2 = groupi.get(k);
+                    ai += distanceMatrix[item][item2];
+                }
+                ai = ai/(groupi.size()-1);
+
+                double bi = Double.MAX_VALUE;
+                for (int k = 0; k < groupInfo.size(); k++) {
+                    if (k == groupIndex){
+                        continue;
+                    }
+                    double biTemp = 0.0;
+                    ArrayList<Integer> otherGroup = groupInfo.get(k);
+                    for (int itemIndex2 = 0; itemIndex2 < otherGroup.size(); itemIndex2++) {
+                        Integer item2 = otherGroup.get(itemIndex2);
+                        biTemp += distanceMatrix[item][item2];
+                    }
+                    biTemp = biTemp/otherGroup.size();
+                    if (bi > biTemp){
+                        bi = biTemp;
+                    }
+                }
+                //样本item的轮廓度
+                double si = (bi -ai)/Math.max(ai,bi);
+                sumSi += si;
+            }
+        }
+        return sumSi/distanceMatrix.length;
     }
 }

@@ -1,13 +1,10 @@
 package cn.zs.service;
 
-import cn.zs.dao.CsvDataWriter;
 import cn.zs.dao.MyDataWriter;
 import cn.zs.dao.OriginDataReader;
 import cn.zs.mapper.OrdersMapper;
 import cn.zs.pojo.*;
 import cn.zs.tools.DataConverter;
-import jnr.ffi.Struct;
-import org.python.antlr.ast.Str;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -241,18 +238,18 @@ public class DataService {
             }
         }
 
-        CsvDataWriter csvDataWriter = new CsvDataWriter();
+        MyDataWriter myDataWriter = new MyDataWriter();
         CommonData commonData = new CommonData();
         commonData.setPath(path+"\\itemInfoTest.csv");
         commonData.setData(itemRes);
-        csvDataWriter.write(commonData);
+        myDataWriter.write(commonData);
 
         commonData.setPath(path+"\\brandDistanceTest.csv");
         CsvContent csvContent = new CsvContent();
         csvContent.setCsvDataMatrix(matrixRes);
         csvContent.setTitile(sb.substring(0,sb.length()-1));
         commonData.setData(csvContent);
-        csvDataWriter.write(commonData);
+        myDataWriter.write(commonData);
     }
     /**
      * 其他模块用到

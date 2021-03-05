@@ -72,4 +72,41 @@ public class OriginDataReaderImp implements OriginDataReader {
         }
         return items;
     }
+
+    /**
+     * 读取分类表
+     * "D:\\works\\data\\all\\SilhouetteTest\\groupInfoTest.csv"
+     * */
+    @Override
+    public  ArrayList<ArrayList<Integer>> readGroupInfo(String path){
+        OriginDataReader originDataReader = new OriginDataReaderImp();
+        ArrayList<ArrayList<String>> arrayLists = originDataReader.readCsv(path);
+        ArrayList<ArrayList<Integer>> res = new ArrayList<>();
+        for (int i = 1; i < arrayLists.size(); i++) {
+            ArrayList<Integer> list = new ArrayList<>();
+            for (int j = 0; j < arrayLists.get(i).size(); j++) {
+                list.add(Integer.valueOf(arrayLists.get(i).get(j).trim()));
+            }
+            res.add(list);
+        }
+        return res;
+    }
+
+    /**
+     * 读取距离矩阵表
+     * "D:\\works\\data\\all\\SilhouetteTest\\brandDistance1.csv"
+     * */
+    @Override
+    public  double[][] readDistanceMatrix(String path){
+        OriginDataReader originDataReader = new OriginDataReaderImp();
+        ArrayList<ArrayList<String>> arrayLists = originDataReader.readCsv(path);
+        double[][] res = new double[arrayLists.size()-1][];
+        for (int i = 1; i < arrayLists.size(); i++) {
+            res[i-1] = new double[arrayLists.get(i).size()];
+            for (int j = 0; j < arrayLists.get(i).size(); j++) {
+                res[i-1][j] = Double.valueOf(arrayLists.get(i).get(j).trim());
+            }
+        }
+        return res;
+    }
 }
