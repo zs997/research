@@ -33,4 +33,13 @@ public class CsvContent {
     public void setCsvDataMatrix(String [][] csvDataMatrix) {
         this.csvDataMatrix = csvDataMatrix;
     }
+    public void setCsvDataMatrix(double [][] csvDataMatrix) {
+        String[][] strings = new String[csvDataMatrix.length][csvDataMatrix[0].length];
+        for (int i = 0; i < csvDataMatrix.length; i++) {
+            for (int j = 0; j < csvDataMatrix[i].length; j++) {
+                strings[i][j] = String.valueOf(csvDataMatrix[i][j]);
+            }
+        }
+        this.csvDataMatrix = strings;
+    }
 }

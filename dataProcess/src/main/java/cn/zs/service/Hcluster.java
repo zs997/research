@@ -10,11 +10,13 @@ package cn.zs.service;
 import cn.zs.dao.MyDataWriter;
 import cn.zs.pojo.CommonData;
 import cn.zs.pojo.CsvContent;
+import cn.zs.pojo.SilhouetteParam;
 import cn.zs.tools.DataConverter;
 import org.rosuda.REngine.REXP;
 import org.rosuda.REngine.Rserve.RConnection;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Set;
 
@@ -36,7 +38,7 @@ public class Hcluster {
      * @param：k 聚类k组
      * @para：destination 结果目录 具体到文件名 "f:\\works\\data\\groupinfo.csv"
      * */
-    public void generateItemGroupByR(String functionPath,String dataPath,int n,int k,String destination) throws Exception {
+    public  ArrayList<ArrayList<Integer>> generateItemGroupByR(String functionPath,String dataPath,int n,int k,String destination) throws Exception {
         //建立连接
         RConnection rc = new RConnection();
         rc.assign("functionPath",functionPath);
@@ -51,22 +53,22 @@ public class Hcluster {
         String s[] = eval.asStrings();
         HashMap<String,ArrayList<Integer>> map = new HashMap<>();
         for (int i = 0; i < s.length; i++) {
-          if (map.containsKey(s[i])){
-              ArrayList<Integer> list = map.get(s[i]);
-              list.add(i);
-          }else {
-              ArrayList<Integer> list = new ArrayList<>();
-              list.add(i);
-              map.put(s[i],list);
-          }
+            if (map.containsKey(s[i])){
+                ArrayList<Integer> list = map.get(s[i]);
+                list.add(i);
+            }else {
+                ArrayList<Integer> list = new ArrayList<>();
+                list.add(i);
+                map.put(s[i],list);
+            }
         }
         Set<String> strings = map.keySet();
         ArrayList<ArrayList<Integer>> res = new ArrayList<>();
         for (String string : strings) {
-           // System.out.println(string+"zxcv");
+            // System.out.println(string+"zxcv");
             ArrayList<Integer> list = map.get(string);
             res.add(list);
-          //  System.out.println(list);
+            //  System.out.println(list);
         }
         String[][] csvDataMatrix = DataConverter.list2Matrix(res);
         CsvContent csvContent = new CsvContent();
@@ -78,6 +80,7 @@ public class Hcluster {
         MyDataWriter myDataWriter = new MyDataWriter();
         myDataWriter.write(commonData);
         rc.close();
+        return  res;
     }
 
     /**
@@ -86,6 +89,7 @@ public class Hcluster {
     public double [][] zeroMeanNormalization(double [][] matrix){
         double sum = 0.0;
         double count = 0;
+        double[][] res = new double[matrix.length][matrix[0].length];
         for (int i = 0; i < matrix.length; i++) {
             for (int j = i+1; j < matrix[i].length; j++) {
                 count++;
@@ -104,11 +108,11 @@ public class Hcluster {
 
         for (int i = 0; i < matrix.length; i++) {
             for (int j = i+1; j < matrix[i].length; j++) {
-               matrix[i][j] = (matrix[i][j]-avg)/s;
-               matrix[j][i] = matrix[i][j];
+               res[i][j] = (matrix[i][j]-avg)/s;
+               res[j][i] = res[i][j];
             }
         }
-        return  matrix;
+        return  res;
     }
 
     /**
@@ -117,7 +121,7 @@ public class Hcluster {
     public double [][] minMaxNormalization(double [][] matrix){
         double min = Double.MAX_VALUE;
         double max = Double.MIN_VALUE;
-
+        double[][] res = new double[matrix.length][matrix[0].length];
         for (int i = 0; i < matrix.length; i++) {
             for (int j = i+1; j < matrix[i].length; j++) {
                 min = Math.min(min,matrix[i][j]);
@@ -127,32 +131,51 @@ public class Hcluster {
 
         for (int i = 0; i < matrix.length; i++) {
             for (int j = i+1; j < matrix[i].length; j++) {
-              matrix[i][j] = (matrix[i][j]-min)/(max-min);
-              matrix[j][i] = matrix[i][j];
+              res[i][j] = (matrix[i][j]-min)/(max-min);
+              res[j][i] = res[i][j];
             }
         }
-        return  matrix;
+        return  res;
     }
 
     //计算聚类结果的轮廓度
     //不适合一个组为一组情况
-    public  double calculSilhouette(ArrayList<ArrayList<Integer>> groupInfo,double [][] distanceMatrix){
-        double sumSi = 0;
+    public SilhouetteParam calculSilhouette(ArrayList<ArrayList<Integer>> groupInfo, double [][] distanceMatrix){
+        SilhouetteParam silhouetteParam = new SilhouetteParam();
+      //  double[][] silhouette
+        double sumSi = 0.0;
+        ArrayList<ArrayList<Double>> itemSilhouette = new ArrayList<>();
+        ArrayList<Double> avgGroupSilhouette = new ArrayList<>();
+
+
+
         for (int groupIndex = 0; groupIndex < groupInfo.size(); groupIndex++) {
             ArrayList<Integer> groupi = groupInfo.get(groupIndex);
+            double sumGroupi = 0.0;
+
+            ArrayList<Double> list = new ArrayList<>();
             for (int itemIndex = 0; itemIndex < groupi.size(); itemIndex++) {
                 //货物编号 对该货物计算 轮廓
                 Integer item = groupi.get(itemIndex);
                 //1.计算本组与该货物距离之和
                 double ai = 0.0;
+                int countAi = 0;
                 for (int k = 0; k < groupi.size(); k++) {
                     if (k == itemIndex){
                         continue;
                     }
                     Integer item2 = groupi.get(k);
+                    if (item == item2){
+                        continue;
+                    }
                     ai += distanceMatrix[item][item2];
+                    countAi++;
                 }
-                ai = ai/(groupi.size()-1);
+                if (countAi == 0){
+                    ai = 0;
+                }else {
+                    ai = ai/countAi;
+                }
 
                 double bi = Double.MAX_VALUE;
                 for (int k = 0; k < groupInfo.size(); k++) {
@@ -161,6 +184,9 @@ public class Hcluster {
                     }
                     double biTemp = 0.0;
                     ArrayList<Integer> otherGroup = groupInfo.get(k);
+                    if (otherGroup == groupi){
+                        continue;
+                    }
                     for (int itemIndex2 = 0; itemIndex2 < otherGroup.size(); itemIndex2++) {
                         Integer item2 = otherGroup.get(itemIndex2);
                         biTemp += distanceMatrix[item][item2];
@@ -172,9 +198,20 @@ public class Hcluster {
                 }
                 //样本item的轮廓度
                 double si = (bi -ai)/Math.max(ai,bi);
-                sumSi += si;
+                if (countAi == 0){
+                    si = 0.0;
+                }
+                list.add(si);
+                sumGroupi += si;
             }
+            Collections.sort(list,Collections.reverseOrder());
+            itemSilhouette.add(list);
+            avgGroupSilhouette.add(sumGroupi/groupi.size());
+            sumSi += sumGroupi;
         }
-        return sumSi/distanceMatrix.length;
+        silhouetteParam.setAvgSilhouette(sumSi/distanceMatrix.length);
+        silhouetteParam.setAvgGroupSilhouette(avgGroupSilhouette);
+        silhouetteParam.setItemSilhouette(itemSilhouette);
+        return silhouetteParam;
     }
 }

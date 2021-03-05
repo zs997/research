@@ -11,4 +11,5 @@ public interface OriginDataReader {
       List<Item> readItemList(String path);
       ArrayList<ArrayList<Integer>> readGroupInfo(String path);
       double[][] readDistanceMatrix(String path);
+      double[][] readDistanceMatrix(String path,int n);
 }

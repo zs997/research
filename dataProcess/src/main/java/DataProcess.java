@@ -7,7 +7,9 @@
  */
 import cn.zs.dao.MyDataWriter;
 import cn.zs.dao.OriginDataReader;
-import cn.zs.dao.OriginDataReaderImp;
+import cn.zs.pojo.CommonData;
+import cn.zs.pojo.CsvContent;
+import cn.zs.pojo.SilhouetteParam;
 import cn.zs.pojo.Item;
 import cn.zs.service.DataService;
 import cn.zs.service.Hcluster;
@@ -36,12 +38,175 @@ public class DataProcess {
         myDataWriter = ac.getBean(MyDataWriter.class);
         originDataReader = ac.getBean(OriginDataReader.class);
     }
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
 
-//        double[][] distanceMatrix = originDataReader.readDistanceMatrix("D:\\works\\data\\all\\SilhouetteTest\\mydata1.csv");
-//        ArrayList<ArrayList<Integer>> groupInfo = originDataReader.readGroupInfo("D:\\works\\data\\all\\SilhouetteTest\\groupInfoTest.csv");
+        silhouettePlot(5);
 
     }
+    public static void silhouettePlot(int k) throws Exception {
+        ArrayList<String> strings = originDataReader.readTxt(baseDir + "\\warehouseStructure.txt");
+        String s = strings.get(strings.size() - 1);
+        String[] datas =s.split("\\s+");
+        //不必加异常处理 异常直接退出
+        int n = Integer.valueOf(datas[0])*Integer.valueOf(datas[1]);
+        System.out.println("n= " + n);
+        double[][] distanceMatrix = originDataReader.readDistanceMatrix(baseDir + "\\brandDistanceMinMax.csv", n);
+        Hcluster hcluster = new Hcluster();
+        ArrayList<ArrayList<Integer>> groups = hcluster.generateItemGroupByR(baseDir + "\\cluster.R",
+                baseDir + "\\brandDistanceMinMax.csv", n, k, baseDir + "\\groupInfo\\goupInfo" + k + ".csv");
+        SilhouetteParam silhouetteParam = hcluster.calculSilhouette(groups, distanceMatrix);
+        System.out.println("聚类数目：" + k);
+        System.out.println("总平均值:");
+        System.out.println(silhouetteParam.getAvgSilhouette());
+        ArrayList<Double> avgGroupSilhouette = silhouetteParam.getAvgGroupSilhouette();
+        for (int i = 0; i < avgGroupSilhouette.size(); i++) {
+            System.out.println("第"+i+"簇平均值：");
+            System.out.println(avgGroupSilhouette.get(i));
+        }
+        System.out.println("个体si值");
+        ArrayList<ArrayList<Double>> itemSilhouette = silhouetteParam.getItemSilhouette();
+        for (int i = 0; i < itemSilhouette.size(); i++) {
+            ArrayList<Double> list = itemSilhouette.get(i);
+            for (int j = 0; j < list.size(); j++) {
+                System.out.println(list.get(j));
+            }
+            System.out.println();
+        }
+    }
+    public static void testSilhouette() throws Exception {
+
+        ArrayList<String> strings = originDataReader.readTxt(baseDir + "\\warehouseStructure.txt");
+        String s = strings.get(strings.size() - 1);
+        String[] datas =s.split("\\s+");
+        //不必加异常处理 异常直接退出
+        int n = Integer.valueOf(datas[0])*Integer.valueOf(datas[1]);
+        System.out.println("n= " + n);
+        double[][] distanceMatrix = originDataReader.readDistanceMatrix(baseDir + "\\brandDistanceMinMax.csv", n);
+        Hcluster hcluster = new Hcluster();
+        for(int k = 2;k < 40;k++){
+            ArrayList<ArrayList<Integer>> groups = hcluster.generateItemGroupByR(baseDir + "\\cluster.R",
+                    baseDir + "\\brandDistanceMinMax.csv", n, k, baseDir + "\\groupInfo\\goupInfo" + k + ".csv");
+            SilhouetteParam silhouetteParam = hcluster.calculSilhouette(groups, distanceMatrix);
+            System.out.println(silhouetteParam.getAvgSilhouette());
+        }
+    }
+    public static void testmatrix(){
+        double[][] distanceMatrix = originDataReader.readDistanceMatrix("D:\\works\\data\\all\\brandDistance.csv", 3);
+        for (int i = 0; i < distanceMatrix.length; i++) {
+            for (int j = 0; j < distanceMatrix[i].length; j++) {
+                System.out.print(distanceMatrix[i][j]+" ");
+            }
+            System.out.println();
+        }
+        Hcluster hcluster = new Hcluster();
+        double[][] doubles = hcluster.zeroMeanNormalization(distanceMatrix);
+        for (int i = 0; i < doubles.length; i++) {
+            for (int j = 0; j < doubles[i].length; j++) {
+                System.out.print(doubles[i][j]+" ");
+            }
+            System.out.println();
+        }
+
+        double[][] doubles1 = hcluster.minMaxNormalization(distanceMatrix);
+        for (int i = 0; i < doubles1.length; i++) {
+            for (int j = 0; j < doubles1[i].length; j++) {
+                System.out.print(doubles1[i][j]+" ");
+            }
+            System.out.println();
+        }
+
+        for (int i = 0; i < distanceMatrix.length; i++) {
+            for (int j = 0; j < distanceMatrix[i].length; j++) {
+                System.out.print(distanceMatrix[i][j]+" ");
+            }
+            System.out.println();
+        }
+    }
+    public static void normalizeData(){
+        ArrayList<String> strings = originDataReader.readTxt(baseDir + "\\warehouseStructure.txt");
+        String s = strings.get(strings.size() - 1);
+        String[] datas =s.split("\\s+");
+        //不必加异常处理 异常直接退出
+        int n = Integer.valueOf(datas[0])*Integer.valueOf(datas[1]);
+        System.out.println("n= " + n);
+
+        ArrayList<ArrayList<String>> arrayLists = originDataReader.readCsv(baseDir+"\\brandDistance.csv");
+        double[][] distanceMatrix = new double[n][n];
+        StringBuilder sb = new StringBuilder();
+        for (int i = 1; i <= n; i++) {
+            sb.append(arrayLists.get(0).get(i-1)+",");
+            for (int j = 0; j < n; j++) {
+                distanceMatrix[i-1][j] = Double.valueOf(arrayLists.get(i).get(j).trim());
+            }
+        }
+        String title = sb.substring(0, sb.length() - 1);
+
+        Hcluster hcluster = new Hcluster();
+        double[][] matrixZeroMean = hcluster.zeroMeanNormalization(distanceMatrix);
+        double[][] matrixMinMax = hcluster.minMaxNormalization(distanceMatrix);
+
+        CommonData commonData = new CommonData();
+        commonData.setPath(baseDir+"\\brandDistanceZeroMean.csv");
+        CsvContent csvContent = new CsvContent();
+        csvContent.setCsvDataMatrix(matrixZeroMean);
+        csvContent.setTitile(title);
+        commonData.setData(csvContent);
+        myDataWriter.write(commonData);
+
+        commonData.setPath(baseDir+"\\brandDistanceMinMax.csv");
+        csvContent.setCsvDataMatrix(matrixMinMax);
+        csvContent.setTitile(title);
+        myDataWriter.write(commonData);
+    }
+    public static void modifyDistanceMatrix(){
+        ArrayList<String> strings = originDataReader.readTxt(baseDir + "\\warehouseStructure.txt");
+        String s = strings.get(strings.size() - 1);
+        String[] datas =s.split("\\s+");
+        //不必加异常处理 异常直接退出
+        int n = Integer.valueOf(datas[0])*Integer.valueOf(datas[1]);
+        System.out.println("n= " + n);
+
+        ArrayList<ArrayList<String>> arrayLists = originDataReader.readCsv(baseDir+"\\brandDistance.csv");
+        double[][] distanceMatrix = new double[n][n];
+        StringBuilder sb = new StringBuilder();
+        for (int i = 1; i <= n; i++) {
+            sb.append(arrayLists.get(0).get(i-1)+",");
+            for (int j = 0; j < n; j++) {
+                distanceMatrix[i-1][j] = Double.valueOf(arrayLists.get(i).get(j).trim());
+            }
+        }
+        double min = Double.MAX_VALUE;
+        for (int i = 0; i < distanceMatrix.length; i++) {
+            for (int j = i+1; j < distanceMatrix[i].length; j++) {
+                min = Math.min(min,distanceMatrix[i][j]);
+            }
+        }
+        for (int i = 0; i < distanceMatrix.length; i++) {
+            for (int j = i+1; j < distanceMatrix[i].length; j++) {
+                distanceMatrix[i][j] = distanceMatrix[i][j]-min;
+                distanceMatrix[j][i] =distanceMatrix[i][j];
+            }
+        }
+        String title = sb.substring(0, sb.length() - 1);
+        CommonData commonData = new CommonData();
+        commonData.setPath(baseDir+"\\brandDistance2.csv");
+        CsvContent csvContent = new CsvContent();
+        csvContent.setCsvDataMatrix(distanceMatrix);
+        csvContent.setTitile(title);
+        commonData.setData(csvContent);
+        myDataWriter.write(commonData);
+    }
+
+
+
+
+
+
+
+
+
+
+
     /**
      * 产生测试集
      * */

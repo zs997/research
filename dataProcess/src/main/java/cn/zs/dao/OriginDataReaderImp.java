@@ -109,4 +109,19 @@ public class OriginDataReaderImp implements OriginDataReader {
         }
         return res;
     }
+
+    public  double[][] readDistanceMatrix(String path,int n){
+        OriginDataReader originDataReader = new OriginDataReaderImp();
+        ArrayList<ArrayList<String>> arrayLists = originDataReader.readCsv(path);
+        if (n >= arrayLists.size()){
+            return  null;
+        }
+        double[][] res = new double[n][n];
+        for (int i = 1; i <= n; i++) {
+            for (int j = 0; j < n; j++) {
+                res[i-1][j] = Double.valueOf(arrayLists.get(i).get(j).trim());
+            }
+        }
+        return res;
+    }
 }
