@@ -197,16 +197,6 @@ public class DataProcess {
         myDataWriter.write(commonData);
     }
 
-
-
-
-
-
-
-
-
-
-
     /**
      * 产生测试集
      * */
@@ -226,6 +216,5 @@ public class DataProcess {
         }
         dataService.generateTestData(trainItemList,k,testItemList,matrix,baseDir);
     }
-
 
 }

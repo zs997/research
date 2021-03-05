@@ -1,10 +1,8 @@
 package cn.zs.algorithm.component;
 
-import cn.zs.dao.CsvDataWriter;
 import cn.zs.dao.MyDataWriter;
 import cn.zs.pojo.CommonData;
 import cn.zs.pojo.CsvContent;
-import org.python.antlr.ast.Str;
 
 import java.util.*;
 
@@ -110,7 +108,7 @@ public class Individual<T extends Column> {
 					// temp[j] = itemNo;
 					coordinateMap.put(itemNo,coordinate);
 				}catch (Exception e){
-					MyDataWriter dataWriter = new CsvDataWriter();
+					MyDataWriter dataWriter = new MyDataWriter();
 					CommonData commonData = new CommonData();
 					CsvContent csvContent = new CsvContent();
 					commonData.setData(csvContent);
@@ -183,7 +181,7 @@ public class Individual<T extends Column> {
 					}
 				}catch (Exception e){
 					excpFlag = true;
-					MyDataWriter dataWriter = new CsvDataWriter();
+					MyDataWriter dataWriter = new MyDataWriter();
 					CommonData commonData = new CommonData();
 					CsvContent csvContent = new CsvContent();
 					commonData.setData(csvContent);

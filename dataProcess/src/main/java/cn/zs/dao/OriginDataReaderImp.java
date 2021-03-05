@@ -79,8 +79,7 @@ public class OriginDataReaderImp implements OriginDataReader {
      * */
     @Override
     public  ArrayList<ArrayList<Integer>> readGroupInfo(String path){
-        OriginDataReader originDataReader = new OriginDataReaderImp();
-        ArrayList<ArrayList<String>> arrayLists = originDataReader.readCsv(path);
+        ArrayList<ArrayList<String>> arrayLists = readCsv(path);
         ArrayList<ArrayList<Integer>> res = new ArrayList<>();
         for (int i = 1; i < arrayLists.size(); i++) {
             ArrayList<Integer> list = new ArrayList<>();

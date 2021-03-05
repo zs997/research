@@ -147,8 +147,6 @@ public class Hcluster {
         ArrayList<ArrayList<Double>> itemSilhouette = new ArrayList<>();
         ArrayList<Double> avgGroupSilhouette = new ArrayList<>();
 
-
-
         for (int groupIndex = 0; groupIndex < groupInfo.size(); groupIndex++) {
             ArrayList<Integer> groupi = groupInfo.get(groupIndex);
             double sumGroupi = 0.0;

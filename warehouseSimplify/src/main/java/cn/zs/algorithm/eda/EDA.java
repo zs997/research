@@ -2,6 +2,10 @@ package cn.zs.algorithm.eda;
 import cn.zs.algorithm.component.Column;
 import cn.zs.algorithm.component.Individual;
 import cn.zs.algorithm.component.Population;
+import cn.zs.dao.MyDataWriter;
+import cn.zs.pojo.CommonData;
+import cn.zs.pojo.CsvContent;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -179,6 +183,17 @@ public class EDA <T extends Column>{
             }
             //保证有效个体
             if(list.size() != storageCount){
+                MyDataWriter myDataWriter = new MyDataWriter();
+
+                CommonData commonData = new CommonData();
+                commonData.setPath("d:\\works\\data\\error\\");
+
+                CsvContent csvContent = new CsvContent();
+                csvContent.setTitile(list.toString());
+                csvContent.setCsvDataMatrix(new String[0][0]);
+                commonData.setData(csvContent);
+
+                myDataWriter.write(commonData);
                 continue;
             }
             Individual individual = new Individual(t,list,weight);

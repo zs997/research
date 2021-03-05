@@ -1,5 +1,4 @@
 package cn.zs;
-import cn.zs.algorithm.cluster.Hcluster;
 import cn.zs.algorithm.component.Column;
 import cn.zs.algorithm.component.ColumnR;
 import cn.zs.algorithm.component.Individual;
@@ -25,7 +24,7 @@ public class AlgorithmStart {
         originDataReader = ac.getBean(OriginDataReader.class);
     }
     public static void main(String args[]) throws Exception {
-         initParams(3);
+         initParams();
          //zhengjiao();
         weightAnalysis();
         //test();
@@ -63,6 +62,7 @@ public class AlgorithmStart {
         System.out.println("localsearchEdaBestTrain: "+localsearchEdaBest.getCost());
     }
     public static void weightAnalysis(){
+        int times = 10;
         double weight = 0;
         ArrayList<ArrayList<ArrayList<Double>>> resss = new ArrayList<>();
         for (;weight <= 1.0;weight += 0.1){
@@ -71,7 +71,7 @@ public class AlgorithmStart {
             double lengthCost = 0.0;
             double spreadCost = 0.0;
             double cost=  0.0;
-            for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < times; i++) {
                 LocalSearchEDA localSearchEDA = new LocalSearchEDA(ColumnR.class, 150, 15 * 2, 15, 0.4,
                         maxGenerations, 30,weight);
                 Individual localsearchEdaBest = localSearchEDA.doEDA();
@@ -87,9 +87,9 @@ public class AlgorithmStart {
                 cost += localsearchEdaBest.getCost();
             }
             ArrayList<Double> res = new ArrayList<>();
-            res.add(lengthCost/10.0);
-            res.add(spreadCost/10.0);
-            res.add(cost/10.0);
+            res.add(lengthCost/times);
+            res.add(spreadCost/times);
+            res.add(cost/times);
             ress.add(res);
 
             resss.add(ress);
@@ -183,15 +183,14 @@ public class AlgorithmStart {
      * @description: 文本 初始化 仓库结构
      * @Param:k 分组数目
      * */
-    public static void initParams(int k) throws Exception {
+    public static void initParams() throws Exception {
         ArrayList<String>  ss = originDataReader.readTxt(baseDataDir + "\\warehouseStructure.txt");
         Params.initWarehouseStructure(ss.get(ss.size() - 1));
         List<Item> itemList = originDataReader.readItemList(baseDataDir+"\\itemInfo.csv");
         Params.initItemList(itemList);
         Params.calculNonEmptyProb();
-        new Hcluster().generateItemGroupByR(baseDataDir+"\\cluster.R"
-                    ,baseDataDir + "\\brandDistance.csv",storageCount,k,baseDataDir + "\\groupinfoTrain.csv");
-        ArrayList<ArrayList<String>> arrayLists = originDataReader.readCsv(baseDataDir + "\\groupinfoTrain.csv");
+
+        ArrayList<ArrayList<String>> arrayLists = originDataReader.readCsv(baseDataDir + "\\groupInfo\\goupInfo5.csv");
         Params.initGroupInfo(arrayLists);
     }
 
@@ -254,8 +253,6 @@ public class AlgorithmStart {
         List<Item> itemList = originDataReader.readItemList(baseDataDir+"\\itemInfoTest.csv");
         Params.initItemList(itemList);
         Params.calculNonEmptyProb();
-        new Hcluster().generateItemGroupByR(baseDataDir+"\\cluster.R"
-                ,baseDataDir + "\\brandDistanceTest.csv",storageCount,k,baseDataDir + "\\groupinfoTest.csv");
         ArrayList<ArrayList<String>> arrayLists = originDataReader.readCsv(baseDataDir + "\\groupinfoTest.csv");
         Params.initGroupInfo(arrayLists);
     }

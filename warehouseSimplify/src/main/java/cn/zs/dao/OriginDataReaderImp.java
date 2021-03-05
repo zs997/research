@@ -71,4 +71,18 @@ public class OriginDataReaderImp implements OriginDataReader {
         }
         return items;
     }
+    @Override
+    public  ArrayList<ArrayList<Integer>> readGroupInfo(String path){
+
+        ArrayList<ArrayList<String>> arrayLists = readCsv(path);
+        ArrayList<ArrayList<Integer>> res = new ArrayList<>();
+        for (int i = 1; i < arrayLists.size(); i++) {
+            ArrayList<Integer> list = new ArrayList<>();
+            for (int j = 0; j < arrayLists.get(i).size(); j++) {
+                list.add(Integer.valueOf(arrayLists.get(i).get(j).trim()));
+            }
+            res.add(list);
+        }
+        return res;
+    }
 }
