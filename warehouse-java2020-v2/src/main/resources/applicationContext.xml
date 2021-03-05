@@ -8,7 +8,7 @@
 	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
 	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd">
 	<!-- 扫描@Controler  @Service   -->
-	<context:component-scan base-package="cn.cn.zs"/>
+	<context:component-scan base-package="cn.cn.cn.zs"/>
 
 	<context:property-placeholder location="classpath:db.properties"/>
 	<!-- 数据库连接池 -->
@@ -30,7 +30,7 @@
 	<!-- Mapper动态代理开发   扫描 -->
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
 		<!-- 基本包 -->
-		<property name="basePackage" value="cn.cn.zs.mapper"/>
+		<property name="basePackage" value="cn.cn.cn.zs.mapper"/>
 	</bean>
 	
 	

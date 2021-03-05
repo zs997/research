@@ -10,6 +10,10 @@ import cn.zs.algorithm.component.Column;
 import cn.zs.algorithm.component.Coordinate;
 import cn.zs.algorithm.component.Params;
 import org.junit.Test;
+import org.rosuda.REngine.REXP;
+import org.rosuda.REngine.REXPMismatchException;
+import org.rosuda.REngine.Rserve.RConnection;
+import org.rosuda.REngine.Rserve.RserveException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,7 +24,7 @@ import static cn.zs.algorithm.component.Params.N;
 
 /**
  * @version: V1.0
- * @author: zs
+ * @author: cn.zs
  * @className: Test1
  * @packageName: PACKAGE_NAME
  * @data: 2021-03-02 18:16
@@ -66,6 +70,23 @@ public class Test1 {
 
         }
     }
+    @Test
+    public void s1() throws RserveException, REXPMismatchException {
+        //建立连接
+        RConnection rc = new RConnection();
+//        rc.assign("functionPath","D:\\works\\R\\backup\\cluster.R");
+//        rc.eval("source(functionPath)");
 
+        rc.assign("n",String.valueOf(10));
+        rc.assign("k",String.valueOf(3));
+        rc.assign("dataPath","D:\\works\\data\\all\\brandDistance.csv");
+
+        REXP eval = rc.eval("cluster(dataPath,n,k)");
+        //返回结果是 组别 每一位s[i]是第i个属于那个组别
+        String s[] = eval.asStrings();
+        for (int i = 0; i < s.length; i++) {
+            System.out.print(s[i]+" ");
+        }
+    }
 
 }

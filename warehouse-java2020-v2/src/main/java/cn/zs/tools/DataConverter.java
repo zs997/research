@@ -1,7 +1,7 @@
 /**
  * projectName: research
  * fileName: FormalCsv.java
- * packageName: cn.cn.zs.tools
+ * packageName: cn.cn.cn.zs.tools
  * date: 2021-01-20 21:01
  * copyright(c) 2019-2021 hust
  */
@@ -11,9 +11,9 @@ import java.util.ArrayList;
 
 /**
  * @version: V1.0
- * @author: cn.zs
+ * @author: cn.cn.zs
  * @className: FormalCsv
- * @packageName: cn.cn.zs.tools
+ * @packageName: cn.cn.cn.zs.tools
  * @data: 2021-01-20 21:01
  **/
 public class DataConverter {

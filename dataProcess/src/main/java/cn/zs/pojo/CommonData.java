@@ -1,7 +1,7 @@
 /**
  * projectName: research
  * fileName: Mydata.java
- * packageName: cn.cn.zs.pojo
+ * packageName: cn.cn.cn.zs.pojo
  * date: 2020-12-09 21:19
  * copyright(c) 2019-2021 hust
  */
@@ -9,9 +9,9 @@ package cn.zs.pojo;
 
 /**
  * @version: V1.0
- * @author: cn.zs
+ * @author: cn.cn.zs
  * @className: Mydata
- * @packageName: cn.cn.zs.pojo
+ * @packageName: cn.cn.cn.zs.pojo
  * @data: 2020-12-09 21:19
  **/
 public class CommonData {

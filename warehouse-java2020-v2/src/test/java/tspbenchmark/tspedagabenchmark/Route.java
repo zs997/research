@@ -1,7 +1,7 @@
 /**
  * projectName: TSP
  * fileName: Path.java
- * packageName: cn.cn.zs
+ * packageName: cn.cn.cn.zs
  * date: 2021-01-17 16:58
  * copyright(c) 2019-2021 hust
  */
@@ -12,9 +12,9 @@ import java.util.ArrayList;
 
 /**
  * @version: V1.0
- * @author: cn.zs
+ * @author: cn.cn.zs
  * @className: Path
- * @packageName: cn.cn.zs
+ * @packageName: cn.cn.cn.zs
  * @data: 2021-01-17 16:58
  **/
 public class Route {

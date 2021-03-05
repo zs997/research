@@ -6,7 +6,7 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 	<!-- 设置别名 -->
 	<typeAliases>
 		<!-- 2. 指定扫描包，会把包内所有的类都设置别名，别名的名称就是类名，大小写不敏感 所以在mapper中使用pojo不用全名 -->
-		<package name="cn.cn.zs.pojo" />
+		<package name="cn.cn.cn.zs.pojo" />
 	</typeAliases>
 
 </configuration>

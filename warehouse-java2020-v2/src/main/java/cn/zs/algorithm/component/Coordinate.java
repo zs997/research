@@ -1,7 +1,7 @@
 /**
  * projectName: research
  * fileName: Coordinate.java
- * packageName: cn.cn.zs.algorithm.component
+ * packageName: cn.cn.cn.zs.algorithm.component
  * date: 2021-01-04 17:02
  * copyright(c) 2019-2021 hust
  */
@@ -11,9 +11,9 @@ import static cn.zs.algorithm.component.Params.*;
 
 /**
  * @version: V1.0
- * @author: cn.zs
+ * @author: cn.cn.zs
  * @className: Coordinate
- * @packageName: cn.cn.zs.algorithm.component
+ * @packageName: cn.cn.cn.zs.algorithm.component
  * @data: 2021-01-04 17:02
  **/
 public class Coordinate {

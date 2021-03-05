@@ -1,7 +1,7 @@
 /**
  * projectName: research
  * fileName: SimilarDataWriter.java
- * packageName: cn.cn.zs.daoImp
+ * packageName: cn.cn.cn.zs.daoImp
  * date: 2020-12-09 21:13
  * copyright(c) 2019-2021 hust
  */
@@ -19,9 +19,9 @@ import java.io.OutputStreamWriter;
 
 /**
  * @version: V1.0
- * @author: cn.zs
+ * @author: cn.cn.zs
  * @className: SimilarDataWriter
- * @packageName: cn.cn.zs.daoImp
+ * @packageName: cn.cn.cn.zs.daoImp
  * @data: 2020-12-09 21:13
  **/
 @Repository

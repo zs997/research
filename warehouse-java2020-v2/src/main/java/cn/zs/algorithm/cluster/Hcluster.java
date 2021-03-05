@@ -1,7 +1,7 @@
 /**
  * projectName: research
  * fileName: Kmeans.java
- * packageName: cn.cn.zs.algorithm.cluster
+ * packageName: cn.cn.cn.zs.algorithm.cluster
  * date: 2021-01-19 22:24
  * copyright(c) 2019-2021 hust
  */
@@ -18,9 +18,9 @@ import java.util.Set;
 
 /**
  * @version: V1.0
- * @author: cn.zs
+ * @author: cn.cn.zs
  * @className: Kmeans
- * @packageName: cn.cn.zs.algorithm.cluster
+ * @packageName: cn.cn.cn.zs.algorithm.cluster
  * @data: 2021-01-19 22:24
  * 调用R语言聚类库 将聚类结果 存储于csv
  **/

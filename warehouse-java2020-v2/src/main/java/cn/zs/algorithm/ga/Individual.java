@@ -1,7 +1,7 @@
 /**
  * projectName: research
  * fileName: GAEntity.java
- * packageName: cn.cn.zs.algorithm
+ * packageName: cn.cn.cn.zs.algorithm
  * date: 2021-01-04 14:42
  * copyright(c) 2019-2021 hust
  * 库位编号：
@@ -20,9 +20,9 @@ import java.util.*;
 import static cn.zs.algorithm.component.Params.*;
 /**
  * @version: V1.0
- * @author: cn.zs
+ * @author: cn.cn.zs
  * @className: GAEntity
- * @packageName: cn.cn.zs.algorithm
+ * @packageName: cn.cn.cn.zs.algorithm
  * @data: 2021-01-04 14:42
  * @description:基因个体 基因个体
  **/
