@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import static cn.zs.algorithm.component.Params.*;
 
-public class Main{
+public class AlgorithmStart {
     static  OriginDataReader originDataReader;
     static int maxGenerations = 500;
     static String baseDataDir = "D:\\works\\data\\all";

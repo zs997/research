@@ -3,7 +3,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>cn.cn.zs</groupId>
+    <groupId>cn.zs</groupId>
     <artifactId>research</artifactId>
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
@@ -11,7 +11,6 @@
         <module>warehouse-java2020-v2</module>
         <module>dataProcess</module>
         <module>warehouseSimplify</module>
-        <module>warehouseSole</module>
     </modules>
     <dependencies>
         <dependency>

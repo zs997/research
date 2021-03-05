@@ -23,7 +23,7 @@ import java.util.List;
  * @packageName: PACKAGE_NAME
  * @data: 2021-03-01 10:55
  **/
-public class Main {
+public class DataProcess {
     static DataService dataService;
     static MyDataWriter myDataWriter;
     static OriginDataReader originDataReader;
