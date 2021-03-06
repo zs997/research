@@ -88,5 +88,8 @@ public class Test1 {
             System.out.print(s[i]+" ");
         }
     }
-
+    @Test
+    public void assss(){
+        System.out.println("asda");
+    }
 }

@@ -54,7 +54,7 @@ public class GeneticAlgorithm <T extends Column>{
             // Print fittest individual from population
             Individual fittest = population.getFittest(0);
             double cost = fittest.getCost();
-            System.out.println("GA: " + generation + "  "+ cost);
+//            System.out.println("GA: " + generation + "  "+ cost);
             // Apply crossover
             population = crossoverPopulation(population);
             // Apply mutation

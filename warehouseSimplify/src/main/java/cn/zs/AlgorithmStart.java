@@ -1,5 +1,4 @@
 package cn.zs;
-import cn.zs.algorithm.component.Column;
 import cn.zs.algorithm.component.ColumnR;
 import cn.zs.algorithm.component.Individual;
 import cn.zs.algorithm.component.Params;
@@ -7,31 +6,22 @@ import cn.zs.algorithm.eda.EDA;
 import cn.zs.algorithm.ga.GeneticAlgorithm;
 import cn.zs.algorithm.localsearcheda.LocalSearchEDA;
 import cn.zs.dao.OriginDataReader;
+import cn.zs.dao.OriginDataReaderImp;
 import cn.zs.pojo.EdaParam;
 import cn.zs.pojo.Item;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import java.util.ArrayList;
 import java.util.List;
 import static cn.zs.algorithm.component.Params.*;
-
 public class AlgorithmStart {
-    static  OriginDataReader originDataReader;
+    static  OriginDataReader originDataReader = new OriginDataReaderImp();
     static int maxGenerations = 500;
     static String baseDataDir = "D:\\works\\data\\all";
-    static {
-        ApplicationContext ac = new ClassPathXmlApplicationContext("applicationContext.xml");
-        originDataReader = ac.getBean(OriginDataReader.class);
-    }
+
     public static void main(String args[]) throws Exception {
          initParams();
          //zhengjiao();
         weightAnalysis();
         //test();
-
-
-
-
     }
 
     public static void test(){
@@ -62,7 +52,7 @@ public class AlgorithmStart {
         System.out.println("localsearchEdaBestTrain: "+localsearchEdaBest.getCost());
     }
     public static void weightAnalysis(){
-        int times = 10;
+        int times = 1;
         double weight = 0;
         ArrayList<ArrayList<ArrayList<Double>>> resss = new ArrayList<>();
         for (;weight <= 1.0;weight += 0.1){
@@ -72,19 +62,21 @@ public class AlgorithmStart {
             double spreadCost = 0.0;
             double cost=  0.0;
             for (int i = 0; i < times; i++) {
-                LocalSearchEDA localSearchEDA = new LocalSearchEDA(ColumnR.class, 150, 15 * 2, 15, 0.4,
-                        maxGenerations, 30,weight);
-                Individual localsearchEdaBest = localSearchEDA.doEDA();
-
+//                LocalSearchEDA localSearchEDA = new LocalSearchEDA(ColumnR.class, 150, 15 * 2, 15, 0.4,
+//                        maxGenerations, 30,weight);
+//                Individual localsearchEdaBest = localSearchEDA.doEDA();
+                GeneticAlgorithm<ColumnR> columnRGeneticAlgorithm = new GeneticAlgorithm<>(ColumnR.class
+                        , 100, 5, 2, 0.9, 0.001, maxGenerations, weight);
+                Individual individual = columnRGeneticAlgorithm.doGA();
                 ArrayList<Double> res = new ArrayList<>();
-                res.add(localsearchEdaBest.getLengthCost());
-                res.add(localsearchEdaBest.getSpreadCost());
-                res.add(localsearchEdaBest.getCost());
+                res.add(individual.getLengthCost());
+                res.add(individual.getSpreadCost());
+                res.add(individual.getCost());
                 ress.add(res);
 
-                lengthCost += localsearchEdaBest.getLengthCost();
-                spreadCost += localsearchEdaBest.getSpreadCost();
-                cost += localsearchEdaBest.getCost();
+                lengthCost += individual.getLengthCost();
+                spreadCost += individual.getSpreadCost();
+                cost += individual.getCost();
             }
             ArrayList<Double> res = new ArrayList<>();
             res.add(lengthCost/times);

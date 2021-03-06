@@ -9,7 +9,7 @@ package cn.zs.algorithm.localsearcheda;
 import cn.zs.algorithm.component.Individual;
 import cn.zs.algorithm.component.Population;
 import cn.zs.algorithm.eda.EDA;
-import static cn.zs.algorithm.component.Params.storageCount;
+import static cn.zs.algorithm.component.Params.*;
 
 /**
  * @version: V1.0
@@ -57,8 +57,8 @@ public class LocalSearchEDA extends EDA {
         while (isTerminationConditionMet(generation, maxGenerations) == false) {
             evalPopulation(population);
             Individual fittest = population.getFittest(0);
-            System.out.println("LocalSearch EDA:G"+generation+" Best distance: "
-                    + fittest.getCost());
+//            System.out.println("LocalSearch EDA:G"+generation+" Best distance: "
+//                    + fittest.getCost());
             Individual individual = localSearchIndividualByReverse(fittest);
             population.setIndividual(0,individual);
             Individual[] superiorityIndividuals = getSuperiorityIndividuals(population);
@@ -80,7 +80,7 @@ public class LocalSearchEDA extends EDA {
             if (delta < 0) {
                 route.setBestCost(route.getTempCost());
                 route.setBestRoute(route.getTempRoute());
-                System.out.println("localSearchByReverse works");
+               // System.out.println("localSearchByReverse works");
             }
         }
         int[] bestRoute = route.getBestRoute();

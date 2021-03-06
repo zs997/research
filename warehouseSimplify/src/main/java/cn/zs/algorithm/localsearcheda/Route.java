@@ -9,9 +9,7 @@ package cn.zs.algorithm.localsearcheda;
 import cn.zs.algorithm.component.Column;
 import cn.zs.algorithm.component.Individual;
 import java.util.ArrayList;
-import static cn.zs.algorithm.component.Params.storageCount;
-import static cn.zs.algorithm.component.Params.wa;
-
+import static cn.zs.algorithm.component.Params.*;
 /**
  * @version: V1.0
  * @author: cn.cn.cn.zs

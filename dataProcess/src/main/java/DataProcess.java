@@ -40,7 +40,8 @@ public class DataProcess {
     }
     public static void main(String[] args) throws Exception {
 
-        silhouettePlot(5);
+      //  silhouettePlot(5);
+        testSilhouette();
 
     }
     public static void silhouettePlot(int k) throws Exception {

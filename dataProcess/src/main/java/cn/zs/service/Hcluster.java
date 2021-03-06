@@ -194,6 +194,9 @@ public class Hcluster {
                         bi = biTemp;
                     }
                 }
+                if(bi == Double.MAX_VALUE){
+                    System.out.println(bi);
+                }
                 //样本item的轮廓度
                 double si = (bi -ai)/Math.max(ai,bi);
                 if (countAi == 0){

@@ -2,14 +2,11 @@ package cn.zs.dao;
 import cn.zs.pojo.Item;
 import com.opencsv.CSVParser;
 import com.opencsv.CSVReader;
-import jnr.ffi.annotations.In;
-import org.springframework.stereotype.Repository;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@Repository
 public class OriginDataReaderImp implements OriginDataReader {
     @Override
     public ArrayList<ArrayList<String>> readCsv(String path) {
@@ -59,6 +56,7 @@ public class OriginDataReaderImp implements OriginDataReader {
     public List<Item> readItemList(String path) {
         ArrayList<ArrayList<String>> arrayLists = readCsv(path);
         ArrayList<Item> items = new ArrayList<>();
+        //略过标题
         for (int i = 1; i < arrayLists.size(); i++) {
             Item item = new Item();
             ArrayList<String> strings = arrayLists.get(i);
