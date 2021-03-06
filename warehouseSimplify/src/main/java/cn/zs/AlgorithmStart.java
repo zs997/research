@@ -21,9 +21,6 @@ public class AlgorithmStart {
     public static void main(String args[]) throws Exception {
       initParams();
          //zhengjiao();
-       weightAnalysis();
-
-
 
     }
 
@@ -174,7 +171,6 @@ public class AlgorithmStart {
             }
             System.out.println();
         }
-
     }
 
     /**
