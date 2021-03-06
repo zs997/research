@@ -2,10 +2,8 @@ package cn.zs.algorithm.eda;
 import cn.zs.algorithm.component.Column;
 import cn.zs.algorithm.component.Individual;
 import cn.zs.algorithm.component.Population;
-
 import java.util.ArrayList;
 import java.util.Random;
-
 import static cn.zs.algorithm.component.Params.storageCount;
 
 public class EDA <T extends Column>{
@@ -109,6 +107,7 @@ public class EDA <T extends Column>{
         double [][] res = new double[n][n];
         for (int i = 0; i < res.length; i++) {
             for (int j = 0; j < res[i].length; j++) {
+                //superiorityCount中 i号货物 放在j号库位占比
                 res[i][j] = ((countMatrix[i][j]*1.0)/superiorityCount) * alpha + (1-alpha)*lastProbMatrix[i][j];
             }
         }
@@ -195,6 +194,7 @@ public class EDA <T extends Column>{
 //            }
             if(list.size() != storageCount){
                 System.out.println("error:"+list);
+                continue;
             }
             Individual individual = new Individual(t,list,weight);
             population.setIndividual(individualIndex,individual);

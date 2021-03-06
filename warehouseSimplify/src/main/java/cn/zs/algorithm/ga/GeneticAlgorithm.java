@@ -53,7 +53,7 @@ public class GeneticAlgorithm <T extends Column>{
         while (isTerminationConditionMet(generation, maxGenerations) == false) {
             // Print fittest individual from population
             Individual fittest = population.getFittest(0);
-            double cost = fittest.getCost();
+  //          double cost = fittest.getCost();
 //            System.out.println("GA: " + generation + "  "+ cost);
             // Apply crossover
             population = crossoverPopulation(population);
@@ -70,7 +70,6 @@ public class GeneticAlgorithm <T extends Column>{
         System.out.println(fittest.getCost());
         System.out.println("GA Stopped after " + maxGenerations + " generations.");
         return fittest;
-
     }
 
 
@@ -178,7 +177,7 @@ public class GeneticAlgorithm <T extends Column>{
                     }
                 }
                 // Add child
-                offspring.calculFitness();
+               //offspring.calculFitness();
                 newPopulation.setIndividual(populationIndex, offspring);
             } else {
                 // Add individual to new population without applying crossover

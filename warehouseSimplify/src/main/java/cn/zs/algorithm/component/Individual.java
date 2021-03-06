@@ -1,10 +1,6 @@
 package cn.zs.algorithm.component;
-
-
 import java.util.*;
-
 import static cn.zs.algorithm.component.Params.*;
-
 public class Individual<T extends Column> {
 	//计算目标函数用
 	private ArrayList<Column> columns ;
@@ -20,10 +16,6 @@ public class Individual<T extends Column> {
 	private double cost;
 	private Class<T> t;
 	private double weight;
-	//使用模板构造新个体 不计算值
-	public Individual(Individual temp,double weight){
-		this(temp.t,temp.getChromosome(),weight);
-	}
 	/**
 	 * 产生随机染色体
 	 * 由基因 同步其他库位分配数据
@@ -37,7 +29,6 @@ public class Individual<T extends Column> {
 		}
 		 Collections.shuffle(g);
 		chromosome = g;
-
 //		int index = 0;
 //		int[][] temp = new int[M][N];
 //		for (int j = 0; j < temp[0].length; j++) {

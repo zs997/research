@@ -78,4 +78,9 @@ public class Params {
         nonEmptyProb = 1 - p;
     }
 
+    @Deprecated
+    public static void setItemPickFreq(double[] itemPickFreq) {
+        Params.itemPickFreq = itemPickFreq;
+    }
+
 }

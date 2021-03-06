@@ -89,6 +89,8 @@ public class LocalSearchEDA extends EDA {
         res.setFitness(1.0/route.getBestCost());
         return res;
     }
+
+
     public void localSearchEliteByReverse(Population population){
         Individual[] individuals = population.getIndividuals();
         for (int i = 0; i < eliteCount; i++) {

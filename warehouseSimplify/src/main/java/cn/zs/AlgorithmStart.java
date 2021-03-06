@@ -1,14 +1,15 @@
 package cn.zs;
-import cn.zs.algorithm.component.ColumnR;
-import cn.zs.algorithm.component.Individual;
-import cn.zs.algorithm.component.Params;
+import cn.zs.algorithm.component.*;
 import cn.zs.algorithm.eda.EDA;
 import cn.zs.algorithm.ga.GeneticAlgorithm;
 import cn.zs.algorithm.localsearcheda.LocalSearchEDA;
+import cn.zs.benchmark.Bench;
 import cn.zs.dao.OriginDataReader;
 import cn.zs.dao.OriginDataReaderImp;
 import cn.zs.pojo.EdaParam;
 import cn.zs.pojo.Item;
+import cn.zs.benchmark.PickParam;
+
 import java.util.ArrayList;
 import java.util.List;
 import static cn.zs.algorithm.component.Params.*;
@@ -18,10 +19,12 @@ public class AlgorithmStart {
     static String baseDataDir = "D:\\works\\data\\all";
 
     public static void main(String args[]) throws Exception {
-         initParams();
+      initParams();
          //zhengjiao();
-        weightAnalysis();
-        //test();
+       weightAnalysis();
+
+
+
     }
 
     public static void test(){
@@ -251,5 +254,12 @@ public class AlgorithmStart {
         ArrayList<ArrayList<String>> arrayLists = originDataReader.readCsv(baseDataDir + "\\groupinfoTest.csv");
         Params.initGroupInfo(arrayLists);
     }
+
+
+
+
+
+
+
 
 }

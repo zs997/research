@@ -105,79 +105,79 @@ public class Main {
     public static void  testIndivual(){
         int [][] assignMatrix = new int[15][4];
         //第四维 是每行的分配方式  为0 正常分配 为1 对称分配
-        assignMatrix[0][0] = 6;
-        assignMatrix[0][1] = 7;
-        assignMatrix[0][2] = 11;
+        assignMatrix[0][0] = 24;
+        assignMatrix[0][1] = 0;
+        assignMatrix[0][2] = 0;
         assignMatrix[0][3] = 0;
 
-        assignMatrix[1][0] = 6;
-        assignMatrix[1][1] = 7;
-        assignMatrix[1][2] = 11;
-        assignMatrix[1][3] = 0;
+        assignMatrix[1][0] = 2;
+        assignMatrix[1][1] = 10;
+        assignMatrix[1][2] = 12;
+        assignMatrix[1][3] = 1;
 
-        assignMatrix[2][0] = 6;
-        assignMatrix[2][1] = 7;
-        assignMatrix[2][2] = 11;
-        assignMatrix[2][3] = 0;
+        assignMatrix[2][0] = 2;
+        assignMatrix[2][1] = 8;
+        assignMatrix[2][2] = 14;
+        assignMatrix[2][3] = 1;
 
-        assignMatrix[3][0] = 6;
-        assignMatrix[3][1] = 7;
-        assignMatrix[3][2] = 11;
-        assignMatrix[3][3] = 0;
+        assignMatrix[3][0] = 2;
+        assignMatrix[3][1] = 8;
+        assignMatrix[3][2] = 14;
+        assignMatrix[3][3] = 1;
 
-        assignMatrix[4][0] = 5;
+        assignMatrix[4][0] = 2;
         assignMatrix[4][1] = 8;
-        assignMatrix[4][2] = 11;
-        assignMatrix[4][3] = 0;
+        assignMatrix[4][2] = 14;
+        assignMatrix[4][3] = 1;
 
-        assignMatrix[5][0] = 5;
+        assignMatrix[5][0] = 2;
         assignMatrix[5][1] = 8;
-        assignMatrix[5][2] = 11;
-        assignMatrix[5][3] = 0;
+        assignMatrix[5][2] = 14;
+        assignMatrix[5][3] = 1;
 
-        assignMatrix[6][0] = 5;
+        assignMatrix[6][0] = 2;
         assignMatrix[6][1] = 8;
-        assignMatrix[6][2] = 11;
-        assignMatrix[6][3] = 0;
+        assignMatrix[6][2] = 14;
+        assignMatrix[6][3] = 1;
 
-        assignMatrix[7][0] = 5;
-        assignMatrix[7][1] = 7;
-        assignMatrix[7][2] = 12;
-        assignMatrix[7][3] = 0;
+        assignMatrix[7][0] = 2;
+        assignMatrix[7][1] = 8;
+        assignMatrix[7][2] = 14;
+        assignMatrix[7][3] = 1;
 
-        assignMatrix[8][0] = 5;
-        assignMatrix[8][1] = 7;
-        assignMatrix[8][2] = 12;
-        assignMatrix[8][3] = 0;
+        assignMatrix[8][0] = 2;
+        assignMatrix[8][1] = 8;
+        assignMatrix[8][2] = 14;
+        assignMatrix[8][3] = 1;
 
-        assignMatrix[9][0] = 5;
-        assignMatrix[9][1] = 7;
-        assignMatrix[9][2] = 12;
-        assignMatrix[9][3] = 0;
+        assignMatrix[9][0] = 2;
+        assignMatrix[9][1] = 8;
+        assignMatrix[9][2] = 14;
+        assignMatrix[9][3] = 1;
 
-        assignMatrix[10][0] = 5;
-        assignMatrix[10][1] = 7;
-        assignMatrix[10][2] = 12;
-        assignMatrix[10][3] = 0;
+        assignMatrix[10][0] = 2;
+        assignMatrix[10][1] = 8;
+        assignMatrix[10][2] = 14;
+        assignMatrix[10][3] = 1;
 
-        assignMatrix[11][0] = 5;
-        assignMatrix[11][1] = 7;
-        assignMatrix[11][2] = 12;
-        assignMatrix[11][3] = 0;
+        assignMatrix[11][0] = 2;
+        assignMatrix[11][1] = 8;
+        assignMatrix[11][2] = 14;
+        assignMatrix[11][3] = 1;
 
-        assignMatrix[12][0] = 5;
-        assignMatrix[12][1] = 7;
-        assignMatrix[12][2] = 12;
-        assignMatrix[12][3] = 0;
+        assignMatrix[12][0] = 2;
+        assignMatrix[12][1] = 8;
+        assignMatrix[12][2] = 14;
+        assignMatrix[12][3] = 1;
 
-        assignMatrix[13][0] = 3;
-        assignMatrix[13][1] = 7;
+        assignMatrix[13][0] = 0;
+        assignMatrix[13][1] = 10;
         assignMatrix[13][2] = 14;
-        assignMatrix[13][3] = 0;
+        assignMatrix[13][3] = 1;
 
-        assignMatrix[14][0] = 0;
-        assignMatrix[14][1] = 7;
-        assignMatrix[14][2] = 17;
+        assignMatrix[14][0] = 24;
+        assignMatrix[14][1] = 0;
+        assignMatrix[14][2] = 0;
         assignMatrix[14][3] = 0;
 //        OriginDataReader originDataReader = new OriginDataReaderImp();
 //        ArrayList<String>  ss = originDataReader.readTxt("f:\\works\\data\\warehouseStructure.txt");
