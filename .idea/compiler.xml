@@ -9,7 +9,6 @@
         <module name="dataProcess" />
         <module name="warehouse-java2020-v2" />
         <module name="warehouseSimplify" />
-        <module name="warehouseSole" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>

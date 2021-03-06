@@ -6,7 +6,6 @@
       <module fileurl="file://$PROJECT_DIR$/research.iml" filepath="$PROJECT_DIR$/research.iml" />
       <module fileurl="file://$PROJECT_DIR$/warehouse-java2020-v2/warehouse-java2020-v2.iml" filepath="$PROJECT_DIR$/warehouse-java2020-v2/warehouse-java2020-v2.iml" />
       <module fileurl="file://$PROJECT_DIR$/warehouseSimplify/warehouseSimplify.iml" filepath="$PROJECT_DIR$/warehouseSimplify/warehouseSimplify.iml" />
-      <module fileurl="file://$PROJECT_DIR$/warehouseSole/warehouseSole.iml" filepath="$PROJECT_DIR$/warehouseSole/warehouseSole.iml" />
     </modules>
   </component>
 </project>

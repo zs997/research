@@ -65,9 +65,12 @@ public class AlgorithmStart {
 //                LocalSearchEDA localSearchEDA = new LocalSearchEDA(ColumnR.class, 150, 15 * 2, 15, 0.4,
 //                        maxGenerations, 30,weight);
 //                Individual localsearchEdaBest = localSearchEDA.doEDA();
-                GeneticAlgorithm<ColumnR> columnRGeneticAlgorithm = new GeneticAlgorithm<>(ColumnR.class
-                        , 100, 5, 2, 0.9, 0.001, maxGenerations, weight);
-                Individual individual = columnRGeneticAlgorithm.doGA();
+//                GeneticAlgorithm<ColumnR> columnRGeneticAlgorithm = new GeneticAlgorithm<>(ColumnR.class
+//                        , 100, 5, 2, 0.9, 0.001, maxGenerations, weight);
+//                Individual individual = columnRGeneticAlgorithm.doGA();
+                EDA<ColumnR> columnREDA = new EDA<>(ColumnR.class, 150, 15 * 2, 15, 0.4,
+                        maxGenerations, weight);
+                Individual individual = columnREDA.doEDA();
                 ArrayList<Double> res = new ArrayList<>();
                 res.add(individual.getLengthCost());
                 res.add(individual.getSpreadCost());

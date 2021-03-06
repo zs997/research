@@ -9,6 +9,7 @@
     <option name="ignoredFiles">
       <set>
         <option value="$PROJECT_DIR$/ARtool/pom.xml" />
+        <option value="$PROJECT_DIR$/warehouseSole/pom.xml" />
       </set>
     </option>
   </component>
