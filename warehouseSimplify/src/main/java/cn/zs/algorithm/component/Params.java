@@ -59,13 +59,23 @@ public class Params {
         ArrayList<ArrayList<Integer>> res = new ArrayList<>();
         //标题舍去
         for (int i = 1; i < groupInfo.size(); i++) {
+            ArrayList<String> groupi = groupInfo.get(i);
+            //去除单个货物一组情况
             ArrayList<Integer> temp = new ArrayList<>();
-            for (int j = 0; j < groupInfo.get(i).size(); j++) {
-                temp.add(Integer.valueOf(groupInfo.get(i).get(j).trim()));
+            for (int j = 0; j < groupi.size(); j++) {
+                if (groupi.get(j) == null || groupi.get(j).trim().equals(""))
+                    continue;
+                temp.add(Integer.valueOf(groupi.get(j).trim()));
             }
             res.add(temp);
         }
-        itemGroups = res;
+
+        itemGroups = new ArrayList<>();
+        for (int i = 0; i < res.size(); i++) {
+            if (res.get(i).size() > 1)
+                itemGroups.add(res.get(i));
+        }
+        System.out.println(itemGroups);
     }
     /**
      * @description:计算订单非空的概率 第 4 步

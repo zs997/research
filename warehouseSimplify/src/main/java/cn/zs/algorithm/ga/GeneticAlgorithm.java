@@ -53,7 +53,7 @@ public class GeneticAlgorithm <T extends Column>{
         while (isTerminationConditionMet(generation, maxGenerations) == false) {
             // Print fittest individual from population
             Individual fittest = population.getFittest(0);
-  //          double cost = fittest.getCost();
+           double cost = fittest.getCost();
 //            System.out.println("GA: " + generation + "  "+ cost);
             // Apply crossover
             population = crossoverPopulation(population);

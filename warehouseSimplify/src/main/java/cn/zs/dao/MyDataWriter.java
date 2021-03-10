@@ -9,10 +9,14 @@ package cn.zs.dao;
 
 import cn.zs.pojo.CommonData;
 import cn.zs.pojo.CsvContent;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStreamWriter;
+import org.apache.commons.io.FileUtils;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import java.io.*;
+import java.util.ArrayList;
 
 /**
  * @version: V1.0
@@ -26,6 +30,53 @@ public class MyDataWriter   {
 
     public void write(CommonData data) {
       write(data,false);
+    }
+    public void writeExcel(ArrayList<ArrayList<Double>> data, String destination) throws IOException {
+        //创建Excel文件薄
+        XSSFWorkbook workbook=new XSSFWorkbook();
+        //创建工作表sheeet
+        Sheet sheet=workbook.createSheet();
+        //追加数据
+        for (int i=0;i<data.size();i++){
+            Row nextrow=sheet.createRow(i);
+            ArrayList<Double> list = data.get(i);
+            for (int j = 0; j < list.size(); j++) {
+                Cell cell2=nextrow.createCell(j);
+                cell2.setCellValue(list.get(j));
+            }
+        }
+        //创建一个文件
+        File file=new File(destination);
+        file.createNewFile();
+        FileOutputStream stream= FileUtils.openOutputStream(file);
+        workbook.write(stream);
+        stream.close();
+    }
+    public void writeExcel(ArrayList<ArrayList<Double>> data, String[] titile,String destination) throws IOException {
+        //创建Excel文件薄
+        XSSFWorkbook workbook=new XSSFWorkbook();
+        //创建工作表sheeet
+        Sheet sheet=workbook.createSheet();
+        //追加数据
+        Row row = sheet.createRow(0);
+        for (int i = 0; i < titile.length; i++) {
+            Cell cell = row.createCell(i);
+            cell.setCellValue(titile[i]);
+        }
+        for (int i=0;i<data.size();i++){
+            Row nextrow=sheet.createRow(i+1);
+            ArrayList<Double> list = data.get(i);
+            for (int j = 0; j < list.size(); j++) {
+                Cell cell2=nextrow.createCell(j);
+                cell2.setCellValue(list.get(j));
+            }
+        }
+        //创建一个文件
+        File file=new File(destination);
+        file.createNewFile();
+        FileOutputStream stream= FileUtils.openOutputStream(file);
+        workbook.write(stream);
+        stream.close();
     }
 
     public void write(CommonData data, boolean append) {

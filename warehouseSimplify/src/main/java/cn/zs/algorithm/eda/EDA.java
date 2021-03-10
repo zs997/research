@@ -3,7 +3,10 @@ import cn.zs.algorithm.component.Column;
 import cn.zs.algorithm.component.Individual;
 import cn.zs.algorithm.component.Population;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
+
 import static cn.zs.algorithm.component.Params.storageCount;
 
 public class EDA <T extends Column>{
@@ -50,7 +53,7 @@ public class EDA <T extends Column>{
         // Start evolution loop
         while (isTerminationConditionMet(generation, maxGenerations) == false) {
             // Print fittest individual from population
-            System.out.println("EDA:G"+generation+" Best distance: " + population.getFittest(0).getCost());
+//            System.out.println("EDA:G"+generation+" Best distance: " + population.getFittest(0).getCost());
             // Apply crossover
             Individual[] superiorityIndividuals = getSuperiorityIndividuals(population);
             prob = updateProbMatrix(superiorityIndividuals, prob);
@@ -60,7 +63,7 @@ public class EDA <T extends Column>{
         }
         Individual fittest = population.getFittest(0);
         System.out.println("EDA Stopped after " + maxGenerations + " generations.");
-        System.out.println("EDA Best distance: " + fittest.getCost());
+        System.out.println("EDA Best : " + fittest.getCost());
         System.out.println(fittest.getChromosome());
         return fittest;
     }
@@ -192,7 +195,8 @@ public class EDA <T extends Column>{
 //                myDataWriter.write(commonData);
 //                continue;
 //            }
-            if(list.size() != storageCount){
+            Set<Integer> set = new HashSet<>(list);
+            if(list.size() != storageCount || set.size() != list.size()){
                 System.out.println("error:"+list);
                 continue;
             }

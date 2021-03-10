@@ -41,7 +41,8 @@ public class DataProcess {
     public static void main(String[] args) throws Exception {
 
       //  silhouettePlot(5);
-        testSilhouette();
+    //    testSilhouette();
+        silhouettePlot(4);
 
     }
     public static void silhouettePlot(int k) throws Exception {
@@ -54,7 +55,7 @@ public class DataProcess {
         double[][] distanceMatrix = originDataReader.readDistanceMatrix(baseDir + "\\brandDistanceMinMax.csv", n);
         Hcluster hcluster = new Hcluster();
         ArrayList<ArrayList<Integer>> groups = hcluster.generateItemGroupByR(baseDir + "\\cluster.R",
-                baseDir + "\\brandDistanceMinMax.csv", n, k, baseDir + "\\groupInfo\\goupInfo" + k + ".csv");
+                baseDir + "\\brandDistanceMinMax.csv", n, k, baseDir + "\\groupInfo\\groupInfo" + k + ".csv");
         SilhouetteParam silhouetteParam = hcluster.calculSilhouette(groups, distanceMatrix);
         System.out.println("聚类数目：" + k);
         System.out.println("总平均值:");
@@ -75,7 +76,8 @@ public class DataProcess {
         }
     }
     public static void testSilhouette() throws Exception {
-
+        int startK = 2;
+        int endK = 390;
         ArrayList<String> strings = originDataReader.readTxt(baseDir + "\\warehouseStructure.txt");
         String s = strings.get(strings.size() - 1);
         String[] datas =s.split("\\s+");
@@ -84,9 +86,9 @@ public class DataProcess {
         System.out.println("n= " + n);
         double[][] distanceMatrix = originDataReader.readDistanceMatrix(baseDir + "\\brandDistanceMinMax.csv", n);
         Hcluster hcluster = new Hcluster();
-        for(int k = 2;k < 40;k++){
+        for(int k = startK;k <= endK;k++){
             ArrayList<ArrayList<Integer>> groups = hcluster.generateItemGroupByR(baseDir + "\\cluster.R",
-                    baseDir + "\\brandDistanceMinMax.csv", n, k, baseDir + "\\groupInfo\\goupInfo" + k + ".csv");
+                    baseDir + "\\brandDistanceMinMax.csv", n, k, baseDir + "\\groupInfo\\groupInfo" + k + ".csv");
             SilhouetteParam silhouetteParam = hcluster.calculSilhouette(groups, distanceMatrix);
             System.out.println(silhouetteParam.getAvgSilhouette());
         }

@@ -165,6 +165,10 @@ public class Individual<T extends Column> {
 				Integer item1 = items.get(j);
 
 				Coordinate c1 = coordinateMap.get(item1);
+				if (c1 == null){
+					System.out.println("item1空指针异常*******************"+item1);
+					System.out.println(coordinateMap);
+				}
 				for (int k = j+1; k < items.size(); k++) {
 					Integer item2 = items.get(k);
 					Coordinate c2 = coordinateMap.get(item2);
