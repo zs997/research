@@ -7,6 +7,7 @@
  */
 
 import cn.zs.algorithm.component.Column;
+import cn.zs.algorithm.component.ColumnR;
 import cn.zs.algorithm.component.Coordinate;
 import cn.zs.algorithm.component.Params;
 import org.junit.Test;
@@ -15,10 +16,7 @@ import org.rosuda.REngine.REXPMismatchException;
 import org.rosuda.REngine.Rserve.RConnection;
 import org.rosuda.REngine.Rserve.RserveException;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Stack;
+import java.util.*;
 
 import static cn.zs.algorithm.component.Params.M;
 import static cn.zs.algorithm.component.Params.N;
@@ -128,11 +126,42 @@ public class Test1 {
         System.out.println("asda");
     }
     @Test
-    public void awsda(){
-        HashMap<Integer, String> integerStringHashMap = new HashMap<>();
-        integerStringHashMap.put(1,"da");
-        integerStringHashMap.put(2,"da");
-        integerStringHashMap.put(54,"da");
-        System.out.println(integerStringHashMap);
+    public <T>void awsda(){
+        Class<T> t = (Class<T>) ColumnR.class;
+        String[] split = t.toString().split("\\.");
+
+       System.out.println(split[split.length-1]);
+    }
+
+    @Test
+    public void asfrgrfe(){
+        ArrayList<ArrayList<Integer>> lists = new ArrayList<>();
+        ArrayList<Integer> list2 = new ArrayList<>();
+        ArrayList<Integer> list3 = new ArrayList<>();
+        ArrayList<Integer> list1 = new ArrayList<>();
+
+
+        list3.add(2);
+        list3.add(4);
+        list3.add(2);
+        list3.add(2);
+        System.out.println(list3);
+        Collections.sort(list3);
+        System.out.println(list3);
+        lists.add(list3);
+        lists.add(list2);
+        lists.add(list1);
+        list2.add(1);
+        list2.add(2);
+
+        System.out.println(lists);
+        Collections.sort(lists, new Comparator<ArrayList<Integer>>() {
+            @Override
+            public int compare(ArrayList<Integer> o1, ArrayList<Integer> o2) {
+                return o1.size()-o2.size();
+            }
+        });
+        System.out.println(lists);
+
     }
 }
